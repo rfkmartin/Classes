@@ -1,0 +1,17 @@
+@relation synthetic2
+@attribute a {t,f}
+@attribute b {t,f}
+@attribute c {t,f}
+@attribute d {t,f}
+@attribute e {t,f}
+@attribute f {t,f}
+@data
+t,t,t,?,?,?
+t,t,?,t,?,?
+t,t,?,?,t,?
+t,?,t,t,?,?
+t,?,?,t,t,?
+?,?,t,t,t,?
+t,?,?,?,t,t
+?,?,t,?,t,t
+?,?,?,t,t,t

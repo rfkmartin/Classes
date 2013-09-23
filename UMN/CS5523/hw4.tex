@@ -1,0 +1,228 @@
+% Robert F.K. Martin
+% ID 1505151
+% CSci 5031
+% Homework Set N
+
+\documentclass[11pt]{article}
+%\RequirePackage{vmargin}
+%\setpapersize{USletter}
+%\setmarginsrb{1in}{1.5in}{1in}{0in}{\headheight}{\headsep}{\footheight}{\footskip}
+\usepackage{setspace}
+\usepackage{homework}
+\usepackage{macros}
+\usepackage{graphics}
+\usepackage{subfigure}
+\usepackage{float}
+\usepackage{placeins}
+\DeclareGraphicsExtensions{.jpg, .JPG, .png, .PNG, .pdf, .PDF}
+
+% detect interpreter: pdflatex or latex
+\newif\ifpdf
+\ifx\pdfoutput\undefined
+  \pdffalse
+\else
+  \pdfoutput=1
+  \pdftrue
+  \pdfcompresslevel=9
+\fi
+
+% user: add packages you need
+\usepackage{amsmath}
+
+% user: set counter depth for lists
+%\setcounter{page}{1}
+
+% user: set style of equation numbering
+\numberwithin{equation}{section}  % (sec.number)
+\renewcommand{\thetable}{\arabic{table}}
+\renewcommand{\thefigure}{\arabic{figure}}
+
+\singlespacing
+
+\begin{document}
+
+% pick type of your preferred page style. UMN requires page numbers.
+%\pagestyle{headings}
+
+
+\noindent Robert F.K. Martin\\
+ID 1505151\\
+Csci 5523\\
+30 Nov 2011\\
+Homework 4
+\hline
+\vspace*{0.25in}
+\noindent\textbf{Problem 1: }
+
+\noindent1-itemsets(\textbf{frequent in bold}): $<$\{\textbf{A}\}$>$,$<$\{\textbf{B}\}$>$,$<$\{\textbf{C}\}$>$,$<$\{\textbf{D}\}$>$,$<$\{E\}$>$\\
+2-itemsets: $<$\{A\} \{A\}$>$, $<$\{A\} \{B\}$>$, $<$\{\textbf{A}\} \{\textbf{C}\}$>$ $<$\{\textbf{A}\} \{\textbf{D}\}$>$, $<$\{A\} \{E\}$>$\\
+$<$\{B\} \{A\}$>$, $<$\{B\} \{B\}$>$, $<$\{\textbf{B}\} \{\textbf{C}\}$>$, $<$\{\textbf{B}\} \{\textbf{D}\}$>$, $<$\{B\} \{E\}$>$,\\
+$<$\{C\} \{A\}$>$, $<$\{C\} \{B\}$>$, $<$\{C\} \{C\}$>$, $<$\{\textbf{C}\} \{\textbf{D}\}$>$, $<$\{C\} \{E\}$>$,\\
+$<$\{D\} \{A\}$>$, $<$\{D\} \{B\}$>$, $<$\{D\} \{C\}$>$, $<$\{D\} \{D\}$>$, $<$\{D\} \{E\}$>$,\\
+$<$\{E\} \{A\}$>$, $<$\{E\} \{B\}$>$, $<$\{E\} \{C\}$>$, $<$\{E\} \{D\}$>$, $<$\{E\} \{E\}$>$\\
+3-itemsets: $<$\{A\} \{C\} \{D\}$>$, $<$\{B\} \{C\} \{D\}$>$\\
+4-itemsets: nothing to generate
+
+\vspace*{0.25in}
+\noindent\textbf{Problem 2a: }
+
+\noindent hierarchical, overlapping, partial
+
+\vspace*{0.25in}
+\noindent\textbf{Problem 2b: }
+
+\noindent partitional, distinct, complete
+
+\vspace*{0.25in}
+\noindent\textbf{Problem 2c: }
+
+\noindent partitional, overlapping, complete
+
+\vspace*{0.25in}
+\noindent\textbf{Problem 3a: }
+
+\noindent Distance matrix generated from the 5 points:
+\begin{tabular}{| l | l | l | l | l | l | }
+\hline
+  \ & A & B & C & D & E \\ \hline
+  A & 0 & 3.7417 & 3.1623 & 2.2361 & 1.4142 \\ \hline
+  B & 3.7417 & 0 & 2.00 & 5.9161 & 4.4721 \\ \hline
+  C & 3.1623 & 2.0 & 0 & 5.1962 & 4.0 \\ \hline
+  D & 2.2361 & 5.9161 & 5.1962 & 0 & 1.7321 \\ \hline
+  E & 1.4142 & 4.4721 & 4.0 & 1.7321 & 0 \\ \hline
+\end{tabular}
+\begin{figure}[htb!]
+\centering
+\subfigure{\resizebox{!}{60mm}{\includegraphics{hw4q3a.jpg}}}
+\caption{Matlab produced dendrogram from above data}
+\label{fig:FigureExample1}
+\end{figure}
+
+\vspace*{0.25in}
+
+\noindent\textbf{Problem 3b: }
+
+\noindent Computing correlation requires the standard deviation of the two vectors to be computed. The vectors for d=(1,1,1) and e=(2,2,2) have a std of 0 which leads to an undefined value for correlation.
+
+\vspace*{0.25in}
+
+\noindent\textbf{Problem 3c: }
+
+\noindent
+\begin{figure}[htb!]
+\centering
+\subfigure{\resizebox{!}{60mm}{\includegraphics{hw4q3c.jpg}}}
+\caption{Matlab produced dendrogram from above data}
+\label{fig:FigureExample2}
+\end{figure}
+
+\vspace*{0.25in}
+
+\noindent\textbf{Problem 4: }
+
+\noindent For eps=0.4, there will be one cluster, centered near point A. The cluster will include B, which is a border point. There are more than 4 points less than 0.4 from A and you can traverse to point B using points less than 0.4 from each other. But B only has 3 points within 0.4 of it so it is only a border point. Points C and D are noise. For eps=0.6, there will be two clusters. One cluster will be centered around C, the other will be somewhere in the vicinity of A and B, since both are core points are included with eps of each other. There is a possibility that C will also be part of the AB cluster, but it is hard to tell without actually checking each of the points in between. From what I can tell, they are not connected although it is probably very close.\\
+\begin{tabular}{| c | c | c | c | c | }
+\hline
+  eps &A & B & C & D \\ \hline
+  \hline
+  0.4 & core & border & noise & noise \\ \hline
+  0.6 & core & core & core & noise \\ \hline
+\end{tabular}
+
+\vspace*{0.25in}
+
+
+
+\FloatBarrier
+\begin{figure}[H]
+\centering
+\subfigure{\resizebox{!}{60mm}{\includegraphics{hw4q5a.jpg}}}
+\caption{\textbf{Problem 5a: }The two cluster centers will be on opposite sides of the center probably along the same diameter.}
+\label{fig:FigureExample}
+\end{figure}
+
+\vspace*{0.25in}
+\begin{figure}[H]
+\centering
+\subfigure{\resizebox{!}{60mm}{\includegraphics{hw4q5b.jpg}}}
+\caption{\textbf{Problem 5b: }The cluster centers will be as shown. Two will be between the smaller circles and the larger circle along a line joining their centers. The third will be somewhere on the lower half of the larger circle.}
+\label{fig:FigureExample3}
+\end{figure}
+
+\vspace*{0.25in}
+\begin{figure}[H]
+\centering
+\subfigure{\resizebox{!}{60mm}{\includegraphics{hw4q5c.jpg}}}
+\caption{\textbf{Problem 5c: }The most likely solution will be the same as part a). However, if by chance, one of the initializing points is in the vicinity of the two far away points, then the two cluster centers may be at the centers of each of the circles.}
+\label{fig:FigureExample4}
+\end{figure}
+
+\vspace*{0.25in}
+\begin{figure}[H]
+\centering
+\subfigure{\resizebox{!}{60mm}{\includegraphics{hw4q5d.jpg}}}
+\caption{\textbf{Problem 5d: }The most likely solution is as shown with both cluster centers in the smaller, denser circle. However, if the algorithm is initialized with two points near the centers of each of the circles, the cluster centers may be the actual centers of each of the circles.}
+\label{fig:FigureExample5}
+\end{figure}
+
+\vspace*{0.25in}
+
+\begin{figure}[H]
+\centering
+\subfigure{\resizebox{!}{60mm}{\includegraphics{hw4q5e.jpg}}}
+\caption{\textbf{Problem 5e: }The cluster centers will be slightly off-center of the crescents.}
+\label{fig:FigureExample6}
+\end{figure}
+\FloatBarrier
+\vspace*{0.25in}
+\noindent\textbf{Problem 6a: }
+
+\noindent Single link will correctly return the three distinct clusters. Complete link will most likely break the larger circle into at least two regions and group the two smaller circles together.
+
+\vspace*{0.25in}
+\noindent\textbf{Problem 6b: }
+
+\noindent single link will probably fail because of the noise and group all the points as one cluster. Complete would more likely be a better choice here because of the noise and it may sometimes group the two clusters separately.
+
+\vspace*{0.25in}
+\noindent\textbf{Problem 6c: }
+
+\noindent Single link will find the correct clusters but complete link will probably include the nearer points of the two lower crescents with the upper crescent.
+
+\vspace*{0.25in}
+\noindent\textbf{Problem 6d: }
+
+\noindent Single link will probably return the two clusters but complete link will include some of the closer points of the larger circle with the smaller circle.
+
+\vspace*{0.25in}
+\noindent\textbf{Problem 7a: }
+
+\noindent As long as epsilon stays small enough that it can't cross the gap between the blobs, DBSCAN will still find two clusters.
+
+\vspace*{0.25in}
+\noindent\textbf{Problem 7b: }
+
+\noindent Similar to a), if epsilon stays small enough that it can't include points from both circles, then it will still find two clusters.
+
+\vspace*{0.25in}
+\noindent\textbf{Problem 7c: }
+
+\noindent DBSCAN will include some of the noise with both of the clusters. If the noise plus epsilon is great enough to bridge the gap between the two circles, then it will return a single cluster and possibly make some distinct clusters in the noise. The epsilon required to create one cluster will be smaller than the epsilon from b) because of the noise.
+
+\vspace*{0.25in}
+\noindent\textbf{Problem 7d: }
+
+\noindent DBSCAN will act the same way as in c). The density of the smaller circle will not have any effect on DBSCAN since we are only changing epsilon. Whether or not the two circles get clustered together has more to do with the noise density and location than the density of the individual circles.
+
+\vspace*{0.25in}
+\end{document}
+
+
+
+
+
+
+
+
+
+

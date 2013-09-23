@@ -1,0 +1,14 @@
+select *
+from Likes L,Friend F1,Friend F2, Highschooler H1,Highschooler H2
+where L.ID1=H1.ID and L.ID2=H2.ID and L.ID1=F1.ID1 and L.ID2=F2.ID1 and F1.ID2=F2.ID2
+
+select *
+from Highschooler H1, Highschooler H2, Highschooler H3,Friend F1, Friend F2,Likes L
+where L.ID1=H1.ID and L.ID2=H2.ID and F1.ID1 = H1.ID and F1.ID2 = H3.ID and F2.ID1=H2.ID and F2.ID2=H3.ID
+
+select name,grade,ID
+from Highschooler
+where  ID in
+(select ID2 as ID
+from Likes)
+group by ID
