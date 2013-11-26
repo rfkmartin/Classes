@@ -1,0 +1,30 @@
+lvalue const2 
+rvalue const1
+push 12 
+rvalue A
++ 
+* 
+push -1 
+rvalue exp
++ 
+* 
+push 25 
++ 
+push 1 
+- 
+push 192 
++ 
+push 64 
++ 
+rvalue final
+- 
+push 12 
++ 
+rvalue year
+push 1900 
+- 
+push 4 
+/ 
+- 
+= 
+

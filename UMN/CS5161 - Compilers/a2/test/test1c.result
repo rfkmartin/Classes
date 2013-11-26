@@ -1,0 +1,36 @@
+lvalue const3 
+rvalue const2
+rvalue A
+push 7 
++ 
+push 5 
++ 
+* 
+rvalue G
+push 3 
++ 
+push 4 
+- 
+rvalue H
++ 
+* 
+push 1350 
+rvalue const1
++ 
+push 8 
++ 
+* 
+rvalue F
+push 2 
+- 
+rvalue M
+rvalue C
+* 
+rvalue C
+* 
+rvalue E
+- 
+/ 
++ 
+= 
+

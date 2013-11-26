@@ -1,0 +1,49 @@
+function eigplot(A,n,s)
+% This program visualizes eigenvectors 
+% for 2x2 matrices. A is a 2x2 matrix.
+% n is optional and determines the number
+% of vectors drawn. The third (optional)
+% parameter determines the number of times
+% that the movie is played.
+% It is based on an idea by Gilbert Strang:
+% As a reference see the CMJ vol.26,no4,
+% September 1995, p.316 (S. Schonefeld).
+% Typical examples use the matrices:
+% A=[13 9;3 7]/8; (fairly generic)
+% A=[cos(pi/4) -sin(pi/4);sin(pi/4) cos(pi/4)];
+%                 (nonreal eigenvalues)
+% A=[2 -2; -1 1]; (one zero eigenvalue)
+% A=[2-sqrt(3) -3; 1 2+sqrt(3)]/2; (double e.value)
+%
+% Written by M.Kawski, October 1995
+% http://math.la.asu.edu/~kawski/kawski.html
+%
+if nargin == 0
+   A=[13 9;3 7]/8;
+   end;
+if nargin < 3 
+   s=3;
+   end;
+if nargin < 2 
+   n=24;
+   end;
+E=moviein(n+1);
+phi=2*pi/n;
+z=zeros(1,n+1);
+x=cos(phi*[0:n]);
+y=sin(phi*[0:n]);
+v=A(1,:)*[x;y];
+w=A(2,:)*[x;y];
+m=max([1,max(abs(v)),max(abs(w))]);
+axis([-m,m,-m,m]);
+axis('off');
+for i=1:n+1
+    hold off
+    plot(x,y,'c:',v,w,'g:');
+    hold on   
+    plot([0;x(i)],[0;y(i)],'b-',[0;v(i)],[0;w(i)],'r-');
+    axis([-m,m,-m,m]);
+    axis('off');
+    E(:,i)=getframe;
+    end;
+movie(E,s);

@@ -1,0 +1,24 @@
+# CSci 5161 - Compilers
+#  Robert F.K. Martin
+#  ID# 1505151
+#
+#  Homework Assignment #2, Problem a
+#
+LEX = flex -I
+YACC = bison
+
+CC = gcc -DYYDEBUG=1
+
+lab2a:	lab2a.tab.o lex.yy.o
+	$(CC) -o lab2a lab2a.tab.o lex.yy.o -ly -lfl -lm
+
+lex.yy.o:	lex.yy.c lab2a.tab.h
+
+lab2a.tab.c lab2a.tab.h:	lab2a.y
+	$(YACC) -d lab2a.y
+
+lex.yy.c:	lab2a.l
+	$(LEX) lab2a.l
+
+clean:
+	rm -f lex* *tab* core

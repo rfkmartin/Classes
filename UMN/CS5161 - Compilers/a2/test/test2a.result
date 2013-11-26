@@ -1,0 +1,7 @@
+Error found in line 6
+ ID abc declared more than once.
+Error found in line 13
+ ID loopvar is not declared
+Error found in line 15
+ ID xzy is not declared
+

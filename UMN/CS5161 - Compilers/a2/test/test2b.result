@@ -1,0 +1,7 @@
+Error found in line 20
+ ID e declared more than once 
+Error found in line 30
+ Incompatible array dimensions
+Error found in line 36
+ Scalar a passed to array parameter arr
+

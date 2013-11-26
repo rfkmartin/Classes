@@ -1,0 +1,33 @@
+# CSci 5161 - Compilers
+#   Robert F.K. Martin
+#   ID# 1505151
+#
+#  Homework Assignment #2, Problem b
+#
+SRC = symtab.cc tree.cc
+OBJS = symtab.o tree.o
+
+LEX = flex -I
+YACC = yacc
+
+CC = g++ -DYYDEBUG=1
+CFLAGS = -c -g
+
+lab2b:	lab2b.tab.o lex.yy.o $(OBJS)
+	$(CC) -o lab2b lab2b.tab.o lex.yy.o $(OBJS) -ly -lm
+
+lex.yy.o:	lex.yy.c lab2b.tab.h
+
+$(OBJS): $(SRC)
+	$(CC) $(CFLAGS) $(SRC)
+
+lab2b.tab.c lab2b.tab.h:	lab2b.y
+	$(YACC) -d lab2b.y
+	mv y.tab.h lab2b.tab.h
+	mv y.tab.c lab2b.tab.c
+
+lex.yy.c:	lab2b.l
+	$(LEX) lab2b.l
+
+clean:
+	rm -f lex* *.tab.* core *.o
