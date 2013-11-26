@@ -1,0 +1,34 @@
+Makefile
+README
+builtin.c
+builtin.h
+builtin.o
+child.c
+child.h
+display.c
+display.h
+display.o
+file.err
+gosh
+gosh.c
+junk
+lab2.tar
+main.c
+main.h
+main.o
+redirect.c
+redirect.h
+redirect.o
+search.c
+search.h
+search.o
+ls: makefile: No such file or directory
+ls: badfile: No such file or directory
+ls: makefile: No such file or directory
+ls: badfile: No such file or directory
+ls: makefile: No such file or directory
+ls: badfile: No such file or directory
+ls: makefile: No such file or directory
+ls: badfile: No such file or directory
+ls: makefile: No such file or directory
+ls: badfile: No such file or directory

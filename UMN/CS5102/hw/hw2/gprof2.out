@@ -1,0 +1,335 @@
+/*
+ * Copyright (c) 1993 by Sun Microsystems, Inc.
+ */
+
+#pragma ident	"@(#)gprof.callg.blurb	1.8	93/06/07 SMI"
+
+
+call graph profile:
+          The sum of self and descendents is the major sort
+          for this listing.
+
+          function entries:
+
+index     the index of the function in the call graph
+          listing, as an aid to locating it (see below).
+
+%time     the percentage of the total time of the program
+          accounted for by this function and its
+          descendents.
+
+self      the number of seconds spent in this function
+          itself.
+
+descendents
+          the number of seconds spent in the descendents of
+          this function on behalf of this function.
+
+called    the number of times this function is called (other
+          than recursive calls).
+
+self      the number of times this function calls itself
+          recursively.
+
+name      the name of the function, with an indication of
+          its membership in a cycle, if any.
+
+index     the index of the function in the call graph
+          listing, as an aid to locating it.
+
+
+
+          parent listings:
+
+self*     the number of seconds of this function's self time
+          which is due to calls from this parent.
+
+descendents*
+          the number of seconds of this function's
+          descendent time which is due to calls from this
+          parent.
+
+called**  the number of times this function is called by
+          this parent.  This is the numerator of the
+          fraction which divides up the function's time to
+          its parents.
+
+total*    the number of times this function was called by
+          all of its parents.  This is the denominator of
+          the propagation fraction.
+
+parents   the name of this parent, with an indication of the
+          parent's membership in a cycle, if any.
+
+index     the index of this parent in the call graph
+          listing, as an aid in locating it.
+
+
+
+          children listings:
+
+self*     the number of seconds of this child's self time
+          which is due to being called by this function.
+
+descendent*
+          the number of seconds of this child's descendent's
+          time which is due to being called by this
+          function.
+
+called**  the number of times this child is called by this
+          function.  This is the numerator of the
+          propagation fraction for this child.
+
+total*    the number of times this child is called by all
+          functions.  This is the denominator of the
+          propagation fraction.
+
+children  the name of this child, and an indication of its
+          membership in a cycle, if any.
+
+index     the index of this child in the call graph listing,
+          as an aid to locating it.
+
+
+
+          * these fields are omitted for parents (or
+          children) in the same cycle as the function.  If
+          the function (or child) is a member of a cycle,
+          the propagated times and propagation denominator
+          represent the self time and descendent time of the
+          cycle as a whole.
+
+          ** static-only parents and children are indicated
+          by a call count of 0.
+
+
+
+          cycle listings:
+          the cycle as a whole is listed with the same
+          fields as a function entry.  Below it are listed
+          the members of the cycle, and their contributions
+          to the time and call counts of the cycle.
+
+
+granularity: each sample hit covers 4 byte(s) for 0.99% of 1.01 seconds
+
+                                  called/total       parents 
+index  %time    self descendents  called+self    name    	index
+                                  called/total       children
+
+                0.01        0.73       1/1           _start [2]
+[1]     73.3    0.01        0.73       1         main [1]
+                0.09        0.63   10000/10000       sine [3]
+                0.00        0.01   10000/10000       __sin [10]
+
+-----------------------------------------------
+
+                                                     <spontaneous>
+[2]     73.3    0.00        0.74                 _start [2]
+                0.01        0.73       1/1           main [1]
+                0.00        0.00       4/4           atexit [13]
+                0.00        0.00       1/1           exit [15]
+
+-----------------------------------------------
+
+                0.09        0.63   10000/10000       main [1]
+[3]     71.3    0.09        0.63   10000         sine [3]
+                0.19        0.19   80000/80000       factorial [4]
+                0.25        0.00  160000/160000      powerof [5]
+
+-----------------------------------------------
+
+                0.19        0.19   80000/80000       sine [3]
+[4]     37.6    0.19        0.19   80000         factorial [4]
+                0.19        0.00  640000/640000      .mul [7]
+
+-----------------------------------------------
+
+                0.25        0.00  160000/160000      sine [3]
+[5]     24.8    0.25        0.00  160000         powerof [5]
+
+-----------------------------------------------
+
+                                                     <spontaneous>
+[6]     21.8    0.22        0.00                 oldarc [6]
+
+-----------------------------------------------
+
+                0.19        0.00  640000/640000      factorial [4]
+[7]     18.8    0.19        0.00  640000         .mul [7]
+
+-----------------------------------------------
+
+                                                     <spontaneous>
+[8]      5.0    0.05        0.00                 done [8]
+
+-----------------------------------------------
+
+                0.01        0.00   10000/10000       __sin [10]
+[9]      1.0    0.01        0.00   10000         __kernel_sin [9]
+
+-----------------------------------------------
+
+                0.00        0.01   10000/10000       main [1]
+[10]     1.0    0.00        0.01   10000         __sin [10]
+                0.01        0.00   10000/10000       __kernel_sin [9]
+
+-----------------------------------------------
+
+                0.00        0.00      12/12          _mcleanup [190]
+[11]     0.0    0.00        0.00      12         write [11]
+
+-----------------------------------------------
+
+                0.00        0.00       1/5           _exithandle [110]
+                0.00        0.00       4/5           atexit [13]
+[12]     0.0    0.00        0.00       5         mutex_lock [12]
+
+-----------------------------------------------
+
+                0.00        0.00       4/4           _start [2]
+[13]     0.0    0.00        0.00       4         atexit [13]
+                0.00        0.00       8/9           _return_zero [106]
+                0.00        0.00       4/5           mutex_lock [12]
+                0.00        0.00       4/4           _mutex_unlock [107]
+
+-----------------------------------------------
+
+                0.00        0.00       1/1           _mcleanup [190]
+[14]     0.0    0.00        0.00       1         creat [14]
+
+-----------------------------------------------
+
+                0.00        0.00       1/1           _start [2]
+[15]     0.0    0.00        0.00       1         exit [15]
+                0.00        0.00       1/1           _exithandle [110]
+
+-----------------------------------------------
+
+                0.00        0.00      11/11          _mcleanup [190]
+[105]    0.0    0.00        0.00      11         _write [105]
+
+-----------------------------------------------
+
+                0.00        0.00       1/9           _exithandle [110]
+                0.00        0.00       8/9           atexit [13]
+[106]    0.0    0.00        0.00       9         _return_zero [106]
+
+-----------------------------------------------
+
+                0.00        0.00       4/4           atexit [13]
+[107]    0.0    0.00        0.00       4         _mutex_unlock [107]
+
+-----------------------------------------------
+
+                0.00        0.00       1/1           _init [171]
+[108]    0.0    0.00        0.00       1         _check_threaded [108]
+                0.00        0.00       1/1           _return_negone [112]
+                0.00        0.00       1/1           _thr_main [113]
+
+-----------------------------------------------
+
+                0.00        0.00       1/1           _mcleanup [190]
+[109]    0.0    0.00        0.00       1         _creat [109]
+
+-----------------------------------------------
+
+                0.00        0.00       1/1           exit [15]
+[110]    0.0    0.00        0.00       1         _exithandle [110]
+                0.00        0.00       1/9           _return_zero [106]
+                0.00        0.00       1/5           mutex_lock [12]
+
+-----------------------------------------------
+
+                0.00        0.00       1/1           _moncontrol [197]
+[111]    0.0    0.00        0.00       1         _profil [111]
+
+-----------------------------------------------
+
+                0.00        0.00       1/1           _check_threaded [108]
+[112]    0.0    0.00        0.00       1         _return_negone [112]
+
+-----------------------------------------------
+
+                0.00        0.00       1/1           _check_threaded [108]
+[113]    0.0    0.00        0.00       1         _thr_main [113]
+
+-----------------------------------------------
+
+
+/*
+ * Copyright (c) 1993 by Sun Microsystems, Inc.
+ */
+
+#pragma ident	"@(#)gprof.flat.blurb	1.8	93/06/07 SMI"
+
+
+flat profile:
+
+ %         the percentage of the total running time of the
+time       program used by this function.
+
+cumulative a running sum of the number of seconds accounted
+ seconds   for by this function and those listed above it.
+
+ self      the number of seconds accounted for by this
+seconds    function alone.  This is the major sort for this
+           listing.
+
+calls      the number of times this function was invoked, if
+           this function is profiled, else blank.
+ 
+ self      the average number of milliseconds spent in this
+ms/call    function per call, if this function is profiled,
+	   else blank.
+
+ total     the average number of milliseconds spent in this
+ms/call    function and its descendents per call, if this 
+	   function is profiled, else blank.
+
+name       the name of the function.  This is the minor sort
+           for this listing. The index shows the location of
+	   the function in the gprof listing. If the index is
+	   in parenthesis it shows where it would appear in
+	   the gprof listing if it were to be printed.
+
+
+granularity: each sample hit covers 4 byte(s) for 0.72% of 1.39 seconds
+
+   %  cumulative    self              self    total          
+ time   seconds   seconds    calls  ms/call  ms/call name    
+ 27.3       0.38     0.38                            _mcount (191)
+ 18.0       0.63     0.25   160000     0.00     0.00  powerof [5]
+ 15.8       0.85     0.22                            oldarc [6]
+ 13.7       1.04     0.19   640000     0.00     0.00  .mul [7]
+ 13.7       1.23     0.19    80000     0.00     0.00  factorial [4]
+  6.5       1.32     0.09    10000     0.01     0.07  sine [3]
+  3.6       1.37     0.05                            done [8]
+  0.7       1.38     0.01    10000     0.00     0.00  __kernel_sin [9]
+  0.7       1.39     0.01        1    10.00   740.00  main [1]
+  0.0       1.39     0.00    10000     0.00     0.00  __sin [10]
+  0.0       1.39     0.00       12     0.00     0.00  write [11]
+  0.0       1.39     0.00       11     0.00     0.00  _write [105]
+  0.0       1.39     0.00        9     0.00     0.00  _return_zero [106]
+  0.0       1.39     0.00        5     0.00     0.00  mutex_lock [12]
+  0.0       1.39     0.00        4     0.00     0.00  _mutex_unlock [107]
+  0.0       1.39     0.00        4     0.00     0.00  atexit [13]
+  0.0       1.39     0.00        1     0.00     0.00  _check_threaded [108]
+  0.0       1.39     0.00        1     0.00     0.00  _creat [109]
+  0.0       1.39     0.00        1     0.00     0.00  _exithandle [110]
+  0.0       1.39     0.00        1     0.00     0.00  _profil [111]
+  0.0       1.39     0.00        1     0.00     0.00  _return_negone [112]
+  0.0       1.39     0.00        1     0.00     0.00  _thr_main [113]
+  0.0       1.39     0.00        1     0.00     0.00  creat [14]
+  0.0       1.39     0.00        1     0.00     0.00  exit [15]
+
+Index by function name
+
+   [7] .mul                [111] _profil              [15] exit               
+   [9] __kernel_sin        [112] _return_negone        [4] factorial          
+  [10] __sin               [106] _return_zero          [1] main               
+ [108] _check_threaded     [113] _thr_main            [12] mutex_lock         
+ [109] _creat              [105] _write                [6] oldarc             
+ [110] _exithandle          [13] atexit                [5] powerof            
+ (191) _mcount              [14] creat                 [3] sine               
+ [107] _mutex_unlock         [8] done                 [11] write              

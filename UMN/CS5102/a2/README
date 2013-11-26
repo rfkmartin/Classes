@@ -1,0 +1,9 @@
+type make to compile gosh
+
+1. Pipes do not work
+2. Background tasks are not implemented.
+3. Everything else should work.
+
+
+Robert Martin
+1505151

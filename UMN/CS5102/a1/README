@@ -1,0 +1,8 @@
+Name: Robert F.K. Martin
+ID:   1505151
+
+Instructions:
+
+1. In this directory, type 'make'. This will compile the program.
+
+2. To run, type 'server' and use the port number assigned by the program. 

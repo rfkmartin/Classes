@@ -1,0 +1,43 @@
+                                                        Robert F.K. Martin
+                                                        ID#1505151
+                                                        CSci 5102
+                                                        Homework #1
+
+1.1 man -k uname
+
+1.2.a The -n flag of the uname command prints out the nodename of the machine.
+      This is the name by which the machine is known to the network.
+
+1.2.b
+
+#include <sys/utsname.h>
+
+...
+
+main()
+{
+struct utsname *n_name;
+
+...
+
+   uname(n_name);
+
+   printf("Nodename = %s\n", n_name.nodename);
+
+...
+
+}
+
+2.1    TS         IDS        UDS
+       14558      1105       1971
+
+2.2  Stack sizes are dynamically created so that their size is not constant. The
+     text segment and the initialize and uninitialzed data segments are known
+     sizes before the programever executes.
+
+3  passwd is a program that accesses the password file of the system and makes
+   changes accordingly. Since only the superuser has access to this file, there
+   needs to be a way for a user to change his own password entry. By making
+   passwd a 'set-user-ID' program, this allows each user to run this root owned
+   program and then have access to the password file, without being allowed
+   access to other users' passwords.
