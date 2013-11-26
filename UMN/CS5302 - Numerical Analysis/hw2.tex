@@ -1,0 +1,109 @@
+% Robert F.K. Martin
+% ID 1505151
+% CSci 5031
+% Homework Set N
+
+\documentclass[11pt]{article}
+%\RequirePackage{vmargin}
+%\setpapersize{USletter}
+%\setmarginsrb{1in}{1.5in}{1in}{0in}{\headheight}{\headsep}{\footheight}{\footskip}
+\usepackage{setspace}
+\usepackage{homework}
+\usepackage{macros}
+
+% detect interpreter: pdflatex or latex
+\newif\ifpdf
+\ifx\pdfoutput\undefined
+  \pdffalse
+\else
+  \pdfoutput=1
+  \pdftrue
+  \pdfcompresslevel=9
+\fi
+
+% user: add packages you need
+\usepackage{amsmath}
+
+% user: set counter depth for lists
+%\setcounter{page}{1}
+
+% user: set style of equation numbering
+\numberwithin{equation}{section}  % (sec.number)
+\renewcommand{\thetable}{\arabic{table}}
+\renewcommand{\thefigure}{\arabic{figure}}
+
+\singlespacing
+
+\begin{document}
+
+% pick type of your preferred page style. UMN requires page numbers.
+%\pagestyle{headings}
+
+
+\noindent Robert F.K. Martin\\
+ID 1505151\\
+Csci 5302\\
+06 Mar 2006\\
+Homework 2
+\hline
+\vspace*{0.25in}
+\noindent\textbf{Problem 1a:\\
+$A=\left( 3 -1 0;-6 1 -1 0 -3 -4\right)$ and $b=\left(1;1;-1\right)$.\\
+Give the infinity norm of $A$, $||A||_{\inf}$, and give a vector \bf{x} such that $||x||_{\inf}$=1 and $||Ax||_{\inf}=||A||_{\inf}$.}
+\\
+\noindent The infinity norm is the largest row sum using absolute values. That gives 8 for the middle row.
+\bf{x}=$\left(-1 1 -1\right)$.
+\vspace*{0.25in}
+\noindent\textbf{Problem 1b: }
+\vspace*{0.25in}
+
+\noindent\textbf{Problem 1c: }
+\vspace*{0.25in}
+
+\noindent\textbf{Problem 1d: }
+\vspace*{0.25in}
+
+\noindent\textbf{Problem 1e: }
+\vspace*{0.25in}
+
+\noindent\textbf{Problem 3a: Write out Newtown's iteration for solving the following equations:\\
+a) $x^3-2x-5=0}
+\\
+\noindent $x_1=x_0+\frac{x_0^3-2x_0-5}{3x_0^2-2}$
+
+\vspace*{0.25in}
+
+\noindent\textbf{b) $e^{-x}-x=0$}
+\\
+\noindent $x_1=x_0+\frac{e^{-x}-x}{something}$
+
+\vspace*{0.25in}
+
+\noindent\textbf{c) $x \sin(x)-1=0$}
+\\
+\noindent $x_1=x_0+\frac{x \sin(x)-1}{\sin{x}-x \cos(x)}$
+\vspace*{0.25in}
+
+\noindent\textbf{Problem 2d: }
+\vspace*{0.25in}
+
+\noindent\textbf{Problem 1e: }
+\vspace*{0.25in}
+
+\noindent\textbf{Problem 3: }
+
+\vspace*{0.25in}
+
+\noindent\textbf{Problem 4: }
+
+\end{document}
+
+
+
+
+
+
+
+
+
+

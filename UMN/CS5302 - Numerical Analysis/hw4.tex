@@ -1,0 +1,188 @@
+% Robert F.K. Martin
+% ID 1505151
+% CSci 5031
+% Homework Set N
+
+\documentclass[11pt]{article}
+%\RequirePackage{vmargin}
+%\setpapersize{USletter}
+%\setmarginsrb{1in}{1.5in}{1in}{0in}{\headheight}{\headsep}{\footheight}{\footskip}
+\usepackage{setspace}
+\usepackage{homework}
+\usepackage{macros}
+
+% detect interpreter: pdflatex or latex
+\newif\ifpdf
+\ifx\pdfoutput\undefined
+  \pdffalse
+\else
+  \pdfoutput=1
+  \pdftrue
+  \pdfcompresslevel=9
+\fi
+
+% user: add packages you need
+\usepackage{amsmath}
+
+% user: set counter depth for lists
+%\setcounter{page}{1}
+
+% user: set style of equation numbering
+\numberwithin{equation}{section}  % (sec.number)
+\renewcommand{\thetable}{\arabic{table}}
+\renewcommand{\thefigure}{\arabic{figure}}
+
+\singlespacing
+
+\begin{document}
+
+% pick type of your preferred page style. UMN requires page numbers.
+%\pagestyle{headings}
+
+
+\noindent Robert F.K. Martin\\
+ID 1505151\\
+Csci 5302\\
+DD Apr 2006\\
+Homework 4
+\hline
+\vspace*{0.25in}
+\noindent\textbf{Problem 1: Find the optimal angle to at least 4 digits of accuracy.}
+\\
+\noindent There is an attached graph that shows the maximum distance versus angle. From this we can see that the optimal angle is around 49 degrees and we can use the golden section search between 45 and 55 degrees. The following is the output:\\
+\\
+\texttt{
+root=gold\_sect('(tan(x*pi/180)+sqrt(tan(x*pi/180)\^2-
+     4*9.8065/(2*(17*cos(x*pi/180))\^2)*4))/
+     (2*9.8065/(2*(17*cos(x*pi/180))\^2))',45,55,1e-5);\\
+Interval: 48.81966 51.18034\\
+Interval: 47.36068 48.81966\\
+Interval: 48.81966 49.72136\\
+Interval: 49.72136 50.27864\\
+Interval: 49.37694 49.72136\\
+Interval: 49.16408 49.37694\\
+Interval: 49.37694 49.50850\\
+Interval: 49.50850 49.58980\\
+Interval: 49.45825 49.50850\\
+Interval: 49.50850 49.53955\\
+Interval: 49.48930 49.50850\\
+Interval: 49.50850 49.52036\\
+Interval: 49.52036 49.52769\\
+Interval: 49.51583 49.52036\\
+Interval: 49.51303 49.51583\\
+Interval: 49.51583 49.51756\\
+Interval: 49.51756 49.51863\\
+Interval: 49.51690 49.51756\\
+Interval: 49.51756 49.51797\\
+Interval: 49.51731 49.51756\\
+Interval: 49.51756 49.51772\\
+Interval: 49.51772 49.51781\\
+Interval: 49.51766 49.51772\\
+Interval: 49.51772 49.51775\\
+Interval: 49.51775 49.51777\\
+Interval: 49.51774 49.51775\\
+Interval: 49.51773 49.51774\\
+Interval: 49.51774 49.51774\\
+Interval: 49.51773 49.51774\\
+alpha*: 49.51774 distance: 25.15420\\
+}
+\vspace*{0.25in}
+
+\noindent\textbf{Problem 2: Solve the previous problem, taking into account air resistance.}
+\\
+\noindent We can do much the same thing as before. Except rather than explicitly solving for $x$, we use the secant method to find a suitable value of $x$ that solves the equation. We can then apply the golden section method plugging in the secant method when necessary. The answer is intuitive in that we should expect to aim the water stream more into the air in order to overcome the resistance.\\
+\texttt{
+root2=gold\_sect\_secant('x*(9.8065/(0.25*17*cos(y*pi/180))
++tan(y*pi/180))+(9.8065/(0.25\^2))
+*log(1-(0.25*x)/(17*cos(y*pi/180)))-4',40,60,1e-5);\\
+Interval: 47.63932 52.36068\\
+Interval: 44.72136 47.63932\\
+Interval: 47.63932 49.44272\\
+Interval: 46.52476 47.63932\\
+Interval: 47.63932 48.32816\\
+Interval: 47.21360 47.63932\\
+Interval: 46.95048 47.21360\\
+Interval: 47.21360 47.37621\\
+Interval: 47.11310 47.21360\\
+Interval: 47.21360 47.27571\\
+Interval: 47.27571 47.31410\\
+Interval: 47.25198 47.27571\\
+Interval: 47.27571 47.29037\\
+Interval: 47.26665 47.27571\\
+Interval: 47.27571 47.28131\\
+Interval: 47.28131 47.28477\\
+Interval: 47.27917 47.28131\\
+Interval: 47.27785 47.27917\\
+Interval: 47.27917 47.27999\\
+Interval: 47.27999 47.28049\\
+Interval: 47.27967 47.27999\\
+Interval: 47.27948 47.27967\\
+Interval: 47.27967 47.27979\\
+Interval: 47.27979 47.27987\\
+Interval: 47.27975 47.27979\\
+Interval: 47.27972 47.27975\\
+Interval: 47.27975 47.27977\\
+Interval: 47.27974 47.27975\\
+Interval: 47.27973 47.27974\\
+Interval: 47.27974 47.27974\\
+Interval: 47.27973 47.27974\\
+alpha*: 47.27974 distance 17.11657}
+
+\vspace*{0.25in}
+
+\noindent\textbf{Problem 3: Write down the general formula for the ``optimal'' $x_1$. Also, what are the numerical values for $x_1$ when $x_2$=-1.386 and when $x_2$=-1.514?}
+\\
+\noindent Since we are fixing $x_2$, the $e^{(x_2 t_n)}$ can be considered constants. Then we just have a simple linear system of one variable, $x_1$. If we let\\
+$\mathbf{A} x_1=\left[\begin{array}{l}
+e^{(x_2 t_1)}\\
+e^{(x_2 t_2)}\\
+e^{(x_2 t_3)}\\
+\...\\
+e^{(x_2 t_8)}\end{array}\right] x_1 = 
+\left[\begin{array}{l}
+6.80\\
+3.00\\
+1.50\\
+\...\\
+0.15\end{array}\right]$.\\
+\\
+we can then solve it much the same way using a normal equation, except we are dealing with scalars rather than matrices. The we have\\
+$\mathbf{A}^T \mathbf{A} x_1 = \mathbf{A}^T \mathbf{b}$.\\
+Then, $x_1=\frac{\mathbf{A}^T \mathbf{b}}{\mathbf{A}^T \mathbf{A}}$. For $x_2$=-1.386, $x_1$=13.2138. For $x_2$=-1.514, $x_1$=14.3774. See the attached graph for a comparison of the data and best fit lines.
+
+\vspace*{0.25in}
+
+\noindent\textbf{Problem 4a: At what point is the function minimized?}
+\\
+\noindent The solution can be solved by sight. $f(1,1)=0$.
+\\
+\vspace*{0.25in}
+
+\noindent\textbf{Problem 4b: Compute the gradient and evaluate it at both the minimum and (2,2).}
+\\
+\noindent The solution can be solved by sight. $f(1,1)=0$.
+\\
+\vspace*{0.25in}
+
+\noindent\textbf{Problem 4a: At what point is the function minimized?}
+\\
+\noindent The solution can be solved by sight. $f(1,1)=0$.
+\\
+\vspace*{0.25in}
+
+\noindent\textbf{Problem 4a: At what point is the function minimized?}
+\\
+\noindent The solution can be solved by sight. $f(1,1)=0$.
+\\
+\vspace*{0.25in}
+\end{document}
+
+
+
+
+
+
+
+
+
+
