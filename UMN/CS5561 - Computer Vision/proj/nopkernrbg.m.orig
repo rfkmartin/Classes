@@ -1,0 +1,38 @@
+function out=nopkernrgb(string)
+
+% define filters
+smooth=[1 2 1;2 4 2;1 2 1];
+
+for i=1:18,
+    temp=double(imread(sprintf('%s%03d.jpg',string,i+29)));
+    im(:,:,1,i)=temp(:,:,1);
+    im(:,:,2,i)=temp(:,:,2);
+    im(:,:,3,i)=temp(:,:,3);
+    %im(:,:,i)=round(normal(filter2(smooth,temp),0,255));
+end
+
+[a,b]=size(im(:,:,1,1));
+
+for i=2:18,
+    for j=1:3,
+        imabs(:,:,j,i-1)=abs(im(:,:,j,i-1)-im(:,:,j,i));
+    end
+end
+
+immed=median(imabs,4);
+
+sigma=immed/(0.68*sqrt(2));
+sigmasq=sigma.*sigma;
+
+Pr=zeros(a,b);
+for i=1:13,
+    Prt=ones(a,b);
+    for j=1:3,
+        Prt=Prt.*(1./sqrt(2*pi*sigmasq(:,:,j))).*exp((-1/2)*...
+        (im(:,:,j,i)-im(:,:,j,9)).*(im(:,:,j,i)-im(:,:,j,9))./...
+        sigmasq(:,:,j));
+end
+Pr=Pr+Prt;
+end
+
+out=Pr;

@@ -1,0 +1,261 @@
+function out=desub(i,ind)
+
+% DESUB(I,IND)
+%
+% Takes the output of [i,ind]=find(...)
+% for a 4D matrix and returns the
+% original subscripts in a 4x1 array.
+
+sz=[21 35 70];
+for j=1:size(i),
+   out(j,1)=i(j);
+   [out(j,2) ind1]=ind2sub(sz,ind(j));
+   [out(j,3) out(j,4)]=ind2sub([35 70],ind1);
+end
+function drawln(theta,r,maxx,ymax)
+
+if(abs(theta)>.01)
+y1=r/sin(theta);
+y2=(r-maxx*cos(theta))/sin(theta);
+else
+    y1=0;
+    y2=ymax;
+end
+
+line([y1 y2],[0 maxx]);
+function edraw(ax,by,x0,y0)
+
+% EDRAW(A,B,X0,Y0)
+%
+% Uses parametric representation of
+% ellipse to draw ellipse with major
+% axis A, minor axis B, and centered
+% at X0,Y0.
+
+for t=1:100,
+   x(t)=(ax)*5*cos(t*pi/50)+5*x0+100;
+   y(t)=(by+)*5*sin(t*pi/50)+5*y0+100;
+end
+
+for t=1:99,
+   line([y(t) y(t+1)], [x(t) x(t+1)]);
+end
+line([y(100) y(1)],[x(100) x(1)]);
+function edraw1(a,b,x0,y0)
+
+% EDRAW(A,B,X0,Y0)
+%
+% Uses parametric representation of
+% ellipse to draw ellipse with major
+% axis A, minor axis B, and centered
+% at X0,Y0.
+
+for t=1:500,
+   x(t)=(a*t/500)*5*cos(t*pi/50)+5*x0+100;
+   y(t)=(b+7)*5*t/500*sin(t*pi/50)+5*y0+100;
+end
+
+for t=1:499,
+   line([y(t) y(t+1)], [x(t) x(t+1)]);
+end
+%line([y(100) y(1)],[x(100) x(1)]);
+function ehuf(in)
+
+% EHUF(IN)
+%
+% Using the hough transform, finds ellipses in the
+% image IN.
+
+tic
+[m n]=size(in);
+vote=zeros(16,21,35,70);
+
+% get edge direction information
+% 9x9 Sobel for better angular resolution
+sob=[-1 -2 -3  -5 0 5 3 2 1;
+   -2 -3 -5 -8 0 8 5 3 2;
+   -3 -5 -8 -13 0 13 8 5 3;
+   -5 -8 -13 -21 0 21 13 8 5;
+   -8 -13 -21 -34 0 34 21 13 8;
+   -5 -8 -13 -21 0 21 13 8 5;
+   -3 -5 -8 -13 0 13 8 5 3;
+   -2 -3 -5 -8 0 8 5 3 2;
+	-1 -2 -3  -5 0 5 3 2 1];
+ver=filter2(sob,in);
+hor=filter2(-sob',in);
+phi=atan2(hor,ver);
+mask=in&(ver|hor); % remove non-edge areas
+[i,j]=find(mask==1);
+[len,junk]=size(i);
+
+for t=1:5:len,
+   %t
+   for k=5:5:80, % a
+      for l=40:5:140, % b
+         %theta
+         if (abs(cos(phi(i(t),j(t))))==1)
+            x0(1)=i(t)+k;
+            x0(2)=i(t)-k;
+            y0(1)=j(t);
+            y0(2)=j(t);
+         elseif (abs(sin(phi(i(t),j(t))))==1)
+            %phi(i(t),j(t)),i(t),j(t)
+            x0(1)=i(t);
+            x0(2)=i(t);
+            y0(1)=j(t)+l;
+            y0(2)=j(t)-l;
+         else
+            x0(1)=i(t)+k/(sqrt(1+l^2/(k^2*tan(phi(i(t),j(t)))^2)));
+            x0(2)=i(t)-k/(sqrt(1+l^2/(k^2*tan(phi(i(t),j(t)))^2)));
+            y0(1)=j(t)+l/(sqrt(1+(k^2*tan(phi(i(t),j(t)))^2)/l^2));
+            y0(2)=j(t)-l/(sqrt(1+(k^2*tan(phi(i(t),j(t)))^2)/l^2));
+         end
+         
+         % shrink param space
+         x0=round((x0-100)/5);
+         y0=round((y0-100)/5);
+         
+         for u=1:2,
+            if ((x0(u)>0)&(x0(u)<=35)&(y0(u)>0)&(y0(u)<=70))
+               %i(t),j(t),phi(i(t),j(t))
+               %t,x0,y0,k/5,l/5-7,phi(i(t),j(t))
+               vote(k/5,l/5-7,x0(u),y0(u))=vote(k/5,l/5-7,x0(u),y0(u))+1;
+            end
+         end
+      end
+   end
+   %i
+end
+out=vote;
+toc
+
+e1=max(max(max(max(vote))));
+[i ind]=find(vote==e1);
+g(1,:)=desub(i,ind);
+j=1;
+
+while (j < 10)
+   % zero out nearby votes to remove duplicates
+   vote(g(j,1):g(j,1)+1,g(j,2):g(j,2)+1,g(j,3):g(j,3)+1,g(j,4):g(j,4)+1)=0;
+   j=j+1;
+   e1=max(max(max(max(vote))));
+   [i ind]=find(vote==e1);
+   g(j,:)=desub(i(1),ind(1));
+end
+
+%imshow(ones(m,n))
+for t=1:10,
+   edraw(g(t,1),g(t,2),g(t,3),g(t,4));
+end
+function out=lhuf(in,rmin,rmax)
+
+% LINE_HOUGH(IN,RMIN,RMAX)
+%
+% Using the hough transform, finds lines in the
+% image IN using the contraints of RMIN and RMAX.
+% Lines are fitted using the equation x cos(t)
+% +y sin(t) = r.
+
+[m n]=size(in);
+vote=zeros(100,rmax-rmin+1);
+
+% get edge direction information
+% [mag dir]=sobel(in);
+
+for i=1:m,
+   for j=1:n,
+      if (in(i,j))
+         for theta=1:100,
+            r=j*sin(2*pi*theta/100)+i*cos(2*pi*theta/100);
+            if ((r>=rmin)&(r<=rmax))
+               vote(theta,fix(r)+1)=vote(theta,fix(r)+1)+1;
+            end            
+         end
+      end
+   end
+end
+
+[i ftheta]=max(max(vote'));
+[i fr]=max(max(vote));
+j=1;
+
+while (j < 6)
+   out(j).theta=ftheta;
+   out(j).r=fr;
+   % zero out nearby votes to remove duplicates
+   vote((ftheta-5)*((ftheta-5)>1)+1:(ftheta+5)*((ftheta+5)<100)+100*((ftheta+5)>=100),(fr-5)*((fr-5)>1)+1:(fr+5)*((fr+5)<rmax)+rmax*((fr+5)>=rmax))=0;
+   j=j+1;
+   [i ftheta]=max(max(vote'));
+   [i fr]=max(max(vote));
+end
+
+function [hor,ver] = my_conv2s(in)
+
+% out = my_conv2s(IN)
+%
+% Performs an efficient 2-D convolution 
+% of IN with a SOBEL template
+
+[a,b]=size(in);
+
+for i=1:a,
+   for j=1:b-2,
+      hor(i,j)=-in(i,j)+in(i,j+2);
+   end
+end
+
+for i=1:a-2,
+   for j=1:b-2,
+      hor(i,j)=hor(i,j)+2*hor(i+1,j)+hor(i+2,j);
+   end
+end
+
+for i=1:a,
+   for j=1:b-2,
+      ver(i,j)=in(i,j)+2*in(i,j+1)+in(i,j+2);
+   end
+end
+
+for i=1:a-2,
+   for j=1:b-2,
+      ver(i,j)=ver(i,j)-ver(i+2,j);
+   end
+end
+function out = normal(in,least,most)
+
+% NORMAL(IN,MIN,MAX)
+%
+% takes a matrix IN and normalizes it between
+% min and max
+
+nmin=min(min(in));
+nmax=max(max(in));
+
+out=least+((in-nmin)/(abs(nmin)+nmax))*(most-least);function [mag,dir] = sobel(in)
+
+% out = sobel(IN)
+%
+% applies a 3x3 Sobel edge operator to the
+% input image in. Outputs the scaled magnitude
+% image.
+
+%[hor,ver]=my_conv2s(in);
+sob=[-1 0 1;-2 0 2;-1 0 1];
+hor=filter2(sob,in);
+ver=filter2(-sob',in);
+
+
+% absolute value is quicker than squares and square roots
+mag=abs(hor)+abs(ver);
+dir=atan2(ver,hor)+pi;
+
+% normalize
+%mag=normal(mag,0,255);
+%dir=normal(dir,0,255);function out = threshold(in,thresh)
+
+% out = threshold(IN,THRESH)
+%
+% performs thresholding on input image
+% IN with specified value of THRESH.
+
+out=(in>thresh)*255;

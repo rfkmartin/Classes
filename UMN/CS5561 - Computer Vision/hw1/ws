@@ -1,0 +1,7 @@
+#!/soft/perl5.6/bin/perl
+
+while (<>) {
+	if ($_=~ /^[^\n]/) {
+		print $_;
+	}
+}
