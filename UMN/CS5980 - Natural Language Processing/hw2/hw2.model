@@ -1,0 +1,712 @@
+2_and_a_half_feet_away -> 2 and_a_half_feet_away  : 1/1
+JJ -> JJ  : 4/841
+JJ -> JJ JJ  : 6/841
+JJ -> JJ JJ_JJ_and_JJ  : 1/841
+JJ -> JJ JJ_NN  : 1/841
+JJ -> JJ JJ_and_JJ  : 1/841
+JJ -> JJ and_JJ  : 43/841
+JJ -> JJ and_JJ_JJ_NN  : 2/841
+JJ -> JJ and_JJ_NN  : 2/841
+JJ -> JJ and_JJ_and_JJ  : 4/841
+JJ -> JJ and_JJ_and_JJ_and_JJ  : 1/841
+JJ -> JJ and_JJ_and_JJ_and_JJ_and_JJ_and_JJ  : 1/841
+JJ -> Sprite  : 4/841
+JJ -> a foot_tall  : 2/841
+JJ -> black  : 4/841
+JJ -> blue  : 101/841
+JJ -> brown  : 24/841
+JJ -> closest to_you  : 2/841
+JJ -> colored  : 9/841
+JJ -> cream  : 7/841
+JJ -> cylinder  : 7/841
+JJ -> cylindrical  : 20/841
+JJ -> dark  : 1/841
+JJ -> fifth  : 6/841
+JJ -> first  : 2/841
+JJ -> foot  : 1/841
+JJ -> foot and_a_quarter  : 2/841
+JJ -> four inches_tall  : 2/841
+JJ -> fourth  : 4/841
+JJ -> front  : 2/841
+JJ -> gold  : 1/841
+JJ -> green  : 66/841
+JJ -> grey  : 2/841
+JJ -> height  : 4/841
+JJ -> irregularly  : 1/841
+JJ -> large  : 11/841
+JJ -> left  : 2/841
+JJ -> medium  : 8/841
+JJ -> mishappen  : 1/841
+JJ -> most  : 2/841
+JJ -> nine by_three_by_seven_inch  : 4/841
+JJ -> nine inch_by_three_inch_by_six_inch  : 4/841
+JJ -> one foot_by_nine_inch_by_three_inch  : 3/841
+JJ -> orange  : 9/841
+JJ -> other  : 4/841
+JJ -> pink  : 3/841
+JJ -> pinkish  : 4/841
+JJ -> plastic  : 2/841
+JJ -> purple  : 43/841
+JJ -> rectangular  : 53/841
+JJ -> rectangular ah  : 4/841
+JJ -> red  : 49/841
+JJ -> right  : 3/841
+JJ -> round  : 2/841
+JJ -> second  : 80/841
+JJ -> shaped  : 2/841
+JJ -> shiny  : 2/841
+JJ -> short  : 7/841
+JJ -> shorter  : 3/841
+JJ -> shortest  : 3/841
+JJ -> silver  : 23/841
+JJ -> six by_three_by_ten  : 3/841
+JJ -> six inch  : 2/841
+JJ -> six inches_tall  : 4/841
+JJ -> sized  : 4/841
+JJ -> small  : 12/841
+JJ -> smaller  : 5/841
+JJ -> sorta JJ  : 1/841
+JJ -> spherical  : 4/841
+JJ -> square  : 2/841
+JJ -> squarish  : 1/841
+JJ -> tall  : 17/841
+JJ -> tannish  : 3/841
+JJ -> third  : 30/841
+JJ -> top  : 2/841
+JJ -> two  : 18/841
+JJ -> uppermost  : 2/841
+JJ -> white  : 53/841
+JJ -> yellow  : 7/841
+JJ.2 -> red  : 2/2
+JJ.2_NN -> JJ.2 NN  : 2/2
+JJ_JJ.2_NN -> JJ JJ.2_NN  : 2/2
+JJ_JJ_JJ_NN -> JJ JJ_JJ_NN  : 7/7
+JJ_JJ_JJ_NN_PP -> JJ JJ_JJ_NN_PP  : 1/1
+JJ_JJ_JJ_NP -> JJ JJ_JJ_NP  : 2/2
+JJ_JJ_NN -> JJ JJ_NN  : 126/126
+JJ_JJ_NN_NN -> JJ JJ_NN_NN  : 3/3
+JJ_JJ_NN_PP -> JJ JJ_NN_PP  : 1/1
+JJ_JJ_NP -> JJ JJ_NP  : 2/2
+JJ_JJ_and_JJ -> JJ JJ_and_JJ  : 1/1
+JJ_NN -> JJ NN  : 434/434
+JJ_NN.3 -> JJ NN.3  : 4/4
+JJ_NN_JJ_NN -> JJ NN_JJ_NN  : 5/5
+JJ_NN_NN -> JJ NN_NN  : 3/3
+JJ_NN_PP -> JJ NN_PP  : 8/8
+JJ_NP -> JJ NP  : 4/4
+JJ_PP -> JJ PP  : 15/15
+JJ_ah_JJ_JJ_NN -> JJ ah_JJ_JJ_NN  : 1/1
+JJ_and_JJ -> JJ and_JJ  : 8/8
+JJ_and_JJ_JJ_NN -> JJ and_JJ_JJ_NN  : 2/2
+JJ_and_JJ_and_JJ -> JJ and_JJ_and_JJ  : 2/2
+JJ_and_JJ_and_JJ_and_JJ -> JJ and_JJ_and_JJ_and_JJ  : 1/1
+JJ_and_JJ_and_JJ_and_JJ_and_JJ -> JJ and_JJ_and_JJ_and_JJ_and_JJ  : 1/1
+JJ_and_PP -> JJ and_PP  : 8/8
+JJ_ob_JJ_NN -> JJ ob_JJ_NN  : 4/4
+NN -> JJ NN  : 24/653
+NN -> bag  : 2/653
+NN -> bottle  : 10/653
+NN -> box  : 169/653
+NN -> boxes  : 14/653
+NN -> can  : 21/653
+NN -> cap  : 1/653
+NN -> closest  : 2/653
+NN -> container  : 2/653
+NN -> cylinder  : 37/653
+NN -> cylinders  : 4/653
+NN -> hand  : 2/653
+NN -> it  : 13/653
+NN -> item  : 30/653
+NN -> lettering  : 3/653
+NN -> liquid  : 1/653
+NN -> object  : 114/653
+NN -> objects  : 5/653
+NN -> one  : 6/653
+NN -> ones  : 2/653
+NN -> rectangle  : 7/653
+NN -> rectangles  : 3/653
+NN -> red  : 1/653
+NN -> set  : 3/653
+NN -> shelf  : 146/653
+NN -> the JJ_NN  : 1/653
+NN -> thing  : 5/653
+NN -> third NN_from_the_top  : 1/653
+NN -> writing  : 10/653
+NN -> you  : 14/653
+NN.3 -> object  : 4/4
+NN_JJ -> NN JJ  : 1/1
+NN_JJ_NN -> NN JJ_NN  : 5/5
+NN_NN -> NN NN  : 4/4
+NN_PP -> NN PP  : 8/8
+NN_PP_RC -> NN PP_RC  : 3/3
+NN_RC -> NN RC  : 4/4
+NN_from_the_top -> NN from_the_top  : 1/1
+NP -> I  : 3/1237
+NP -> JJ JJ_JJ_NN  : 3/1237
+NP -> JJ JJ_NN  : 1/1237
+NP -> JJ NN  : 13/1237
+NP -> NN  : 31/1237
+NP -> NN VP  : 3/1237
+NP -> NP  : 49/1237
+NP -> NP JJ_PP  : 2/1237
+NP -> NP NP  : 5/1237
+NP -> NP NP_RC  : 3/1237
+NP -> NP NP_SENT  : 2/1237
+NP -> NP PP  : 351/1237
+NP -> NP PP.  : 3/1237
+NP -> NP PP_PP  : 2/1237
+NP -> NP PP_PP_PP  : 1/1237
+NP -> NP RC  : 121/1237
+NP -> NPthe PP  : 2/1237
+NP -> a JJ_JJ_NN  : 12/1237
+NP -> a JJ_NN  : 12/1237
+NP -> a NN  : 5/1237
+NP -> a red_object  : 1/1237
+NP -> ah NP  : 2/1237
+NP -> another JJ_JJ_NN  : 3/1237
+NP -> another JJ_NN  : 6/1237
+NP -> another JJ_NP  : 2/1237
+NP -> another NN  : 1/1237
+NP -> it  : 47/1237
+NP -> it it  : 1/1237
+NP -> object  : 2/1237
+NP -> objects  : 2/1237
+NP -> some JJ_NN  : 3/1237
+NP -> the JJ  : 5/1237
+NP -> the JJ_JJ.2_NN  : 2/1237
+NP -> the JJ_JJ_JJ_NN  : 7/1237
+NP -> the JJ_JJ_JJ_NN_PP  : 1/1237
+NP -> the JJ_JJ_NN  : 96/1237
+NP -> the JJ_JJ_NN_NN  : 3/1237
+NP -> the JJ_NN  : 266/1237
+NP -> the JJ_NN.3  : 4/1237
+NP -> the JJ_NN_JJ_NN  : 5/1237
+NP -> the JJ_NN_PP  : 7/1237
+NP -> the JJ_ah_JJ_JJ_NN  : 1/1237
+NP -> the JJ_and_JJ_JJ_NN  : 2/1237
+NP -> the JJ_ob_JJ_NN  : 4/1237
+NP -> the NN  : 107/1237
+NP -> the NN_JJ  : 1/1237
+NP -> the NN_NN  : 1/1237
+NP -> the NN_PP_RC  : 3/1237
+NP -> the NN_RC  : 4/1237
+NP -> the ah_JJ_NN  : 2/1237
+NP -> the purple  : 4/1237
+NP -> the sec_JJ_NN  : 1/1237
+NP -> the short_rectangular_object  : 3/1237
+NP -> the third  : 4/1237
+NP -> two other_JJ_NN  : 2/1237
+NP -> two red_objects  : 1/1237
+NP -> you  : 5/1237
+NP -> your NN  : 2/1237
+NP. -> e1 NP_PP  : 2/2
+NP_NP -> NP NP  : 2/2
+NP_PP -> NP PP  : 13/13
+NP_RC -> NP RC  : 10/10
+NP_SENT -> NP SENT  : 2/2
+NP_VP -> NP VP  : 5/5
+NP_and_NP -> NP and_NP  : 15/15
+NPthe -> JJ JJ_NN  : 2/2
+PP -> PP PP  : 1/686
+PP -> PP and_PP  : 52/686
+PP -> PP and_PP_PP  : 2/686
+PP -> PP and_one  : 1/686
+PP -> PP and_slightly  : 2/686
+PP -> PP and_to  : 3/686
+PP -> a foot_tall_and_eight_inches_wide  : 4/686
+PP -> a foot_to_the_left_of_NP  : 4/686
+PP -> a fourth_of_a_foot_to_the_left_of_you  : 3/686
+PP -> a fourth_of_a_foot_to_the_right_of_you  : 1/686
+PP -> a half_a_foot_below_NP  : 1/686
+PP -> a half_a_foot_below_you  : 1/686
+PP -> a half_a_foot_to_the_left_of_you  : 4/686
+PP -> about a_foot_and_a_half_a_to_your_left  : 2/686
+PP -> about a_foot_and_a_half_just_a_little_above_you  : 1/686
+PP -> about a_foot_and_a_half_to_your_left  : 3/686
+PP -> about a_foot_below_where_you_are  : 2/686
+PP -> about a_foot_tall  : 1/686
+PP -> about even_with_you  : 2/686
+PP -> about four_inches_tall  : 1/686
+PP -> about four_inches_tall_between_NP  : 1/686
+PP -> about six_inches_above_you  : 1/686
+PP -> about six_inches_below_you  : 2/686
+PP -> about six_inches_high_and_four_inches_wide  : 1/686
+PP -> about two_feet_away_from_you  : 2/686
+PP -> about two_feet_in_front  : 1/686
+PP -> about two_feet_in_front_of_NP  : 7/686
+PP -> about two_feet_in_front_of_you  : 2/686
+PP -> about two_feet_to_the_front_of_you  : 3/686
+PP -> above you  : 11/686
+PP -> all the_way_to_the_left  : 6/686
+PP -> all the_way_to_the_right  : 1/686
+PP -> around er_the_same_height_as_the_bottle_to_the_left  : 2/686
+PP -> at hand_level  : 13/686
+PP -> below NP  : 2/686
+PP -> below hand_level  : 4/686
+PP -> below you  : 1/686
+PP -> below you_about_two_feet_in_front  : 1/686
+PP -> besides NP  : 2/686
+PP -> between NP  : 15/686
+PP -> between NP_and_NP  : 11/686
+PP -> directly PP  : 1/686
+PP -> directly below_NP  : 1/686
+PP -> directly below_you  : 4/686
+PP -> directly in_front_of_NP  : 4/686
+PP -> directly in_front_of_you  : 11/686
+PP -> down about_2_and_a_half_feet_away  : 1/686
+PP -> down taller_than_the_things  : 2/686
+PP -> fourth from_the_right  : 4/686
+PP -> from NP  : 5/686
+PP -> from the_far_left_of_NP  : 3/686
+PP -> from the_left  : 11/686
+PP -> from the_right_on_the_on_NP  : 1/686
+PP -> from the_top  : 5/686
+PP -> front  : 4/686
+PP -> half a_foot_down_from_you  : 2/686
+PP -> half a_foot_to_the_right_of_you  : 2/686
+PP -> immediately in_front_of_you  : 6/686
+PP -> in  : 1/686
+PP -> in between_NP  : 6/686
+PP -> in directly_in_front_of_you  : 1/686
+PP -> in front  : 4/686
+PP -> in front_and_to_the_left_of_you  : 4/686
+PP -> in front_of_another_one  : 2/686
+PP -> in front_of_you  : 39/686
+PP -> in front_of_you_about_a_foot_and_a_half  : 1/686
+PP -> in the_center_of_NP  : 1/686
+PP -> in the_middle  : 2/686
+PP -> in the_middle_of_NP  : 3/686
+PP -> just a_little_bit_to_your_left  : 1/686
+PP -> just above_you  : 1/686
+PP -> just in_front_of_you  : 2/686
+PP -> just like_it  : 2/686
+PP -> next to_NP  : 13/686
+PP -> next to_the_left_of_NP  : 3/686
+PP -> of NP  : 3/686
+PP -> of the_JJ_JJ_JJ_NP  : 2/686
+PP -> of the_same_size  : 4/686
+PP -> on  : 4/686
+PP -> on NN  : 1/686
+PP -> on NP  : 125/686
+PP -> on NP_PP  : 2/686
+PP -> on either_side_of_it  : 3/686
+PP -> on it  : 9/686
+PP -> on the  : 2/686
+PP -> on the_edge_of_NP  : 2/686
+PP -> on the_far_left  : 1/686
+PP -> on the_left  : 7/686
+PP -> on the_right  : 3/686
+PP -> on the_rightmost  : 2/686
+PP -> on the_shelf_below_your_hand  : 1/686
+PP -> on the_shelf_directly_below_you  : 2/686
+PP -> on top_of_NP  : 8/686
+PP -> on top_of_it  : 3/686
+PP -> on your_left  : 1/686
+PP -> on your_right  : 2/686
+PP -> one foot_tall_and_about_four_inches_across  : 1/686
+PP -> one shelf_down_about_two_feet  : 2/686
+PP -> resting on_top_of_NP  : 2/686
+PP -> right in_front_of_you  : 3/686
+PP -> right next_to_NP  : 3/686
+PP -> roughly two_feet_directly_in_front_of_you  : 1/686
+PP -> roughly two_feet_exactly_in_front_of_you  : 1/686
+PP -> roughly two_feet_in_front_of_NP  : 1/686
+PP -> roughly two_feet_in_front_of_you  : 10/686
+PP -> second from_the_left  : 5/686
+PP -> six inches_below_you  : 2/686
+PP -> six inches_tall_two_inches_wide  : 3/686
+PP -> slightly PP  : 14/686
+PP -> slightly to_the_right  : 2/686
+PP -> slightly to_your_left  : 2/686
+PP -> slightly to_your_right_and_multi_colored  : 1/686
+PP -> straight in_front_of_you  : 6/686
+PP -> taller than_the_things_around_it  : 1/686
+PP -> the fourth_from_the_left  : 4/686
+PP -> the fourth_on_the_left  : 4/686
+PP -> the furthest_right_on_NP  : 3/686
+PP -> third from_the_left  : 4/686
+PP -> to the_far_left  : 3/686
+PP -> to the_far_right_of_NP  : 3/686
+PP -> to the_left  : 11/686
+PP -> to the_left_NP  : 3/686
+PP -> to the_left_of_NP  : 6/686
+PP -> to the_left_of_NP_PP  : 1/686
+PP -> to the_left_of_you  : 4/686
+PP -> to the_right  : 3/686
+PP -> to the_right_of_NP  : 11/686
+PP -> to the_second_one_from_the_right  : 4/686
+PP -> to you  : 2/686
+PP -> to your_left  : 18/686
+PP -> to your_left_about_a_foot_and_a_half_between_NP_and_NP  : 4/686
+PP -> um about_nine_inches_by_five_inches_by_a_foot_and_a_half  : 2/686
+PP -> um third_from_the_left  : 4/686
+PP -> up towards_the_top_of_it  : 2/686
+PP -> with NP  : 10/686
+PP. -> e3 from_the_left  : 3/3
+PP_NP -> PP NP  : 2/2
+PP_PP -> PP PP  : 30/30
+PP_PP_PP -> PP PP_PP  : 1/1
+PP_RC -> PP RC  : 3/3
+PP_SENT -> PP SENT  : 2/2
+RC -> RC  : 4/142
+RC -> that VP  : 117/142
+RC -> which VP  : 18/142
+RC -> which which_VP  : 3/142
+SENT -> NP  : 3/352
+SENT -> NP VP  : 53/352
+SENT -> NP VP_NP_VP  : 5/352
+SENT -> PP VP  : 2/352
+SENT -> PP VP.  : 3/352
+SENT -> SENT and_SENT  : 14/352
+SENT -> VB  : 7/352
+SENT -> VP  : 258/352
+SENT -> VP VP  : 4/352
+SENT -> pick up_NP  : 1/352
+SENT -> there VP  : 2/352
+VB -> pick up_NP  : 7/7
+VP -> 's  : 2/498
+VP -> 's JJ  : 2/498
+VP -> 's JJ_PP  : 3/498
+VP -> 's NP  : 16/498
+VP -> 's PP  : 36/498
+VP -> 's PP_PP  : 4/498
+VP -> Ah pick_up_NP  : 8/498
+VP -> Alright pick_up_NP  : 2/498
+VP -> Pick up_NP  : 19/498
+VP -> VP NP  : 2/498
+VP -> VP PP  : 2/498
+VP -> VP and_VP  : 10/498
+VP -> ah pick_up_NP  : 7/498
+VP -> don't know  : 3/498
+VP -> has JJ_PP  : 6/498
+VP -> has NP  : 3/498
+VP -> has NP_NP  : 1/498
+VP -> has NP_PP  : 3/498
+VP -> ick up_NP  : 1/498
+VP -> is  : 3/498
+VP -> is JJ  : 21/498
+VP -> is JJ_PP  : 4/498
+VP -> is JJ_and_PP  : 8/498
+VP -> is NP  : 31/498
+VP -> is PP  : 49/498
+VP -> is PP_PP  : 21/498
+VP -> move PP_SENT  : 2/498
+VP -> pick NP  : 2/498
+VP -> pick NP_PP  : 2/498
+VP -> pick up  : 2/498
+VP -> pick up_NP  : 205/498
+VP -> pick up_NP.  : 2/498
+VP -> pick up_NP_NP  : 1/498
+VP -> pick up_NP_PP  : 3/498
+VP -> pick up_NP_RC  : 7/498
+VP -> pick up_PP_NP  : 2/498
+VP -> reach out  : 2/498
+VP -> well pick_up_NP  : 1/498
+VP. -> e1 pick_up_NP  : 3/3
+VP_NP_VP -> VP NP_VP  : 5/5
+a_foot_and_a_half -> a foot_and_a_half  : 3/3
+a_foot_and_a_half_a_to_your_left -> a foot_and_a_half_a_to_your_left  : 2/2
+a_foot_and_a_half_between_NP_and_NP -> a foot_and_a_half_between_NP_and_NP  : 4/4
+a_foot_and_a_half_just_a_little_above_you -> a foot_and_a_half_just_a_little_above_you  : 1/1
+a_foot_and_a_half_to_your_left -> a foot_and_a_half_to_your_left  : 3/3
+a_foot_below_NP -> a foot_below_NP  : 1/1
+a_foot_below_where_you_are -> a foot_below_where_you_are  : 2/2
+a_foot_below_you -> a foot_below_you  : 1/1
+a_foot_down_from_you -> a foot_down_from_you  : 2/2
+a_foot_tall -> a foot_tall  : 1/1
+a_foot_to_the_left_of_you -> a foot_to_the_left_of_you  : 7/7
+a_foot_to_the_right_of_you -> a foot_to_the_right_of_you  : 3/3
+a_half -> a half  : 3/3
+a_half_a_to_your_left -> a half_a_to_your_left  : 2/2
+a_half_between_NP_and_NP -> a half_between_NP_and_NP  : 4/4
+a_half_feet_away -> a half_feet_away  : 1/1
+a_half_just_a_little_above_you -> a half_just_a_little_above_you  : 1/1
+a_half_to_your_left -> a half_to_your_left  : 3/3
+a_little_above_you -> a little_above_you  : 1/1
+a_little_bit_to_your_left -> a little_bit_to_your_left  : 1/1
+a_quarter -> a quarter  : 2/2
+a_to_your_left -> a to_your_left  : 2/2
+about_2_and_a_half_feet_away -> about 2_and_a_half_feet_away  : 1/1
+about_a_foot_and_a_half -> about a_foot_and_a_half  : 1/1
+about_a_foot_and_a_half_between_NP_and_NP -> about a_foot_and_a_half_between_NP_and_NP  : 4/4
+about_four_inches_across -> about four_inches_across  : 1/1
+about_nine_inches_by_five_inches_by_a_foot_and_a_half -> about nine_inches_by_five_inches_by_a_foot_and_a_half  : 2/2
+about_two_feet -> about two_feet  : 2/2
+about_two_feet_in_front -> about two_feet_in_front  : 1/1
+above_you -> above you  : 3/3
+ah_JJ_JJ_NN -> ah JJ_JJ_NN  : 1/1
+ah_JJ_NN -> ah JJ_NN  : 2/2
+and_JJ -> and JJ  : 51/51
+and_JJ_JJ_NN -> and JJ_JJ_NN  : 4/4
+and_JJ_NN -> and JJ_NN  : 2/2
+and_JJ_and_JJ -> and JJ_and_JJ  : 6/6
+and_JJ_and_JJ_and_JJ -> and JJ_and_JJ_and_JJ  : 2/2
+and_JJ_and_JJ_and_JJ_and_JJ -> and JJ_and_JJ_and_JJ_and_JJ  : 1/1
+and_JJ_and_JJ_and_JJ_and_JJ_and_JJ -> and JJ_and_JJ_and_JJ_and_JJ_and_JJ  : 1/1
+and_NP -> and NP  : 15/15
+and_PP -> and PP  : 60/60
+and_PP_PP -> and PP_PP  : 2/2
+and_SENT -> and SENT  : 14/14
+and_VP -> and VP  : 10/10
+and_a_half -> and a_half  : 3/3
+and_a_half_a_to_your_left -> and a_half_a_to_your_left  : 2/2
+and_a_half_between_NP_and_NP -> and a_half_between_NP_and_NP  : 4/4
+and_a_half_feet_away -> and a_half_feet_away  : 1/1
+and_a_half_just_a_little_above_you -> and a_half_just_a_little_above_you  : 1/1
+and_a_half_to_your_left -> and a_half_to_your_left  : 3/3
+and_a_quarter -> and a_quarter  : 2/2
+and_about_four_inches_across -> and about_four_inches_across  : 1/1
+and_eight_inches_wide -> and eight_inches_wide  : 4/4
+and_four_inches_wide -> and four_inches_wide  : 1/1
+and_multi_colored -> and multi_colored  : 1/1
+and_one -> and one  : 1/1
+and_slightly -> and slightly  : 2/2
+and_to -> and to  : 3/3
+and_to_the_left_of_you -> and to_the_left_of_you  : 4/4
+another_one -> another one  : 2/2
+around_it -> around it  : 1/1
+as_the_bottle_to_the_left -> as the_bottle_to_the_left  : 2/2
+away_from_you -> away from_you  : 2/2
+below_NP -> below NP  : 2/2
+below_where_you_are -> below where_you_are  : 2/2
+below_you -> below you  : 11/11
+below_your_hand -> below your_hand  : 1/1
+between_NP -> between NP  : 7/7
+between_NP_and_NP -> between NP_and_NP  : 4/4
+bit_to_your_left -> bit to_your_left  : 1/1
+bottle_to_the_left -> bottle to_the_left  : 2/2
+by_a_foot_and_a_half -> by a_foot_and_a_half  : 2/2
+by_five_inches_by_a_foot_and_a_half -> by five_inches_by_a_foot_and_a_half  : 2/2
+by_nine_inch_by_three_inch -> by nine_inch_by_three_inch  : 3/3
+by_seven_inch -> by seven_inch  : 4/4
+by_six_inch -> by six_inch  : 4/4
+by_ten -> by ten  : 3/3
+by_three_by_seven_inch -> by three_by_seven_inch  : 4/4
+by_three_by_ten -> by three_by_ten  : 3/3
+by_three_inch -> by three_inch  : 3/3
+by_three_inch_by_six_inch -> by three_inch_by_six_inch  : 4/4
+center_of_NP -> center of_NP  : 1/1
+directly_below_you -> directly below_you  : 2/2
+directly_in_front_of_you -> directly in_front_of_you  : 2/2
+down_about_two_feet -> down about_two_feet  : 2/2
+down_from_you -> down from_you  : 2/2
+edge_of_NP -> edge of_NP  : 2/2
+eight_inches_wide -> eight inches_wide  : 4/4
+either_side_of_it -> either side_of_it  : 3/3
+er_the_same_height_as_the_bottle_to_the_left -> er the_same_height_as_the_bottle_to_the_left  : 2/2
+even_with_you -> even with_you  : 2/2
+exactly_in_front_of_you -> exactly in_front_of_you  : 1/1
+far_left -> far left  : 4/4
+far_left_of_NP -> far left_of_NP  : 3/3
+far_right_of_NP -> far right_of_NP  : 3/3
+feet_away -> feet away  : 1/1
+feet_away_from_you -> feet away_from_you  : 2/2
+feet_directly_in_front_of_you -> feet directly_in_front_of_you  : 1/1
+feet_exactly_in_front_of_you -> feet exactly_in_front_of_you  : 1/1
+feet_in_front -> feet in_front  : 2/2
+feet_in_front_of_NP -> feet in_front_of_NP  : 8/8
+feet_in_front_of_you -> feet in_front_of_you  : 12/12
+feet_to_the_front_of_you -> feet to_the_front_of_you  : 3/3
+five_inches_by_a_foot_and_a_half -> five inches_by_a_foot_and_a_half  : 2/2
+foot_and_a_half -> foot and_a_half  : 3/3
+foot_and_a_half_a_to_your_left -> foot and_a_half_a_to_your_left  : 2/2
+foot_and_a_half_between_NP_and_NP -> foot and_a_half_between_NP_and_NP  : 4/4
+foot_and_a_half_just_a_little_above_you -> foot and_a_half_just_a_little_above_you  : 1/1
+foot_and_a_half_to_your_left -> foot and_a_half_to_your_left  : 3/3
+foot_below_NP -> foot below_NP  : 1/1
+foot_below_where_you_are -> foot below_where_you_are  : 2/2
+foot_below_you -> foot below_you  : 1/1
+foot_by_nine_inch_by_three_inch -> foot by_nine_inch_by_three_inch  : 3/3
+foot_down_from_you -> foot down_from_you  : 2/2
+foot_tall -> foot tall  : 3/3
+foot_tall_and_about_four_inches_across -> foot tall_and_about_four_inches_across  : 1/1
+foot_tall_and_eight_inches_wide -> foot tall_and_eight_inches_wide  : 4/4
+foot_to_the_left_of_NP -> foot to_the_left_of_NP  : 4/4
+foot_to_the_left_of_you -> foot to_the_left_of_you  : 7/7
+foot_to_the_right_of_you -> foot to_the_right_of_you  : 3/3
+four_inches_across -> four inches_across  : 1/1
+four_inches_tall -> four inches_tall  : 1/1
+four_inches_tall_between_NP -> four inches_tall_between_NP  : 1/1
+four_inches_wide -> four inches_wide  : 1/1
+fourth_from_the_left -> fourth from_the_left  : 4/4
+fourth_of_a_foot_to_the_left_of_you -> fourth of_a_foot_to_the_left_of_you  : 3/3
+fourth_of_a_foot_to_the_right_of_you -> fourth of_a_foot_to_the_right_of_you  : 1/1
+fourth_on_the_left -> fourth on_the_left  : 4/4
+from_the_left -> from the_left  : 20/20
+from_the_right -> from the_right  : 8/8
+from_the_top -> from the_top  : 1/1
+from_you -> from you  : 4/4
+front_and_to_the_left_of_you -> front and_to_the_left_of_you  : 4/4
+front_of_NP -> front of_NP  : 12/12
+front_of_another_one -> front of_another_one  : 2/2
+front_of_you -> front of_you  : 85/85
+front_of_you_about_a_foot_and_a_half -> front of_you_about_a_foot_and_a_half  : 1/1
+furthest_right_on_NP -> furthest right_on_NP  : 3/3
+half_a_foot_below_NP -> half a_foot_below_NP  : 1/1
+half_a_foot_below_you -> half a_foot_below_you  : 1/1
+half_a_foot_to_the_left_of_you -> half a_foot_to_the_left_of_you  : 4/4
+half_a_to_your_left -> half a_to_your_left  : 2/2
+half_between_NP_and_NP -> half between_NP_and_NP  : 4/4
+half_feet_away -> half feet_away  : 1/1
+half_just_a_little_above_you -> half just_a_little_above_you  : 1/1
+half_to_your_left -> half to_your_left  : 3/3
+hand_level -> hand level  : 17/17
+height_as_the_bottle_to_the_left -> height as_the_bottle_to_the_left  : 2/2
+high_and_four_inches_wide -> high and_four_inches_wide  : 1/1
+in_front -> in front  : 2/2
+in_front_of_NP -> in front_of_NP  : 12/12
+in_front_of_you -> in front_of_you  : 43/43
+inch_by_six_inch -> inch by_six_inch  : 4/4
+inch_by_three_inch -> inch by_three_inch  : 3/3
+inch_by_three_inch_by_six_inch -> inch by_three_inch_by_six_inch  : 4/4
+inches_above_you -> inches above_you  : 1/1
+inches_across -> inches across  : 1/1
+inches_below_you -> inches below_you  : 4/4
+inches_by_a_foot_and_a_half -> inches by_a_foot_and_a_half  : 2/2
+inches_by_five_inches_by_a_foot_and_a_half -> inches by_five_inches_by_a_foot_and_a_half  : 2/2
+inches_high_and_four_inches_wide -> inches high_and_four_inches_wide  : 1/1
+inches_tall -> inches tall  : 7/7
+inches_tall_between_NP -> inches tall_between_NP  : 1/1
+inches_tall_two_inches_wide -> inches tall_two_inches_wide  : 3/3
+inches_wide -> inches wide  : 8/8
+just_a_little_above_you -> just a_little_above_you  : 1/1
+left_NP -> left NP  : 3/3
+left_about_a_foot_and_a_half_between_NP_and_NP -> left about_a_foot_and_a_half_between_NP_and_NP  : 4/4
+left_of_NP -> left of_NP  : 16/16
+left_of_NP_PP -> left of_NP_PP  : 1/1
+left_of_you -> left of_you  : 19/19
+like_it -> like it  : 2/2
+little_above_you -> little above_you  : 1/1
+little_bit_to_your_left -> little bit_to_your_left  : 1/1
+middle_of_NP -> middle of_NP  : 3/3
+multi_colored -> multi colored  : 1/1
+next_to_NP -> next to_NP  : 3/3
+nine_inch_by_three_inch -> nine inch_by_three_inch  : 3/3
+nine_inches_by_five_inches_by_a_foot_and_a_half -> nine inches_by_five_inches_by_a_foot_and_a_half  : 2/2
+ob_JJ_NN -> ob JJ_NN  : 4/4
+of_NP -> of NP  : 58/58
+of_NP_PP -> of NP_PP  : 1/1
+of_a_foot_to_the_left_of_you -> of a_foot_to_the_left_of_you  : 3/3
+of_a_foot_to_the_right_of_you -> of a_foot_to_the_right_of_you  : 1/1
+of_another_one -> of another_one  : 2/2
+of_it -> of it  : 8/8
+of_you -> of you  : 107/107
+of_you_about_a_foot_and_a_half -> of you_about_a_foot_and_a_half  : 1/1
+on_NP -> on NP  : 4/4
+on_the_left -> on the_left  : 4/4
+on_the_on_NP -> on the_on_NP  : 1/1
+on_top_of_NP -> on top_of_NP  : 2/2
+one -> foot to_the_left_of_you  : 1/1
+one_from_the_right -> one from_the_right  : 4/4
+other_JJ_NN -> other JJ_NN  : 2/2
+pick_up_NP -> pick up_NP  : 21/21
+rectangular_object -> rectangular object  : 3/3
+red_object -> red object  : 1/1
+red_objects -> red objects  : 1/1
+right_and_multi_colored -> right and_multi_colored  : 1/1
+right_of_NP -> right of_NP  : 14/14
+right_of_you -> right of_you  : 3/3
+right_on_NP -> right on_NP  : 3/3
+right_on_the_on_NP -> right on_the_on_NP  : 1/1
+same_height_as_the_bottle_to_the_left -> same height_as_the_bottle_to_the_left  : 2/2
+same_size -> same size  : 4/4
+sec_JJ_NN -> sec JJ_NN  : 1/1
+second_one_from_the_right -> second one_from_the_right  : 4/4
+seven_inch -> seven inch  : 4/4
+shelf_below_your_hand -> shelf below_your_hand  : 1/1
+shelf_directly_below_you -> shelf directly_below_you  : 2/2
+shelf_down_about_two_feet -> shelf down_about_two_feet  : 2/2
+short_rectangular_object -> short rectangular_object  : 3/3
+side_of_it -> side of_it  : 3/3
+six_inch -> six inch  : 4/4
+six_inches_above_you -> six inches_above_you  : 1/1
+six_inches_below_you -> six inches_below_you  : 2/2
+six_inches_high_and_four_inches_wide -> six inches_high_and_four_inches_wide  : 1/1
+slightly -> to the_left  : 2/2
+tall_and_about_four_inches_across -> tall and_about_four_inches_across  : 1/1
+tall_and_eight_inches_wide -> tall and_eight_inches_wide  : 4/4
+tall_between_NP -> tall between_NP  : 1/1
+tall_two_inches_wide -> tall two_inches_wide  : 3/3
+taller_than_the_things -> taller than_the_things  : 2/2
+than_the_things -> than the_things  : 2/2
+than_the_things_around_it -> than the_things_around_it  : 1/1
+the_JJ_JJ_JJ_NP -> the JJ_JJ_JJ_NP  : 2/2
+the_bottle_to_the_left -> the bottle_to_the_left  : 2/2
+the_center_of_NP -> the center_of_NP  : 1/1
+the_edge_of_NP -> the edge_of_NP  : 2/2
+the_far_left -> the far_left  : 4/4
+the_far_left_of_NP -> the far_left_of_NP  : 3/3
+the_far_right_of_NP -> the far_right_of_NP  : 3/3
+the_front_of_you -> the front_of_you  : 3/3
+the_left -> the left  : 63/63
+the_left_NP -> the left_NP  : 3/3
+the_left_of_NP -> the left_of_NP  : 13/13
+the_left_of_NP_PP -> the left_of_NP_PP  : 1/1
+the_left_of_you -> the left_of_you  : 16/16
+the_middle -> the middle  : 2/2
+the_middle_of_NP -> the middle_of_NP  : 3/3
+the_on_NP -> the on_NP  : 1/1
+the_right -> the right  : 17/17
+the_right_of_NP -> the right_of_NP  : 11/11
+the_right_of_you -> the right_of_you  : 3/3
+the_right_on_the_on_NP -> the right_on_the_on_NP  : 1/1
+the_rightmost -> the rightmost  : 2/2
+the_same_height_as_the_bottle_to_the_left -> the same_height_as_the_bottle_to_the_left  : 2/2
+the_same_size -> the same_size  : 4/4
+the_second_one_from_the_right -> the second_one_from_the_right  : 4/4
+the_shelf_below_your_hand -> the shelf_below_your_hand  : 1/1
+the_shelf_directly_below_you -> the shelf_directly_below_you  : 2/2
+the_things -> the things  : 2/2
+the_things_around_it -> the things_around_it  : 1/1
+the_top -> the top  : 6/6
+the_top_of_it -> the top_of_it  : 2/2
+the_way_to_the_left -> the way_to_the_left  : 6/6
+the_way_to_the_right -> the way_to_the_right  : 1/1
+things_around_it -> things around_it  : 1/1
+third_from_the_left -> third from_the_left  : 4/4
+three_by_seven_inch -> three by_seven_inch  : 4/4
+three_by_ten -> three by_ten  : 3/3
+three_inch -> three inch  : 3/3
+three_inch_by_six_inch -> three inch_by_six_inch  : 4/4
+to -> the left_of_you  : 3/3
+to_NP -> to NP  : 16/16
+to_the_front_of_you -> to the_front_of_you  : 3/3
+to_the_left -> to the_left  : 8/8
+to_the_left_of_NP -> to the_left_of_NP  : 7/7
+to_the_left_of_you -> to the_left_of_you  : 12/12
+to_the_right -> to the_right  : 3/3
+to_the_right_of_you -> to the_right_of_you  : 3/3
+to_you -> to you  : 2/2
+to_your_left -> to your_left  : 8/8
+to_your_right_and_multi_colored -> to your_right_and_multi_colored  : 1/1
+top_of_NP -> top of_NP  : 10/10
+top_of_it -> top of_it  : 5/5
+towards_the_top_of_it -> towards the_top_of_it  : 2/2
+two_feet -> two feet  : 2/2
+two_feet_away_from_you -> two feet_away_from_you  : 2/2
+two_feet_directly_in_front_of_you -> two feet_directly_in_front_of_you  : 1/1
+two_feet_exactly_in_front_of_you -> two feet_exactly_in_front_of_you  : 1/1
+two_feet_in_front -> two feet_in_front  : 2/2
+two_feet_in_front_of_NP -> two feet_in_front_of_NP  : 8/8
+two_feet_in_front_of_you -> two feet_in_front_of_you  : 12/12
+two_feet_to_the_front_of_you -> two feet_to_the_front_of_you  : 3/3
+two_inches_wide -> two inches_wide  : 3/3
+up_NP -> up NP  : 254/254
+up_NP. -> up NP.  : 2/2
+up_NP_NP -> up NP_NP  : 1/1
+up_NP_PP -> up NP_PP  : 3/3
+up_NP_RC -> up NP_RC  : 7/7
+up_PP_NP -> up PP_NP  : 2/2
+way_to_the_left -> way to_the_left  : 6/6
+way_to_the_right -> way to_the_right  : 1/1
+where_you_are -> where you_are  : 2/2
+which_VP -> which VP  : 3/3
+with_you -> with you  : 2/2
+you_about_a_foot_and_a_half -> you about_a_foot_and_a_half  : 1/1
+you_about_two_feet_in_front -> you about_two_feet_in_front  : 1/1
+you_are -> you are  : 2/2
+your_hand -> your hand  : 1/1
+your_left -> your left  : 27/27
+your_left_about_a_foot_and_a_half_between_NP_and_NP -> your left_about_a_foot_and_a_half_between_NP_and_NP  : 4/4
+your_right -> your right  : 2/2
+your_right_and_multi_colored -> your right_and_multi_colored  : 1/1

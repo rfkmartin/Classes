@@ -1,0 +1,952 @@
+(***********************************************************************
+
+                    Mathematica-Compatible Notebook
+
+This notebook can be used on any computer system with Mathematica 4.0,
+MathReader 4.0, or any compatible application. The data for the notebook 
+starts with the line containing stars above.
+
+To get the notebook into a Mathematica-compatible application, do one of 
+the following:
+
+* Save the data starting with the line of stars above into a file
+  with a name ending in .nb, then open the file inside the application;
+
+* Copy the data starting with the line of stars above to the
+  clipboard, then use the Paste menu command inside the application.
+
+Data for notebooks contains only printable 7-bit ASCII and can be
+sent directly in email or through ftp in text mode.  Newlines can be
+CR, LF or CRLF (Unix, Macintosh or MS-DOS style).
+
+NOTE: If you modify the data for this notebook not in a Mathematica-
+compatible application, you must delete the line below containing the 
+word CacheID, otherwise Mathematica-compatible applications may try to 
+use invalid cache data.
+
+For more information on notebooks and Mathematica-compatible 
+applications, contact Wolfram Research:
+  web: http://www.wolfram.com
+  email: info@wolfram.com
+  phone: +1-217-398-0700 (U.S.)
+
+Notebook reader applications are available free of charge from 
+Wolfram Research.
+***********************************************************************)
+
+(*CacheID: 232*)
+
+
+(*NotebookFileLineBreakTest
+NotebookFileLineBreakTest*)
+(*NotebookOptionsPosition[     34331,        796]*)
+(*NotebookOutlinePosition[     35457,        831]*)
+(*  CellTagsIndexPosition[     35413,        827]*)
+(*WindowFrame->Normal*)
+
+
+
+Notebook[{
+Cell[TextData[
+"Vision: Computational theory to neural systems\nU. Minn. Psy 5036\n\n\
+Assignment #1: Ideal discriminator\n\nIdeal pattern detector\n"], "Subtitle",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData[{
+  "In this assignment, you will simulate an ideal detector called the ",
+  StyleBox["signal-known-exactly",
+    FontColor->RGBColor[1, 0, 0]],
+  " ideal (SKE).  This detector has a built-in template that matches the \
+signal that it is looking for. The signal is embedded in \"white gaussian \
+noise\".   \"white\" means the pixels are not correlated with each \
+other--intuitively this means that you can't reliably predict what one  \
+pixel's value is from any of the others.\n\nIn the absence of any internal \
+noise, this ideal detector behaves as one would expect a linear neuron to \
+behave when a target signal pattern exactly matches its synaptic weight \
+pattern. There are some neurons in the the primary cortex of the visual \
+system called \"simple cells\". These cells can be modeled as ideal detectors \
+for the patterns that match their receptive fields. In actual practice, \
+neurons are not noise-free, and not perfectly linear."
+}], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[CellGroupData[{
+
+Cell[TextData["Before you get started"], "Subsubsection",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData[{
+  "When doing calculations on images, it is useful to be able to easily go \
+back and forth between matrix and vector representations of images. So in the \
+exercises below, you have a ",
+  StyleBox["signal",
+    FontWeight->"Bold"],
+  " which is represented as a ",
+  StyleBox["size x size",
+    FontWeight->"Bold"],
+  " matrix. But in some of the calculations you'd like to treat the signal as \
+a vector. How do you get back and forth? The answer is with ",
+  StyleBox["Flatten[] ",
+    FontWeight->"Bold"],
+  "and ",
+  StyleBox["Partition[]",
+    FontWeight->"Bold"],
+  ". Here is an example:"
+}], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData[
+"m = {{1,2,3},{4,5,6},{7,8,9}}\nv=Flatten[m]\nPartition[v,3]"], "Input",
+  AspectRatioFixed->True]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell[TextData["The target"], "Subsubsection",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData[
+"The target is given to you  below. The x-y dimensions are 16 x 16, the \
+amplitude is 8, and the mean is 0. We will let both the target signal and the \
+noise have zero means so that it is easier to add the noise as contrast \
+noise. \n\nThe target is a very low contrast sine-wave grating that is \
+oriented at 45 deg, which is displayed below as deviations about a mean \
+gray-level of 128."], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell["\<\
+size = 16;
+amplitude = 8;
+Grating[x_,y_,fx_,fy_] :=
+\tN[amplitude Cos[2 Pi (fx x + fy y)]];\
+\>", "Input",
+  AspectRatioFixed->False],
+
+Cell["\<\
+signal = Table[Grating[x,y,1/16,1/16],
+{x,0,size-1},{y,0,size-1}];
+\
+\>", "Input",
+  AspectRatioFixed->True],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+ListDensityPlot[signal+128,Mesh->False,
+\tFrame->False,PlotRange->{0,255}];\
+\>", "Input",
+  AspectRatioFixed->True],
+
+Cell[GraphicsData["PostScript", "\<\
+%!
+%%Creator: Mathematica
+%%AspectRatio: 1 
+MathPictureStart
+/Mabs {
+Mgmatrix idtransform
+Mtmatrix dtransform
+} bind def
+/Mabsadd { Mabs
+3 -1 roll add
+3 1 roll add
+exch } bind def
+%% DensityGraphics
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+/Courier findfont 10  scalefont  setfont
+% Scaling calculations
+0.0192308 0.0600962 0.0192308 0.0600962 [
+[ 0 0 0 0 ]
+[ 1 1 0 0 ]
+] MathScale
+% Start of Graphics
+1 setlinecap
+1 setlinejoin
+newpath
+0 0 m
+1 0 L
+1 1 L
+0 1 L
+closepath
+clip
+newpath
+% Start of gray image
+p
+.01923 .01923 translate
+.96154 .96154 scale
+16 string
+16 16 8 [16 0 0 16 0 0] {
+\tcurrentfile
+\t1 index
+\treadhexstring
+\tpop
+}  Mimage
+88878683807D7A7978797A7D80838687
+878683807D7A7978797A7D8083868788
+8683807D7A7978797A7D808386878887
+83807D7A7978797A7D80838687888786
+807D7A7978797A7D8083868788878683
+7D7A7978797A7D808386878887868380
+7A7978797A7D8083868788878683807D
+7978797A7D8083868788878683807D7A
+78797A7D8083868788878683807D7A79
+797A7D8083868788878683807D7A7978
+7A7D8083868788878683807D7A797879
+7D8083868788878683807D7A7978797A
+8083868788878683807D7A7978797A7D
+83868788878683807D7A7978797A7D80
+868788878683807D7A7978797A7D8083
+8788878683807D7A7978797A7D808386
+pop
+P
+% End of image
+% End of Graphics
+MathPictureEnd
+\
+\>"], "Graphics",
+  Evaluatable->False,
+  AspectRatioFixed->True,
+  ImageSize->{75, 75},
+  ImageMargins->{{206, 0}, {0, 3}},
+  ImageRegion->{{0, 1}, {0, 1}},
+  ImageCache->GraphicsData["Bitmap", "\<\
+CF5dJ6E]HGAYHf4PAg9QL6QYHg<PAVmbKF5d0`40001;0000Bb000`400?l00000o`00003oB`3oool0
+04/0oooo001;0?ooo`0000<0oooo08R8R028R8P00P28R8P508N7Q`@0QXJ61@23Ph<40820P0D0OGem
+101jNWX507UiN@@0N7Qh1@1iNGT507YjNP@0OGem1@20P80408>3P`D0QXJ61027QhL20?ooo`0000<0
+oooo08R8R028R8P00P28R8P508N7Q`@0QXJ61@23Ph<40820P0D0OGem101jNWX507UiN@@0N7Qh1@1i
+NGT507YjNP@0OGem1@20P80408>3P`D0QXJ61027QhL20?ooo`0000<0oooo08R8R028R8P00P28R8P5
+08N7Q`@0QXJ61@23Ph<40820P0D0OGem101jNWX507UiN@@0N7Qh1@1iNGT507YjNP@0OGem1@20P804
+08>3P`D0QXJ61027QhL20?ooo`0000<0oooo08R8R028R8P00P28R8P508N7Q`@0QXJ61@23Ph<40820
+P0D0OGem101jNWX507UiN@@0N7Qh1@1iNGT507YjNP@0OGem1@20P80408>3P`D0QXJ61027QhL20?oo
+o`0000<0oooo08N7Q`27QhL00P27QhL508J6QP@0Ph>31@20P80407emO@D0NWYj101iNGT507QhN0@0
+NGUi1@1jNWX507emO@@0P8201@23Ph<408J6QPD0QhN71028R8P20?ooo`0000<0oooo08N7Q`27QhL0
+0P27QhL508J6QP@0Ph>31@20P80407emO@D0NWYj101iNGT507QhN0@0NGUi1@1jNWX507emO@@0P820
+1@23Ph<408J6QPD0QhN71028R8P20?ooo`0000<0oooo08N7Q`27QhL00P27QhL508J6QP@0Ph>31@20
+P80407emO@D0NWYj101iNGT507QhN0@0NGUi1@1jNWX507emO@@0P8201@23Ph<408J6QPD0QhN71028
+R8P20?ooo`0000<0oooo08N7Q`27QhL00P27QhL508J6QP@0Ph>31@20P80407emO@D0NWYj101iNGT5
+07QhN0@0NGUi1@1jNWX507emO@@0P8201@23Ph<408J6QPD0QhN71028R8P20?ooo`0000<0oooo08N7
+Q`27QhL00P27QhL508J6QP@0Ph>31@20P80407emO@D0NWYj101iNGT507QhN0@0NGUi1@1jNWX507em
+O@@0P8201@23Ph<408J6QPD0QhN71028R8P20?ooo`0000<0oooo08J6QP26QXH00P26QXH508>3P`@0
+P8201@1mOGd407YjNPD0NGUi101hN7P507UiN@@0NWYj1@1mOGd50820P0@0Ph>31@26QXH408N7Q`D0
+R8R81027QhL20?ooo`0000<0oooo08J6QP26QXH00P26QXH508>3P`@0P8201@1mOGd407YjNPD0NGUi
+101hN7P507UiN@@0NWYj1@1mOGd50820P0@0Ph>31@26QXH408N7Q`D0R8R81027QhL20?ooo`0000<0
+oooo08J6QP26QXH00P26QXH508>3P`@0P8201@1mOGd407YjNPD0NGUi101hN7P507UiN@@0NWYj1@1m
+OGd50820P0@0Ph>31@26QXH408N7Q`D0R8R81027QhL20?ooo`0000<0oooo08J6QP26QXH00P26QXH5
+08>3P`@0P8201@1mOGd407YjNPD0NGUi101hN7P507UiN@@0NWYj1@1mOGd50820P0@0Ph>31@26QXH4
+08N7Q`D0R8R81027QhL20?ooo`0000<0oooo08>3P`23Ph<00P23Ph<50820P0@0OGem1@1jNWX407Ui
+N@D0N7Qh101iNGT507YjNP@0OGem1@20P80508>3P`@0QXJ61@27QhL408R8R0D0QhN71026QXH20?oo
+o`0000<0oooo08>3P`23Ph<00P23Ph<50820P0@0OGem1@1jNWX407UiN@D0N7Qh101iNGT507YjNP@0
+OGem1@20P80508>3P`@0QXJ61@27QhL408R8R0D0QhN71026QXH20?ooo`0000<0oooo08>3P`23Ph<0
+0P23Ph<50820P0@0OGem1@1jNWX407UiN@D0N7Qh101iNGT507YjNP@0OGem1@20P80508>3P`@0QXJ6
+1@27QhL408R8R0D0QhN71026QXH20?ooo`0000<0oooo08>3P`23Ph<00P23Ph<50820P0@0OGem1@1j
+NWX407UiN@D0N7Qh101iNGT507YjNP@0OGem1@20P80508>3P`@0QXJ61@27QhL408R8R0D0QhN71026
+QXH20?ooo`0000<0oooo0820P020P8000P20P80507emO@@0NWYj1@1iNGT407QhN0D0NGUi101jNWX5
+07emO@@0P8201@23Ph<508J6QP@0QhN71@28R8P408N7Q`D0QXJ61023Ph<20?ooo`0000<0oooo0820
+P020P8000P20P80507emO@@0NWYj1@1iNGT407QhN0D0NGUi101jNWX507emO@@0P8201@23Ph<508J6
+QP@0QhN71@28R8P408N7Q`D0QXJ61023Ph<20?ooo`0000<0oooo0820P020P8000P20P80507emO@@0
+NWYj1@1iNGT407QhN0D0NGUi101jNWX507emO@@0P8201@23Ph<508J6QP@0QhN71@28R8P408N7Q`D0
+QXJ61023Ph<20?ooo`0000<0oooo0820P020P8000P20P80507emO@@0NWYj1@1iNGT407QhN0D0NGUi
+101jNWX507emO@@0P8201@23Ph<508J6QP@0QhN71@28R8P408N7Q`D0QXJ61023Ph<20?ooo`0000<0
+oooo0820P020P8000P20P80507emO@@0NWYj1@1iNGT407QhN0D0NGUi101jNWX507emO@@0P8201@23
+Ph<508J6QP@0QhN71@28R8P408N7Q`D0QXJ61023Ph<20?ooo`0000<0oooo07emO@1mOGd00P1mOGd5
+07YjNP@0NGUi1@1hN7P407UiN@D0NWYj101mOGd50820P0@0Ph>31@26QXH508N7Q`@0R8R81@27QhL4
+08J6QPD0Ph>31020P8020?ooo`0000<0oooo07emO@1mOGd00P1mOGd507YjNP@0NGUi1@1hN7P407Ui
+N@D0NWYj101mOGd50820P0@0Ph>31@26QXH508N7Q`@0R8R81@27QhL408J6QPD0Ph>31020P8020?oo
+o`0000<0oooo07emO@1mOGd00P1mOGd507YjNP@0NGUi1@1hN7P407UiN@D0NWYj101mOGd50820P0@0
+Ph>31@26QXH508N7Q`@0R8R81@27QhL408J6QPD0Ph>31020P8020?ooo`0000<0oooo07emO@1mOGd0
+0P1mOGd507YjNP@0NGUi1@1hN7P407UiN@D0NWYj101mOGd50820P0@0Ph>31@26QXH508N7Q`@0R8R8
+1@27QhL408J6QPD0Ph>31020P8020?ooo`0000<0oooo07YjNP1jNWX00P1jNWX507UiN@@0N7Qh1@1i
+NGT407YjNPD0OGem1020P80508>3P`@0QXJ61@27QhL508R8R0@0QhN71@26QXH408>3P`D0P820101m
+OGd20?ooo`0000<0oooo07YjNP1jNWX00P1jNWX507UiN@@0N7Qh1@1iNGT407YjNPD0OGem1020P805
+08>3P`@0QXJ61@27QhL508R8R0@0QhN71@26QXH408>3P`D0P820101mOGd20?ooo`0000<0oooo07Yj
+NP1jNWX00P1jNWX507UiN@@0N7Qh1@1iNGT407YjNPD0OGem1020P80508>3P`@0QXJ61@27QhL508R8
+R0@0QhN71@26QXH408>3P`D0P820101mOGd20?ooo`0000<0oooo07YjNP1jNWX00P1jNWX507UiN@@0
+N7Qh1@1iNGT407YjNPD0OGem1020P80508>3P`@0QXJ61@27QhL508R8R0@0QhN71@26QXH408>3P`D0
+P820101mOGd20?ooo`0000<0oooo07YjNP1jNWX00P1jNWX507UiN@@0N7Qh1@1iNGT407YjNPD0OGem
+1020P80508>3P`@0QXJ61@27QhL508R8R0@0QhN71@26QXH408>3P`D0P820101mOGd20?ooo`0000<0
+oooo07UiN@1iNGT00P1iNGT507QhN0@0NGUi1@1jNWX407emO@D0P8201023Ph<508J6QP@0QhN71@28
+R8P508N7Q`@0QXJ61@23Ph<40820P0D0OGem101jNWX20?ooo`0000<0oooo07UiN@1iNGT00P1iNGT5
+07QhN0@0NGUi1@1jNWX407emO@D0P8201023Ph<508J6QP@0QhN71@28R8P508N7Q`@0QXJ61@23Ph<4
+0820P0D0OGem101jNWX20?ooo`0000<0oooo07UiN@1iNGT00P1iNGT507QhN0@0NGUi1@1jNWX407em
+O@D0P8201023Ph<508J6QP@0QhN71@28R8P508N7Q`@0QXJ61@23Ph<40820P0D0OGem101jNWX20?oo
+o`0000<0oooo07UiN@1iNGT00P1iNGT507QhN0@0NGUi1@1jNWX407emO@D0P8201023Ph<508J6QP@0
+QhN71@28R8P508N7Q`@0QXJ61@23Ph<40820P0D0OGem101jNWX20?ooo`0000<0oooo07QhN01hN7P0
+0P1hN7P507UiN@@0NWYj1@1mOGd40820P0D0Ph>31026QXH508N7Q`@0R8R81@27QhL508J6QP@0Ph>3
+1@20P80407emO@D0NWYj101iNGT20?ooo`0000<0oooo07QhN01hN7P00P1hN7P507UiN@@0NWYj1@1m
+OGd40820P0D0Ph>31026QXH508N7Q`@0R8R81@27QhL508J6QP@0Ph>31@20P80407emO@D0NWYj101i
+NGT20?ooo`0000<0oooo07QhN01hN7P00P1hN7P507UiN@@0NWYj1@1mOGd40820P0D0Ph>31026QXH5
+08N7Q`@0R8R81@27QhL508J6QP@0Ph>31@20P80407emO@D0NWYj101iNGT20?ooo`0000<0oooo07Qh
+N01hN7P00P1hN7P507UiN@@0NWYj1@1mOGd40820P0D0Ph>31026QXH508N7Q`@0R8R81@27QhL508J6
+QP@0Ph>31@20P80407emO@D0NWYj101iNGT20?ooo`0000<0oooo07UiN@1iNGT00P1iNGT507YjNP@0
+OGem1@20P80408>3P`D0QXJ61027QhL508R8R0@0QhN71@26QXH508>3P`@0P8201@1mOGd407YjNPD0
+NGUi101hN7P20?ooo`0000<0oooo07UiN@1iNGT00P1iNGT507YjNP@0OGem1@20P80408>3P`D0QXJ6
+1027QhL508R8R0@0QhN71@26QXH508>3P`@0P8201@1mOGd407YjNPD0NGUi101hN7P20?ooo`0000<0
+oooo07UiN@1iNGT00P1iNGT507YjNP@0OGem1@20P80408>3P`D0QXJ61027QhL508R8R0@0QhN71@26
+QXH508>3P`@0P8201@1mOGd407YjNPD0NGUi101hN7P20?ooo`0000<0oooo07UiN@1iNGT00P1iNGT5
+07YjNP@0OGem1@20P80408>3P`D0QXJ61027QhL508R8R0@0QhN71@26QXH508>3P`@0P8201@1mOGd4
+07YjNPD0NGUi101hN7P20?ooo`0000<0oooo07UiN@1iNGT00P1iNGT507YjNP@0OGem1@20P80408>3
+P`D0QXJ61027QhL508R8R0@0QhN71@26QXH508>3P`@0P8201@1mOGd407YjNPD0NGUi101hN7P20?oo
+o`0000<0oooo07YjNP1jNWX00P1jNWX507emO@@0P8201@23Ph<408J6QPD0QhN71028R8P508N7Q`@0
+QXJ61@23Ph<50820P0@0OGem1@1jNWX407UiN@D0N7Qh101iNGT20?ooo`0000<0oooo07YjNP1jNWX0
+0P1jNWX507emO@@0P8201@23Ph<408J6QPD0QhN71028R8P508N7Q`@0QXJ61@23Ph<50820P0@0OGem
+1@1jNWX407UiN@D0N7Qh101iNGT20?ooo`0000<0oooo07YjNP1jNWX00P1jNWX507emO@@0P8201@23
+Ph<408J6QPD0QhN71028R8P508N7Q`@0QXJ61@23Ph<50820P0@0OGem1@1jNWX407UiN@D0N7Qh101i
+NGT20?ooo`0000<0oooo07YjNP1jNWX00P1jNWX507emO@@0P8201@23Ph<408J6QPD0QhN71028R8P5
+08N7Q`@0QXJ61@23Ph<50820P0@0OGem1@1jNWX407UiN@D0N7Qh101iNGT20?ooo`0000<0oooo07em
+O@1mOGd00P1mOGd50820P0@0Ph>31@26QXH408N7Q`D0R8R81027QhL508J6QP@0Ph>31@20P80507em
+O@@0NWYj1@1iNGT407QhN0D0NGUi101jNWX20?ooo`0000<0oooo07emO@1mOGd00P1mOGd50820P0@0
+Ph>31@26QXH408N7Q`D0R8R81027QhL508J6QP@0Ph>31@20P80507emO@@0NWYj1@1iNGT407QhN0D0
+NGUi101jNWX20?ooo`0000<0oooo07emO@1mOGd00P1mOGd50820P0@0Ph>31@26QXH408N7Q`D0R8R8
+1027QhL508J6QP@0Ph>31@20P80507emO@@0NWYj1@1iNGT407QhN0D0NGUi101jNWX20?ooo`0000<0
+oooo07emO@1mOGd00P1mOGd50820P0@0Ph>31@26QXH408N7Q`D0R8R81027QhL508J6QP@0Ph>31@20
+P80507emO@@0NWYj1@1iNGT407QhN0D0NGUi101jNWX20?ooo`0000<0oooo07emO@1mOGd00P1mOGd5
+0820P0@0Ph>31@26QXH408N7Q`D0R8R81027QhL508J6QP@0Ph>31@20P80507emO@@0NWYj1@1iNGT4
+07QhN0D0NGUi101jNWX20?ooo`0000<0oooo0820P020P8000P20P80508>3P`@0QXJ61@27QhL408R8
+R0D0QhN71026QXH508>3P`@0P8201@1mOGd507YjNP@0NGUi1@1hN7P407UiN@D0NWYj101mOGd20?oo
+o`0000<0oooo0820P020P8000P20P80508>3P`@0QXJ61@27QhL408R8R0D0QhN71026QXH508>3P`@0
+P8201@1mOGd507YjNP@0NGUi1@1hN7P407UiN@D0NWYj101mOGd20?ooo`0000<0oooo0820P020P800
+0P20P80508>3P`@0QXJ61@27QhL408R8R0D0QhN71026QXH508>3P`@0P8201@1mOGd507YjNP@0NGUi
+1@1hN7P407UiN@D0NWYj101mOGd20?ooo`0000<0oooo0820P020P8000P20P80508>3P`@0QXJ61@27
+QhL408R8R0D0QhN71026QXH508>3P`@0P8201@1mOGd507YjNP@0NGUi1@1hN7P407UiN@D0NWYj101m
+OGd20?ooo`0000<0oooo08>3P`23Ph<00P23Ph<508J6QP@0QhN71@28R8P408N7Q`D0QXJ61023Ph<5
+0820P0@0OGem1@1jNWX507UiN@@0N7Qh1@1iNGT407YjNPD0OGem1020P8020?ooo`0000<0oooo08>3
+P`23Ph<00P23Ph<508J6QP@0QhN71@28R8P408N7Q`D0QXJ61023Ph<50820P0@0OGem1@1jNWX507Ui
+N@@0N7Qh1@1iNGT407YjNPD0OGem1020P8020?ooo`0000<0oooo08>3P`23Ph<00P23Ph<508J6QP@0
+QhN71@28R8P408N7Q`D0QXJ61023Ph<50820P0@0OGem1@1jNWX507UiN@@0N7Qh1@1iNGT407YjNPD0
+OGem1020P8020?ooo`0000<0oooo08>3P`23Ph<00P23Ph<508J6QP@0QhN71@28R8P408N7Q`D0QXJ6
+1023Ph<50820P0@0OGem1@1jNWX507UiN@@0N7Qh1@1iNGT407YjNPD0OGem1020P8020?ooo`0000<0
+oooo08J6QP26QXH00P26QXH508N7Q`@0R8R81@27QhL408J6QPD0Ph>31020P80507emO@@0NWYj1@1i
+NGT507QhN0@0NGUi1@1jNWX407emO@D0P8201023Ph<20?ooo`0000<0oooo08J6QP26QXH00P26QXH5
+08N7Q`@0R8R81@27QhL408J6QPD0Ph>31020P80507emO@@0NWYj1@1iNGT507QhN0@0NGUi1@1jNWX4
+07emO@D0P8201023Ph<20?ooo`0000<0oooo08J6QP26QXH00P26QXH508N7Q`@0R8R81@27QhL408J6
+QPD0Ph>31020P80507emO@@0NWYj1@1iNGT507QhN0@0NGUi1@1jNWX407emO@D0P8201023Ph<20?oo
+o`0000<0oooo08J6QP26QXH00P26QXH508N7Q`@0R8R81@27QhL408J6QPD0Ph>31020P80507emO@@0
+NWYj1@1iNGT507QhN0@0NGUi1@1jNWX407emO@D0P8201023Ph<20?ooo`0000<0oooo08J6QP26QXH0
+0P26QXH508N7Q`@0R8R81@27QhL408J6QPD0Ph>31020P80507emO@@0NWYj1@1iNGT507QhN0@0NGUi
+1@1jNWX407emO@D0P8201023Ph<20?ooo`0000<0oooo08N7Q`27QhL00P27QhL508R8R0@0QhN71@26
+QXH408>3P`D0P820101mOGd507YjNP@0NGUi1@1hN7P507UiN@@0NWYj1@1mOGd40820P0D0Ph>31026
+QXH20?ooo`0000<0oooo08N7Q`27QhL00P27QhL508R8R0@0QhN71@26QXH408>3P`D0P820101mOGd5
+07YjNP@0NGUi1@1hN7P507UiN@@0NWYj1@1mOGd40820P0D0Ph>31026QXH20?ooo`0000<0oooo08N7
+Q`27QhL00P27QhL508R8R0@0QhN71@26QXH408>3P`D0P820101mOGd507YjNP@0NGUi1@1hN7P507Ui
+N@@0NWYj1@1mOGd40820P0D0Ph>31026QXH20?ooo`0000<0oooo08N7Q`27QhL00P27QhL508R8R0@0
+QhN71@26QXH408>3P`D0P820101mOGd507YjNP@0NGUi1@1hN7P507UiN@@0NWYj1@1mOGd40820P0D0
+Ph>31026QXH20?ooo`00B`3oool004/0oooo0000\
+\>"],
+  ImageRangeCache->{{{0, 74}, {74, 0}} -> {-0.320083, -0.320083, 0.224867, \
+0.224867}}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[TextData["Problem 1: The noise"], "Subsubsection",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData[{
+  "Define a function ",
+  StyleBox["noise",
+    FontWeight->"Bold"],
+  " that will generate a sizexsize array of Gaussian noise with standard \
+deviation of ",
+  StyleBox["sigma=48",
+    FontWeight->"Bold"],
+  ", and a mean of 0.  Use the standard library package"
+}], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell["\<\
+<<Statistics`ContinuousDistributions`
+General[spell::off];\
+\>", "Input",
+  AspectRatioFixed->True],
+
+Cell[TextData[{
+  "Add the",
+  StyleBox[" signa",
+    FontWeight->"Bold"],
+  "l to the",
+  StyleBox[" nois",
+    FontWeight->"Bold"],
+  "e to generate an observation vector called",
+  StyleBox[" observatio",
+    FontWeight->"Bold"],
+  "n, and use ",
+  StyleBox["ListDensityPlot",
+    FontWeight->"Bold"],
+  " to display a sample observation."
+}], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(sigma = 48;\)\), "\[IndentingNewLine]", 
+    \(\(mean = 0;\)\[IndentingNewLine]\), "\[IndentingNewLine]", 
+    \(\(noise := 
+        Table[Random[NormalDistribution[mean, sigma]], {x, 0, size - 1}, {y, 
+            0, size - 1}];\)\[IndentingNewLine]\), "\[IndentingNewLine]", 
+    \(\(observation = 
+        noise + signal;\)\[IndentingNewLine]\), "\[IndentingNewLine]", 
+    \(\(ListDensityPlot[observation + 128, Mesh \[Rule] False, 
+        Frame \[Rule] False, PlotRange \[Rule] {0, 255}];\)\)}], "Input"],
+
+Cell[GraphicsData["PostScript", "\<\
+%!
+%%Creator: Mathematica
+%%AspectRatio: 1 
+MathPictureStart
+/Mabs {
+Mgmatrix idtransform
+Mtmatrix dtransform
+} bind def
+/Mabsadd { Mabs
+3 -1 roll add
+3 1 roll add
+exch } bind def
+%% DensityGraphics
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+/Courier findfont 10  scalefont  setfont
+% Scaling calculations
+0.0192308 0.0600962 0.0192308 0.0600962 [
+[ 0 0 0 0 ]
+[ 1 1 0 0 ]
+] MathScale
+% Start of Graphics
+1 setlinecap
+1 setlinejoin
+newpath
+0 0 m
+1 0 L
+1 1 L
+0 1 L
+closepath
+clip
+newpath
+% Start of gray image
+p
+.01923 .01923 translate
+.96154 .96154 scale
+16 string
+16 16 8 [16 0 0 16 0 0] {
+\tcurrentfile
+\t1 index
+\treadhexstring
+\tpop
+}  Mimage
+D363A9E3A88C568758B6D6599F928DB8
+A16722ABB9DBBA3C998745DE4C85C85D
+E34AA682CB956092BF9A8E2F96A3B990
+EADD34B964A3673F71516C807A997993
+A5925A3D9597158B74566E68326DC576
+A91E43668CDE5042B86CA15AE5C95547
+53775C6E6F493F8453848F6039AC676D
+AAB37A935B6145D68BB56A636B40635F
+A6FE749855DA9F5A559B9F546F439444
+9638C28B666C75CBC4189AAFCC1C8C2D
+2FB94FF269128A6A7F907D465D6A5A6F
+9E95802D418098651AAF8A747BBC676D
+AC4E887B7F69BE41AF6E52466D5E6240
+8DC8B276BC90864C6870F850B6809B7D
+62C8C5624B79432B578F7D288B1D8BA5
+87118F9C2F9370663B5A6A166DE64CDC
+pop
+P
+% End of image
+% End of Graphics
+MathPictureEnd
+\
+\>"], "Graphics",
+  ImageSize->{72, 72},
+  ImageMargins->{{206, 0}, {0, 0}},
+  ImageRegion->{{0, 1}, {0, 1}},
+  ImageCache->GraphicsData["Bitmap", "\<\
+CF5dJ6E]HGAYHf4PAg9QL6QYHg<PAVmbKF5d0`4000180000B2000`400?l00000o`00003oB03oool0
+04P0oooo00180?ooo`0000<0oooo0=?Cd`3Cdm<00P3Cdm<406=SH`D0ZJVY103Shn<40:RXZ0D0S8b<
+101FEUH408N7Q`D0F5QH102f][H40=KFePD0FEUI102OWil409:BTPD0SHf=102h^;P20?ooo`0000<0
+oooo0=?Cd`3Cdm<00P3Cdm<406=SH`D0ZJVY103Shn<40:RXZ0D0S8b<101FEUH408N7Q`D0F5QH102f
+][H40=KFePD0FEUI102OWil409:BTPD0SHf=102h^;P20?ooo`0000<0oooo0=?Cd`3Cdm<00P3Cdm<4
+06=SH`D0ZJVY103Shn<40:RXZ0D0S8b<101FEUH408N7Q`D0F5QH102f][H40=KFePD0FEUI102OWil4
+09:BTPD0SHf=102h^;P20?ooo`0000<0oooo0=?Cd`3Cdm<00P3Cdm<406=SH`D0ZJVY103Shn<40:RX
+Z0D0S8b<101FEUH408N7Q`D0F5QH102f][H40=KFePD0FEUI102OWil409:BTPD0SHf=102h^;P20?oo
+o`0000<0oooo0:6QX@2QXJ400P2QXJ4406MWI`D08R8R102[Zj/40;Vi^@D0fm_K102j^[X403`l?0D0
+VIVI1027QhL404E5A@D0g]kN101<C4`408F5Q@D0b<S8101MGEd20?ooo`0000<0oooo0:6QX@2QXJ40
+0P2QXJ4406MWI`D08R8R102[Zj/40;Vi^@D0fm_K102j^[X403`l?0D0VIVI1027QhL404E5A@D0g]kN
+101<C4`408F5Q@D0b<S8101MGEd20?ooo`0000<0oooo0:6QX@2QXJ400P2QXJ4406MWI`D08R8R102[
+Zj/40;Vi^@D0fm_K102j^[X403`l?0D0VIVI1027QhL404E5A@D0g]kN101<C4`408F5Q@D0b<S8101M
+GEd20?ooo`0000<0oooo0:6QX@2QXJ400P2QXJ4406MWI`D08R8R102[Zj/40;Vi^@D0fm_K102j^[X4
+03`l?0D0VIVI1027QhL404E5A@D0g]kN101<C4`408F5Q@D0b<S8101MGEd20?ooo`0000<0oooo0>?S
+h`3Shn<00P3Shn<404Y:BPD0YZJV1022PX840<_;b`D0UIFE101PH60409:BTPD0_kno102JVYX408j>
+SPD0;bl_102FUYH40:>SX`D0^KVi102@T9020?ooo`0000<0oooo0>?Sh`3Shn<00P3Shn<404Y:BPD0
+YZJV1022PX840<_;b`D0UIFE101PH60409:BTPD0_kno102JVYX408j>SPD0;bl_102FUYH40:>SX`D0
+^KVi102@T9020?ooo`0000<0oooo0>?Sh`3Shn<00P3Shn<404Y:BPD0YZJV1022PX840<_;b`D0UIFE
+101PH60409:BTPD0_kno102JVYX408j>SPD0;bl_102FUYH40:>SX`D0^KVi102@T9020?ooo`0000<0
+oooo0>?Sh`3Shn<00P3Shn<404Y:BPD0YZJV1022PX840<_;b`D0UIFE101PH60409:BTPD0_kno102J
+VYX408j>SPD0;bl_102FUYH40:>SX`D0^KVi102@T9020?ooo`0000<0oooo0>[ZjP3Zj^X00P3Zj^X4
+0=gMg@D0=3@d102i^KT406ATI0D0Xj>S101WIfL403lo?`D0LG5a101ADE4406a/K0D0P820101jNWX4
+09VIV@D0NGUi102CTi<20?ooo`0000<0oooo0>[ZjP3Zj^X00P3Zj^X40=gMg@D0=3@d102i^KT406AT
+I0D0Xj>S101WIfL403lo?`D0LG5a101ADE4406a/K0D0P820101jNWX409VIV@D0NGUi102CTi<20?oo
+o`0000<0oooo0>[ZjP3Zj^X00P3Zj^X40=gMg@D0=3@d102i^KT406ATI0D0Xj>S101WIfL403lo?`D0
+LG5a101ADE4406a/K0D0P820101jNWX409VIV@D0NGUi102CTi<20?ooo`0000<0oooo0>[ZjP3Zj^X0
+0P3Zj^X40=gMg@D0=3@d102i^KT406ATI0D0Xj>S101WIfL403lo?`D0LG5a101ADE4406a/K0D0P820
+101jNWX409VIV@D0NGUi102CTi<20?ooo`0000<0oooo0>[ZjP3Zj^X00P3Zj^X40=gMg@D0=3@d102i
+^KT406ATI0D0Xj>S101WIfL403lo?`D0LG5a101ADE4406a/K0D0P820101jNWX409VIV@D0NGUi102C
+Ti<20?ooo`0000<0oooo0:FUY@2UYJD00P2UYJD409:BTPD0FUYJ100m?Cd409FEU@D0UiNG100E5AD4
+08^;R`D0M7Ad101FEUH406i^KPD0J6QX100b<S8406e]K@D0aLG5101fMWH20?ooo`0000<0oooo0:FU
+Y@2UYJD00P2UYJD409:BTPD0FUYJ100m?Cd409FEU@D0UiNG100E5AD408^;R`D0M7Ad101FEUH406i^
+KPD0J6QX100b<S8406e]K@D0aLG5101fMWH20?ooo`0000<0oooo0:FUY@2UYJD00P2UYJD409:BTPD0
+FUYJ100m?Cd409FEU@D0UiNG100E5AD408^;R`D0M7Ad101FEUH406i^KPD0J6QX100b<S8406e]K@D0
+aLG5101fMWH20?ooo`0000<0oooo0:FUY@2UYJD00P2UYJD409:BTPD0FUYJ100m?Cd409FEU@D0UiNG
+100E5AD408^;R`D0M7Ad101FEUH406i^KPD0J6QX100b<S8406e]K@D0aLG5101fMWH20?ooo`0000<0
+oooo0:VYZ@2YZJT00P2YZJT401hN7PD0@d=3101VIVH408b<S0D0g]kN101@D5040492@PD0^;Rh101/
+K6`40:6QX@D0FUYJ103UiND40<W9b@D0EEEE1017AdL20?ooo`0000<0oooo0:VYZ@2YZJT00P2YZJT4
+01hN7PD0@d=3101VIVH408b<S0D0g]kN101@D5040492@PD0^;Rh101/K6`40:6QX@D0FUYJ103UiND4
+0<W9b@D0EEEE1017AdL20?ooo`0000<0oooo0:VYZ@2YZJT00P2YZJT401hN7PD0@d=3101VIVH408b<
+S0D0g]kN101@D5040492@PD0^;Rh101/K6`40:6QX@D0FUYJ103UiND40<W9b@D0EEEE1017AdL20?oo
+o`0000<0oooo0:VYZ@2YZJT00P2YZJT401hN7PD0@d=3101VIVH408b<S0D0g]kN101@D5040492@PD0
+^;Rh101/K6`40:6QX@D0FUYJ103UiND40<W9b@D0EEEE1017AdL20?ooo`0000<0oooo05=CD`1CDe<0
+0P1CDe<407MgM`D0G5aL101^KVh406m_K`D0BDU9100o?cl408B4Q0D0De=C1024Q8@408n?S`D0H61P
+100i>CT40:b/[0D0IfMW101]KFd20?ooo`0000<0oooo05=CD`1CDe<00P1CDe<407MgM`D0G5aL101^
+KVh406m_K`D0BDU9100o?cl408B4Q0D0De=C1024Q8@408n?S`D0H61P100i>CT40:b/[0D0IfMW101]
+KFd20?ooo`0000<0oooo05=CD`1CDe<00P1CDe<407MgM`D0G5aL101^KVh406m_K`D0BDU9100o?cl4
+08B4Q0D0De=C1024Q8@408n?S`D0H61P100i>CT40:b/[0D0IfMW101]KFd20?ooo`0000<0oooo05=C
+D`1CDe<00P1CDe<407MgM`D0G5aL101^KVh406m_K`D0BDU9100o?cl408B4Q0D0De=C1024Q8@408n?
+S`D0H61P100i>CT40:b/[0D0IfMW101]KFd20?ooo`0000<0oooo0:ZZZP2ZZZX00P2ZZZX40;>c/`D0
+NWYj102CTi<405]KF`D0HF5Q1015ADD40=KFePD0Rh^;102e]KD406YZJPD0Hf=S101[Jf/40410@0D0
+Hf=S101OGel20?ooo`0000<0oooo0:ZZZP2ZZZX00P2ZZZX40;>c/`D0NWYj102CTi<405]KF`D0HF5Q
+1015ADD40=KFePD0Rh^;102e]KD406YZJPD0Hf=S101[Jf/40410@0D0Hf=S101OGel20?ooo`0000<0
+oooo0:ZZZP2ZZZX00P2ZZZX40;>c/`D0NWYj102CTi<405]KF`D0HF5Q1015ADD40=KFePD0Rh^;102e
+]KD406YZJPD0Hf=S101[Jf/40410@0D0Hf=S101OGel20?ooo`0000<0oooo0:ZZZP2ZZZX00P2ZZZX4
+0;>c/`D0NWYj102CTi<405]KF`D0HF5Q1015ADD40=KFePD0Rh^;102e]KD406YZJPD0Hf=S101[Jf/4
+0410@0D0Hf=S101OGel20?ooo`0000<0oooo0:ZZZP2ZZZX00P2ZZZX40;>c/`D0NWYj102CTi<405]K
+F`D0HF5Q1015ADD40=KFePD0Rh^;102e]KD406YZJPD0Hf=S101[Jf/40410@0D0Hf=S101OGel20?oo
+o`0000<0oooo0:JVYP2VYZH00P2VYZH40?knoPD0M7Ad102HV9P405EEE@D0f][J102OWil405YJFPD0
+EEEE102KVi/409nOW`D0E5AD101_Kfl404=3@`D0U9BD1014A4@20?ooo`0000<0oooo0:JVYP2VYZH0
+0P2VYZH40?knoPD0M7Ad102HV9P405EEE@D0f][J102OWil405YJFPD0EEEE102KVi/409nOW`D0E5AD
+101_Kfl404=3@`D0U9BD1014A4@20?ooo`0000<0oooo0:JVYP2VYZH00P2VYZH40?knoPD0M7Ad102H
+V9P405EEE@D0f][J102OWil405YJFPD0EEEE102KVi/409nOW`D0E5AD101_Kfl404=3@`D0U9BD1014
+A4@20?ooo`0000<0oooo0:JVYP2VYZH00P2VYZH40?knoPD0M7Ad102HV9P405EEE@D0f][J102OWil4
+05YJFPD0EEEE102KVi/409nOW`D0E5AD101_Kfl404=3@`D0U9BD1014A4@20?ooo`0000<0oooo09JF
+UP2FUYH00P2FUYH403Ph>0D0`/;2102;Rh/406IVIPD0K6a/101eMGD40<_;b`D0a<C4100H61P409ZJ
+VPD0[jn_103<c<`401`L70D0S8b<100];Bd20?ooo`0000<0oooo09JFUP2FUYH00P2FUYH403Ph>0D0
+`/;2102;Rh/406IVIPD0K6a/101eMGD40<_;b`D0a<C4100H61P409ZJVPD0[jn_103<c<`401`L70D0
+S8b<100];Bd20?ooo`0000<0oooo09JFUP2FUYH00P2FUYH403Ph>0D0`/;2102;Rh/406IVIPD0K6a/
+101eMGD40<_;b`D0a<C4100H61P409ZJVPD0[jn_103<c<`401`L70D0S8b<100];Bd20?ooo`0000<0
+oooo09JFUP2FUYH00P2FUYH403Ph>0D0`/;2102;Rh/406IVIPD0K6a/101eMGD40<_;b`D0a<C4100H
+61P409ZJVPD0[jn_103<c<`401`L70D0S8b<100];Bd20?ooo`0000<0oooo02l_;`0_;bl00P0_;bl4
+0;Vi^@D0Cdm?103bl_8406UYJ@D04Q8B102:RXX406YZJPD0Ogmo102@T90407emO@D0ATI6101MGEd4
+06YZJPD0FUYJ101_Kfl20?ooo`0000<0oooo02l_;`0_;bl00P0_;bl40;Vi^@D0Cdm?103bl_8406UY
+J@D04Q8B102:RXX406YZJPD0Ogmo102@T90407emO@D0ATI6101MGEd406YZJPD0FUYJ101_Kfl20?oo
+o`0000<0oooo02l_;`0_;bl00P0_;bl40;Vi^@D0Cdm?103bl_8406UYJ@D04Q8B102:RXX406YZJPD0
+Ogmo102@T90407emO@D0ATI6101MGEd406YZJPD0FUYJ101_Kfl20?ooo`0000<0oooo02l_;`0_;bl0
+0P0_;bl40;Vi^@D0Cdm?103bl_8406UYJ@D04Q8B102:RXX406YZJPD0Ogmo102@T90407emO@D0ATI6
+101MGEd406YZJPD0FUYJ101_Kfl20?ooo`0000<0oooo09jNWP2NWYh00P2NWYh409FEU@D0P820100]
+;Bd40451@@D0P820102HV9P406EUI@D06QXJ102_[jl408Z:RPD0M7Ad101kNg/40;bl_0D0IfMW101]
+KFd20?ooo`0000<0oooo09jNWP2NWYh00P2NWYh409FEU@D0P820100];Bd40451@@D0P820102HV9P4
+06EUI@D06QXJ102_[jl408Z:RPD0M7Ad101kNg/40;bl_0D0IfMW101]KFd20?ooo`0000<0oooo09jN
+WP2NWYh00P2NWYh409FEU@D0P820100];Bd40451@@D0P820102HV9P406EUI@D06QXJ102_[jl408Z:
+RPD0M7Ad101kNg/40;bl_0D0IfMW101]KFd20?ooo`0000<0oooo09jNWP2NWYh00P2NWYh409FEU@D0
+P820100];Bd40451@@D0P820102HV9P406EUI@D06QXJ102_[jl408Z:RPD0M7Ad101kNg/40;bl_0D0
+IfMW101]KFd20?ooo`0000<0oooo0:b/[02/[:`00P2/[:`404i>CPD0R8R8101kNg/407moO`D0JFUY
+102n_[h40451@@D0[jn_101^KVh4059BDPD0ATI6101]KFd405iNGPD0HV9R1010@4020?ooo`0000<0
+oooo0:b/[02/[:`00P2/[:`404i>CPD0R8R8101kNg/407moO`D0JFUY102n_[h40451@@D0[jn_101^
+KVh4059BDPD0ATI6101]KFd405iNGPD0HV9R1010@4020?ooo`0000<0oooo0:b/[02/[:`00P2/[:`4
+04i>CPD0R8R8101kNg/407moO`D0JFUY102n_[h40451@@D0[jn_101^KVh4059BDPD0ATI6101]KFd4
+05iNGPD0HV9R1010@4020?ooo`0000<0oooo0:b/[02/[:`00P2/[:`404i>CPD0R8R8101kNg/407mo
+O`D0JFUY102n_[h40451@@D0[jn_101^KVh4059BDPD0ATI6101]KFd405iNGPD0HV9R1010@4020?oo
+o`0000<0oooo0:b/[02/[:`00P2/[:`404i>CPD0R8R8101kNg/407moO`D0JFUY102n_[h40451@@D0
+[jn_101^KVh4059BDPD0ATI6101]KFd405iNGPD0HV9R1010@4020?ooo`0000<0oooo08f=S@2=SHd0
+0P2=SHd40<S8b0D0/[:b101fMWH40;bl_0D0T92@1026QXH404a<C0D0J6QX101`L7040?Shn0D0D51@
+102f][H40820P0D0Vi^K101mOGd20?ooo`0000<0oooo08f=S@2=SHd00P2=SHd40<S8b0D0/[:b101f
+MWH40;bl_0D0T92@1026QXH404a<C0D0J6QX101`L7040?Shn0D0D51@102f][H40820P0D0Vi^K101m
+OGd20?ooo`0000<0oooo08f=S@2=SHd00P2=SHd40<S8b0D0/[:b101fMWH40;bl_0D0T92@1026QXH4
+04a<C0D0J6QX101`L7040?Shn0D0D51@102f][H40820P0D0Vi^K101mOGd20?ooo`0000<0oooo08f=
+S@2=SHd00P2=SHd40<S8b0D0/[:b101fMWH40;bl_0D0T92@1026QXH404a<C0D0J6QX101`L7040?Sh
+n0D0D51@102f][H40820P0D0Vi^K101mOGd20?ooo`0000<0oooo069RHP1RHV800P1RHV840<S8b0D0
+aLG5101RHV8404];B`D0NGUi1013@d<402/[:`D0EeMG102?Shl407emO@D0:2PX102;Rh/401dM7@D0
+Rh^;102UYJD20?ooo`0000<0oooo069RHP1RHV800P1RHV840<S8b0D0aLG5101RHV8404];B`D0NGUi
+1013@d<402/[:`D0EeMG102?Shl407emO@D0:2PX102;Rh/401dM7@D0Rh^;102UYJD20?ooo`0000<0
+oooo069RHP1RHV800P1RHV840<S8b0D0aLG5101RHV8404];B`D0NGUi1013@d<402/[:`D0EeMG102?
+Shl407emO@D0:2PX102;Rh/401dM7@D0Rh^;102UYJD20?ooo`0000<0oooo069RHP1RHV800P1RHV84
+0<S8b0D0aLG5101RHV8404];B`D0NGUi1013@d<402/[:`D0EeMG102?Shl407emO@D0:2PX102;Rh/4
+01dM7@D0Rh^;102UYJD20?ooo`0000<0oooo08N7Q`27QhL00P27QhL4014A4@D0Shn?102LW9`402l_
+;`D0Ti>C101`L70406IVIPD0>c/k101JFUX406YZJPD05QHF101]KFd40>KViPD0C4a<103Lg=`20?oo
+o`0000<0oooo08N7Q`27QhL00P27QhL4014A4@D0Shn?102LW9`402l_;`D0Ti>C101`L70406IVIPD0
+>c/k101JFUX406YZJPD05QHF101]KFd40>KViPD0C4a<103Lg=`20?ooo`0000<0oooo08N7Q`27QhL0
+0P27QhL4014A4@D0Shn?102LW9`402l_;`D0Ti>C101`L70406IVIPD0>c/k101JFUX406YZJPD05QHF
+101]KFd40>KViPD0C4a<103Lg=`20?ooo`0000<0oooo08N7Q`27QhL00P27QhL4014A4@D0Shn?102L
+W9`402l_;`D0Ti>C101`L70406IVIPD0>c/k101JFUX406YZJPD05QHF101]KFd40>KViPD0C4a<103L
+g=`20?ooo`00B03oool004P0oooo0000\
+\>"],
+  ImageRangeCache->{{{0, 71}, {71, 0}} -> {-0.320083, -0.320083, 0.234368, \
+0.234368}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[TextData["Problem 2-a: Ideal's theoretical d'"], "Subsubsection",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData["Use the formula:"], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData["dprime := Sqrt[s.s]/sigma"], "Text",
+  Evaluatable->False,
+  TextAlignment->Center,
+  AspectRatioFixed->True],
+
+Cell[TextData[{
+  "to calculate the ideal's d' using ",
+  StyleBox["Mathematica",
+    FontSlant->"Italic"],
+  ". This formula assumes that the signal has an average value of zero (not \
+128), so you will have to take that into account."
+}], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(dprime2a[sgnl_] := 
+        Sqrt[Flatten[sgnl] . Flatten[sgnl]]/
+          sigma;\)\), "\[IndentingNewLine]", 
+    \(dprime2a[signal]\)}], "Input"],
+
+Cell[BoxData[
+    \(1.885618083164127`\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+Problem 2-b: Write a function to calculate d' from a \
+two-alternative forced-choice experiment from a z-score of the proportion \
+correct.\
+\>", "Subsubsection",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[CellGroupData[{
+
+Cell[TextData[{
+  "Answer 2-b.",
+  StyleBox[" I'll give you an answer to this one. Here is the answer using \
+the inverse of a standard mathematical function called",
+    FontWeight->"Plain"],
+  " Erf[].  ",
+  StyleBox["(For ",
+    FontWeight->"Plain"],
+  StyleBox["Mathematica",
+    FontWeight->"Plain",
+    FontSlant->"Italic"],
+  StyleBox[" ",
+    FontWeight->"Plain"],
+  StyleBox["v. 4.0, InverseErf is built-in, but in version 3.0 you have to \
+read in a package to access its inverse: ",
+    FontWeight->"Plain"],
+  "<<Statistics`InverseStatisticalFunctions`)"
+}], "Subsubsection",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell["z[p_] := Sqrt[2] InverseErf[1 - 2 p];", "Input",
+  AspectRatioFixed->True],
+
+Cell["d' for a 2AFC task is given by the formula:", "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell["dprime := -Sqrt[2] Z(Pc)", "Text",
+  Evaluatable->False,
+  TextAlignment->Center,
+  AspectRatioFixed->True],
+
+Cell[TextData[{
+  "where Z(*) is the z-score for P",
+  StyleBox["c ",
+    FontVariations->{"CompatibilityType"->"Subscript"}],
+  ", the proportion correct. (See Green and Swets or the supplementary class \
+notes on SDT). "
+}], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell["dprime2b[x_] := N[-Sqrt[2] z[x]]", "Input",
+  AspectRatioFixed->True],
+
+Cell[CellGroupData[{
+
+Cell["dprime2b[.76]", "Input",
+  CellOpen->False,
+  AspectRatioFixed->True],
+
+Cell[BoxData[
+    \(0.9988626635073271`\)], "Output"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[TextData[
+"Problem 3: Ideal's simulated d' in a two-alternative forced-choice task \
+(2AFC)"], "Subsubsection",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData[{
+  "Generate ",
+  StyleBox["ntrials",
+    FontWeight->"Bold"],
+  " = 100 observation pairs of",
+  StyleBox[" signal+noise",
+    FontWeight->"Bold"],
+  ", and",
+  StyleBox[" average gray + noise",
+    FontWeight->"Bold"],
+  ". For each pair compute an ideal decision variable (i.e. the output of a \
+cross-correlator, which is the dot product of the observation with the \
+signal). Pick which observation has the higher decision variable. Decide \
+whether this decision is the right answer or not. Total up the proportion of \
+right answers and compute d'. Repeat this four times (total of 400 trials) to \
+get four estimates of d'. How does the average of these four compare to your \
+result from the closed form prediction above?"
+}], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(ntrials = 100;\)\), "\[IndentingNewLine]", 
+    \(\(nsamples = 4;\)\), "\[IndentingNewLine]", 
+    \(\(sample[ntimes_] := 
+        Table[Flatten[signal] . Flatten[noise + signal] - 
+            Flatten[noise + 128] . Flatten[signal], {i, 0, 
+            ntimes - 1}];\)\), "\[IndentingNewLine]", 
+    \(\(dprimeanswer[m_] := 
+        Table[dprime2b[Count[sample[ntrials], x_ /; x > 0]/100], {x, 0, 
+            m - 1}];\)\), "\[IndentingNewLine]", 
+    \(dprimefinal = dprimeanswer[nsamples]\), "\[IndentingNewLine]", 
+    \(averagedprime = Dot[dprimefinal, {1, 1, 1, 1}]/nsamples\)}], "Input"],
+
+Cell[BoxData[
+    \({2.0870836872795175`, 2.1987819038984386`, 1.9870712566946085`, 
+      1.7345727019877493`}\)], "Output"],
+
+Cell[BoxData[
+    \(2.0018773874650786`\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[TextData[
+"Problem 4: What would d' be if the template was wrong? Run your simulation \
+above using  the template below:"], "Subsubsection",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData[
+"size = 16;\namplitude = 8;\nGrating[x_,y_,fx_,fy_] := \n\tN[amplitude Cos[2 \
+Pi (fx x + fy y)]];"], "Input",
+  AspectRatioFixed->False],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+wrongtemplate = Table[Grating[x,y,1/16,0],
+\t{x,0,size-1},{y,0,size-1}];
+\t
+wrongsample[ntimes_]:=
+    Table[Flatten[wrongtemplate].Flatten[noise+signal]-
+        Flatten[noise+128].Flatten[wrongtemplate],{i,0,ntimes-1}];
+        
+dprimewronganswer[m_]:=
+    Table[dprime2b[Count[wrongsample[ntrials],x_/;x>0]/100],{x,0,m-1}];
+    
+dprimefinal=dprimewronganswer[nsamples]
+averagedprime=Dot[dprimefinal,{1,1,1,1}]/nsamples
+\
+\>", "Input",
+  AspectRatioFixed->True],
+
+Cell[BoxData[
+    \({\(-0.1777119809885154`\), 0.1420347296669095`, 0.07092787793743728`, 
+      0.`}\)], "Output"],
+
+Cell[BoxData[
+    \(0.008812656653957845`\)], "Output"]
+}, Open  ]]
+}, Open  ]]
+},
+FrontEndVersion->"4.0 for Macintosh",
+ScreenRectangle->{{0, 832}, {0, 604}},
+WindowToolbars->{"RulerBar", "EditBar"},
+CellGrouping->Manual,
+WindowSize->{764, 577},
+WindowMargins->{{1, Automatic}, {Automatic, 5}},
+PrivateNotebookOptions->{"ColorPalette"->{RGBColor, 128}},
+ShowCellLabel->True,
+ShowCellTags->False,
+RenderingOptions->{"ObjectDithering"->True,
+"RasterDithering"->False},
+CharacterEncoding->"MacintoshAutomaticEncoding",
+MacintoshSystemPageSetup->"\<\
+00<0001804P000000]P2:?oQon82n@960dL5:0?l0080001804P000000]P2:001
+0000I00000400`<300000BL?00400@00000000000000060801T1T00000000000
+00000000000000000000000000000000\>"
+]
+
+
+(***********************************************************************
+Cached data follows.  If you edit this Notebook file directly, not using
+Mathematica, you must remove the line containing CacheID at the top of 
+the file.  The cache data will then be recreated when you save this file 
+from within Mathematica.
+***********************************************************************)
+
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+
+(*NotebookFileOutline
+Notebook[{
+Cell[1717, 49, 212, 4, 217, "Subtitle",
+  Evaluatable->False],
+Cell[1932, 55, 1022, 17, 126, "Text",
+  Evaluatable->False],
+
+Cell[CellGroupData[{
+Cell[2979, 76, 105, 2, 42, "Subsubsection",
+  Evaluatable->False],
+Cell[3087, 80, 673, 19, 66, "Text",
+  Evaluatable->False],
+Cell[3763, 101, 113, 2, 57, "Input"]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[3913, 108, 93, 2, 28, "Subsubsection",
+  Evaluatable->False],
+Cell[4009, 112, 467, 8, 78, "Text",
+  Evaluatable->False],
+Cell[4479, 122, 143, 6, 72, "Input"],
+Cell[4625, 130, 118, 5, 57, "Input"],
+
+Cell[CellGroupData[{
+Cell[4768, 139, 126, 4, 42, "Input"],
+Cell[4897, 145, 11335, 196, 86, 1296, 66, "GraphicsData", "PostScript", \
+"Graphics",
+  Evaluatable->False]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[16281, 347, 103, 2, 42, "Subsubsection",
+  Evaluatable->False],
+Cell[16387, 351, 340, 11, 48, "Text",
+  Evaluatable->False],
+Cell[16730, 364, 109, 4, 42, "Input"],
+Cell[16842, 370, 402, 16, 32, "Text",
+  Evaluatable->False]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[17281, 391, 533, 9, 155, "Input"],
+Cell[17817, 402, 10874, 189, 80, 1296, 66, "GraphicsData", "PostScript", \
+"Graphics"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[28728, 596, 118, 2, 42, "Subsubsection",
+  Evaluatable->False],
+Cell[28849, 600, 90, 2, 30, "Text",
+  Evaluatable->False],
+Cell[28942, 604, 124, 3, 30, "Text",
+  Evaluatable->False],
+Cell[29069, 609, 296, 8, 48, "Text",
+  Evaluatable->False]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[29402, 622, 170, 4, 43, "Input"],
+Cell[29575, 628, 52, 1, 26, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[29664, 634, 220, 6, 42, "Subsubsection",
+  Evaluatable->False],
+
+Cell[CellGroupData[{
+Cell[29909, 644, 635, 19, 74, "Subsubsection",
+  Evaluatable->False],
+Cell[30547, 665, 80, 1, 27, "Input"],
+Cell[30630, 668, 107, 2, 30, "Text",
+  Evaluatable->False],
+Cell[30740, 672, 113, 3, 30, "Text",
+  Evaluatable->False],
+Cell[30856, 677, 282, 8, 38, "Text",
+  Evaluatable->False],
+Cell[31141, 687, 75, 1, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[31241, 692, 75, 2, 19, "Input",
+  CellOpen->False],
+Cell[31319, 696, 53, 1, 26, "Output"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[31433, 704, 164, 4, 42, "Subsubsection",
+  Evaluatable->False],
+Cell[31600, 710, 806, 19, 80, "Text",
+  Evaluatable->False]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[32443, 734, 617, 11, 155, "Input"],
+Cell[33063, 747, 125, 2, 26, "Output"],
+Cell[33191, 751, 53, 1, 26, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[33281, 757, 193, 4, 42, "Subsubsection",
+  Evaluatable->False],
+Cell[33477, 763, 152, 3, 72, "Input"],
+
+Cell[CellGroupData[{
+Cell[33654, 770, 473, 15, 207, "Input"],
+Cell[34130, 787, 115, 2, 26, "Output"],
+Cell[34248, 791, 55, 1, 26, "Output"]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
+
+
+
+(***********************************************************************
+End of Mathematica Notebook file.
+***********************************************************************)
+

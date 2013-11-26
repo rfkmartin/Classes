@@ -1,0 +1,229 @@
+(***********************************************************************
+
+                    Mathematica-Compatible Notebook
+
+This notebook can be used on any computer system with Mathematica 4.0,
+MathReader 4.0, or any compatible application. The data for the notebook 
+starts with the line containing stars above.
+
+To get the notebook into a Mathematica-compatible application, do one of 
+the following:
+
+* Save the data starting with the line of stars above into a file
+  with a name ending in .nb, then open the file inside the application;
+
+* Copy the data starting with the line of stars above to the
+  clipboard, then use the Paste menu command inside the application.
+
+Data for notebooks contains only printable 7-bit ASCII and can be
+sent directly in email or through ftp in text mode.  Newlines can be
+CR, LF or CRLF (Unix, Macintosh or MS-DOS style).
+
+NOTE: If you modify the data for this notebook not in a Mathematica-
+compatible application, you must delete the line below containing the 
+word CacheID, otherwise Mathematica-compatible applications may try to 
+use invalid cache data.
+
+For more information on notebooks and Mathematica-compatible 
+applications, contact Wolfram Research:
+  web: http://www.wolfram.com
+  email: info@wolfram.com
+  phone: +1-217-398-0700 (U.S.)
+
+Notebook reader applications are available free of charge from 
+Wolfram Research.
+***********************************************************************)
+
+(*CacheID: 232*)
+
+
+(*NotebookFileLineBreakTest
+NotebookFileLineBreakTest*)
+(*NotebookOptionsPosition[      8272,        188]*)
+(*NotebookOutlinePosition[      8913,        211]*)
+(*  CellTagsIndexPosition[      8869,        207]*)
+(*WindowFrame->Normal*)
+
+
+
+Notebook[{
+Cell[BoxData[{
+    \(\(Sabs[x_] := Abs[x];\)\), "\[IndentingNewLine]", 
+    \(\(Sexp[x_] := \(-Exp[\(-x^2\)]\);\)\), "\[IndentingNewLine]", 
+    \(\(Slog[x_] := Log[1 + x^2];\)\), "\[IndentingNewLine]", 
+    \(\(Spar[x_] := x^2;\)\), "\[IndentingNewLine]", 
+    \(\(Plot[{Sabs[x], Sexp[x], Slog[x], Spar[x]}, {x, \(-4\), 4}, 
+        PlotStyle \[Rule] {RGBColor[1\ , 0, \ 0], RGBColor[0, 1, 0], 
+            RGBColor[0, 0, 1], RGBColor[0, 0, 0]}];\)\)}], "Input"],
+
+Cell[BoxData[{
+    \(\(normalize[x_] := N[x/Sqrt[x . x]];\)\), "\n", 
+    \(\(genPhi := {normalize[{Random[] - 0.5, Random[] - 0.5}], 
+          normalize[{Random[] - 0.5, Random[] - 0.5}]};\)\)}], "Input"],
+
+Cell[BoxData[
+    \(\(genRF[xsize_, ysize_] := 
+        Table[Random[Integer, {0, 255}], {x, 0, xsize - 1}, {y, 0, 
+            ysize - 1}];\)\)], "Input"],
+
+Cell[BoxData[{
+    \( (*generate\ the\ 50\ data\ points\ with\ slope\ 4*) \(npts = 
+        50;\)\), "\n", 
+    \(\(testpts = 
+        genData[4, 
+          npts];\)\[IndentingNewLine]\n (*generate\ some\ random\ starting\ \
+vectors*) \), "\[IndentingNewLine]", 
+    \(\(phi = 
+        genPhi;\)\[IndentingNewLine]\n (*put\ it\ all\ together*) \), "\
+\[IndentingNewLine]", 
+    \(test = 
+      ListPlot[testpts, PlotRange \[Rule] {{\(-10\), 10}, {\(-10\), 10}}, 
+        DisplayFunction \[Rule] Identity]; 
+    gPhi = Plot[{x\ \((phi[\([1, 2]\)]/phi[\([1, 1]\)])\), 
+          x\ \((phi[\([2, 2]\)]/phi[\([2, 1]\)])\)}, {x, \(-4\), 4}, 
+        AxesOrigin \[Rule] {0, 0}, PlotStyle \[Rule] {RGBColor[1, 0, 0]}, 
+        DisplayFunction \[Rule] Identity];\), "\[IndentingNewLine]", 
+    \(\(Show[test, gPhi, 
+        DisplayFunction \[Rule] $DisplayFunction];\)\)}], "Input"],
+
+Cell[BoxData[{
+    \(\(f[xr_] := If[xr < 0, \(-1\), 1];\)\), "\n", 
+    \(\(SprimeAbs[a_, mu_, sigma_] := 
+        Map[f, Transpose[
+            Transpose[
+                Transpose[
+                  Transpose[a] - {Mean[a[\([1]\)]], 
+                      Mean[a[\([2]\)]]}]]/{StandardDeviation[a[\([1]\)]], 
+                StandardDeviation[
+                  a[\([2]\)]]}], {2}];\)\n\), "\[IndentingNewLine]", 
+    \(\(SprimeExp[a_, mu_, sigma_] := 
+        2\ Transpose[
+            Transpose[
+                Transpose[
+                  Transpose[a] - {Mean[a[\([1]\)]], 
+                      Mean[a[\([2]\)]]}]]/{StandardDeviation[a[\([1]\)]], 
+                StandardDeviation[
+                  a[\([2]\)]]}]\ Exp[\(-\((Transpose[
+                    Transpose[
+                        Transpose[
+                          Transpose[a] - {Mean[a[\([1]\)]], 
+                              Mean[a[\([2]\)]]}]]/{StandardDeviation[
+                          a[\([1]\)]], 
+                        StandardDeviation[
+                          a[\([2]\)]]}])\)^2\)];\)\)}], "Input"],
+
+Cell[BoxData[{
+    \(\(npts = 50;\)\), "\n", 
+    \(\(slope = 1;\)\), "\n", 
+    \(\(i = 0;\)\), "\n", 
+    \(\(testpts = genData[slope, npts];\)\), "\n", 
+    \(\(phi = 
+        genPhi;\)\[IndentingNewLine]\n (*get\ initial\ weights*) \), "\
+\[IndentingNewLine]", 
+    \(\(a = 
+        testpts . 
+          Inverse[phi];\)\[IndentingNewLine]\n (*define\ constants*) \), "\
+\[IndentingNewLine]", 
+    \(\(eta = 0.1;\)\), "\n", 
+    \(\(etaw = 0.1;\)\), "\n", 
+    \(\(betaoversigma = 
+        0.14;\)\[IndentingNewLine]\n (*Show\ initial\ vectors\ and\ test\ \
+points*) \), "\[IndentingNewLine]", 
+    \(\(test = 
+        ListPlot[testpts, PlotRange \[Rule] {{\(-10\), 10}, {\(-10\), 10}}, 
+          PlotLabel \[Rule] 0, DisplayFunction \[Rule] Identity];\)\), "\n", 
+    \(\(gPhi = 
+        Plot[{x\ \((phi[\([1, 2]\)]/phi[\([1, 1]\)])\), 
+            x\ \((phi[\([2, 2]\)]/phi[\([2, 1]\)])\)}, {x, \(-4\), 4}, 
+          AxesOrigin \[Rule] {0, 0}, PlotStyle \[Rule] {RGBColor[1, 0, 0]}, 
+          DisplayFunction \[Rule] Identity];\)\), "\n", 
+    \(\(mypts = 
+        ListPlot[a . phi, PlotStyle \[Rule] {RGBColor[0, 0, 1]}, 
+          DisplayFunction \[Rule] Identity];\)\), "\n", 
+    \(\(Show[test, mypts, gPhi, 
+        DisplayFunction \[Rule] $DisplayFunction];\)\[IndentingNewLine]\
+\[IndentingNewLine] (*Loop\ thru\ the\ update\ algorithm*) \
+\[IndentingNewLine] (*update\ the\ weights\ every\ time\ thru*) \
+\[IndentingNewLine] (*update\ the\ vectors\ every\ 20\ times\ thru*) \n \
+(*draw\ the\ new\ graph\ every\ 100\ time\ thru*) \), "\[IndentingNewLine]", 
+    \(While[1 \[Equal] 1, 
+      a = a + eta*\((testpts . Transpose[phi] - a . phi . Transpose[phi] - 
+                betaoversigma\ Transpose[
+                    Transpose[
+                        SprimeAbs[
+                          a, {Mean[a[\([1]\)]], 
+                            Mean[a[\([2]\)]]}, {StandardDeviation[
+                              a[\([1]\)]], 
+                            StandardDeviation[a[\([2]\)]]}]]\ {1, 
+                        1/Abs[slope]}])\); \[IndentingNewLine]\
+\[IndentingNewLine] (*update\ basis\ functions*) \[IndentingNewLine]If[
+        Mod[i, 20] \[Equal] 0, 
+        residual = \((etaw/npts)\)\ Transpose[testpts - a . phi] . 
+              a; \[IndentingNewLine]phi = 
+          phi + residual; \[IndentingNewLine]phi = {normalize[phi[\([1]\)]], 
+            normalize[
+              phi[\([2]\)]]}; \[IndentingNewLine]If[\((\((Flatten[residual] . 
+                    Flatten[residual])\) < 0.0008)\) && \((i > 
+                2500)\), \(Break[];\)]]; \[IndentingNewLine]\
+\[IndentingNewLine] (*\ for\ memory\ requirements, \ 
+        don' t\ iterate\ past\ 15000\ *) \[IndentingNewLine]If[i > 15000, 
+        Break[]]; \[IndentingNewLine]\[IndentingNewLine] (*show\ data\ \
+points, along\ with\ new\ basis\ functions\ and\ reconstructed\ points\ in\ \
+blue*) \[IndentingNewLine]If[Mod[i, 100] \[Equal] 0, 
+        gPhi = Plot[{x\ \((phi[\([1, 2]\)]/phi[\([1, 1]\)])\), 
+              x\ \((phi[\([2, 2]\)]/phi[\([2, 1]\)])\)}, {x, \(-4\), 4}, 
+            PlotRange \[Rule] {{\(-10\), 10}, {\(-10\), 10}}, 
+            AxesOrigin \[Rule] {0, 0}, PlotStyle \[Rule] {RGBColor[1, 0, 0]}, 
+            PlotLabel \[Rule] i, 
+            DisplayFunction \[Rule] Identity]; \[IndentingNewLine]mypts = 
+          ListPlot[a . phi, PlotStyle \[Rule] {RGBColor[0, 0, 1]}, 
+            DisplayFunction \[Rule] Identity]; 
+        Show[gPhi, test, mypts, 
+          DisplayFunction \[Rule] $DisplayFunction];]; \
+\[IndentingNewLine]\(\(i++\);\)]\[IndentingNewLine]\[IndentingNewLine] (*Show\
+\ last\ image*) \), "\n", 
+    \(\(Show[gPhi, test, mypts, 
+        DisplayFunction \[Rule] $DisplayFunction];\)\)}], "Input",
+  Background->None]
+},
+FrontEndVersion->"4.0 for X",
+ScreenRectangle->{{0, 1280}, {0, 1024}},
+WindowSize->{520, 600},
+WindowMargins->{{350, Automatic}, {Automatic, 53}}
+]
+
+
+(***********************************************************************
+Cached data follows.  If you edit this Notebook file directly, not using
+Mathematica, you must remove the line containing CacheID at the top of 
+the file.  The cache data will then be recreated when you save this file 
+from within Mathematica.
+***********************************************************************)
+
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+
+(*NotebookFileOutline
+Notebook[{
+Cell[1717, 49, 463, 7, 123, "Input"],
+Cell[2183, 58, 206, 3, 59, "Input"],
+Cell[2392, 63, 155, 3, 59, "Input"],
+Cell[2550, 68, 874, 18, 251, "Input"],
+Cell[3427, 88, 1088, 24, 347, "Input"],
+Cell[4518, 114, 3750, 72, 1099, "Input"]
+}
+]
+*)
+
+
+
+
+(***********************************************************************
+End of Mathematica Notebook file.
+***********************************************************************)
+

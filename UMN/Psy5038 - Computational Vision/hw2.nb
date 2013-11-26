@@ -1,0 +1,638 @@
+(***********************************************************************
+
+                    Mathematica-Compatible Notebook
+
+This notebook can be used on any computer system with Mathematica 4.0,
+MathReader 4.0, or any compatible application. The data for the notebook 
+starts with the line containing stars above.
+
+To get the notebook into a Mathematica-compatible application, do one of 
+the following:
+
+* Save the data starting with the line of stars above into a file
+  with a name ending in .nb, then open the file inside the application;
+
+* Copy the data starting with the line of stars above to the
+  clipboard, then use the Paste menu command inside the application.
+
+Data for notebooks contains only printable 7-bit ASCII and can be
+sent directly in email or through ftp in text mode.  Newlines can be
+CR, LF or CRLF (Unix, Macintosh or MS-DOS style).
+
+NOTE: If you modify the data for this notebook not in a Mathematica-
+compatible application, you must delete the line below containing the 
+word CacheID, otherwise Mathematica-compatible applications may try to 
+use invalid cache data.
+
+For more information on notebooks and Mathematica-compatible 
+applications, contact Wolfram Research:
+  web: http://www.wolfram.com
+  email: info@wolfram.com
+  phone: +1-217-398-0700 (U.S.)
+
+Notebook reader applications are available free of charge from 
+Wolfram Research.
+***********************************************************************)
+
+(*CacheID: 232*)
+
+
+(*NotebookFileLineBreakTest
+NotebookFileLineBreakTest*)
+(*NotebookOptionsPosition[     23437,        566]*)
+(*NotebookOutlinePosition[     24431,        600]*)
+(*  CellTagsIndexPosition[     24387,        596]*)
+(*WindowFrame->Normal*)
+
+
+
+Notebook[{
+Cell["\<\
+Introduction to Neural Networks
+U. Minn. Psy 5038
+
+Daniel Kersten
+
+Problem Set 2
+(see Lecture 5 on Lateral inhibition)
+\
+\>", "Subtitle",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell["\<\
+Robert Martin
+1505151\
+\>", "Subtitle"],
+
+Cell[BoxData[""], "Author"],
+
+Cell["Exercises", "Section"],
+
+Cell[CellGroupData[{
+
+Cell["\<\Exercise 1: Comparing lateral inhibition responses to step and ramp \images\\>", "Subsection",  Evaluatable->False,  AspectRatioFixed->True],
+
+Cell[TextData[{
+  "This exercise is easiest if you copy and modify bits of code from Lecture \
+5 used to illustrate Mach bands. Make a ",
+  StyleBox["DensityPlot",
+    FontWeight->"Bold"],
+  " of a 30x30 pixel step function (rather than the ramp function used in \
+Lecture 5). As with the ramp in Lecture 5 illustrating Mach bands, the \
+pattern should only change in the x-direction. \nLook at the brighter knee of \
+the density plot. Do you perceive a bigger Mach band for the step than for \
+the ramp?"
+}], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(y[x_] := 0.2 /; x \[LessEqual] 15;\)\), "\[IndentingNewLine]", 
+    \(\(y[x_] := 0.8 /; x > 15;\)\), "\[IndentingNewLine]", 
+    \(\(stepMach = Table[y[i], {i, 1, 30}];\)\), "\[IndentingNewLine]", 
+    \(\(ListDensityPlot[Table[stepMach, {i, 1, 30}], \ Frame \[Rule] False, \ 
+        Mesh \[Rule] \ False, \ PlotRange \[Rule] {0, 1}];\)\)}], "Input"],
+
+Cell[GraphicsData["PostScript", "\<\
+%!
+%%Creator: Mathematica
+%%AspectRatio: 1 
+MathPictureStart
+/Mabs {
+Mgmatrix idtransform
+Mtmatrix dtransform
+} bind def
+/Mabsadd { Mabs
+3 -1 roll add
+3 1 roll add
+exch } bind def
+%% DensityGraphics
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+/Courier findfont 10  scalefont  setfont
+% Scaling calculations
+0.0192308 0.0320513 0.0192308 0.0320513 [
+[ 0 0 0 0 ]
+[ 1 1 0 0 ]
+] MathScale
+% Start of Graphics
+1 setlinecap
+1 setlinejoin
+newpath
+0 0 m
+1 0 L
+1 1 L
+0 1 L
+closepath
+clip
+newpath
+% Start of gray image
+p
+.01923 .01923 translate
+.96154 .96154 scale
+30 string
+30 30 8 [30 0 0 30 0 0] {
+\tcurrentfile
+\t1 index
+\treadhexstring
+\tpop
+}  Mimage
+333333333333333333333333333333CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+333333333333333333333333333333CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+333333333333333333333333333333CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+333333333333333333333333333333CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+333333333333333333333333333333CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+333333333333333333333333333333CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+333333333333333333333333333333CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+333333333333333333333333333333CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+333333333333333333333333333333CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+333333333333333333333333333333CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+333333333333333333333333333333CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+333333333333333333333333333333CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+333333333333333333333333333333CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+333333333333333333333333333333CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+333333333333333333333333333333CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+333333333333333333333333333333CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+333333333333333333333333333333CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+333333333333333333333333333333CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+333333333333333333333333333333CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+333333333333333333333333333333CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+333333333333333333333333333333CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+333333333333333333333333333333CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+333333333333333333333333333333CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+333333333333333333333333333333CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+333333333333333333333333333333CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+333333333333333333333333333333CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+333333333333333333333333333333CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+333333333333333333333333333333CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+333333333333333333333333333333CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+333333333333333333333333333333CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+pop
+P
+% End of image
+% End of Graphics
+MathPictureEnd
+\
+\>"], "Graphics",
+  ImageSize->{288, 288},
+  ImageMargins->{{0, 0}, {0, 0}},
+  ImageRegion->{{0, 1}, {0, 1}},
+  ImageCache->GraphicsData["Bitmap", "\<\
+CF5dJ6E]HGAYHf4PAg9QL6QYHg<PAVmbKF5d0`40004P000182000`400?l00000o`00003oo`3ooolQ
+0?ooo`00o`3ooolQ0?ooo`00o`3ooolQ0?ooo`00o`3ooolQ0?ooo`00o`3ooolQ0?ooo`00o`3ooolQ
+0?ooo`00o`3ooolQ0?ooo`001@3ooon:03<c<h/0c<c<1P3oool000D0ooooRP0c<c>;0<c<c0H0oooo
+00050?ooohX0<c<cR`3<c<`60?ooo`001@3ooon:03<c<h/0c<c<1P3oool000D0ooooRP0c<c>;0<c<
+c0H0oooo00050?ooohX0<c<cR`3<c<`60?ooo`001@3ooon:03<c<h/0c<c<1P3oool000D0ooooRP0c
+<c>;0<c<c0H0oooo00050?ooohX0<c<cR`3<c<`60?ooo`001@3ooon:03<c<h/0c<c<1P3oool000D0
+ooooRP0c<c>;0<c<c0H0oooo00050?ooohX0<c<cR`3<c<`60?ooo`001@3ooon:03<c<h/0c<c<1P3o
+ool000D0ooooRP0c<c>;0<c<c0H0oooo00050?ooohX0<c<cR`3<c<`60?ooo`001@3ooon:03<c<h/0
+c<c<1P3oool000D0ooooRP0c<c>;0<c<c0H0oooo00050?ooohX0<c<cR`3<c<`60?ooo`001@3ooon:
+03<c<h/0c<c<1P3oool000D0ooooRP0c<c>;0<c<c0H0oooo00050?ooohX0<c<cR`3<c<`60?ooo`00
+1@3ooon:03<c<h/0c<c<1P3oool000D0ooooRP0c<c>;0<c<c0H0oooo00050?ooohX0<c<cR`3<c<`6
+0?ooo`001@3ooon:03<c<h/0c<c<1P3oool000D0ooooRP0c<c>;0<c<c0H0oooo00050?ooohX0<c<c
+R`3<c<`60?ooo`001@3ooon:03<c<h/0c<c<1P3oool000D0ooooRP0c<c>;0<c<c0H0oooo00050?oo
+ohX0<c<cR`3<c<`60?ooo`001@3ooon:03<c<h/0c<c<1P3oool000D0ooooRP0c<c>;0<c<c0H0oooo
+00050?ooohX0<c<cR`3<c<`60?ooo`001@3ooon:03<c<h/0c<c<1P3oool000D0ooooRP0c<c>;0<c<
+c0H0oooo00050?ooohX0<c<cR`3<c<`60?ooo`001@3ooon:03<c<h/0c<c<1P3oool000D0ooooRP0c
+<c>;0<c<c0H0oooo00050?ooohX0<c<cR`3<c<`60?ooo`001@3ooon:03<c<h/0c<c<1P3oool000D0
+ooooRP0c<c>;0<c<c0H0oooo00050?ooohX0<c<cR`3<c<`60?ooo`001@3ooon:03<c<h/0c<c<1P3o
+ool000D0ooooRP0c<c>;0<c<c0H0oooo00050?ooohX0<c<cR`3<c<`60?ooo`001@3ooon:03<c<h/0
+c<c<1P3oool000D0ooooRP0c<c>;0<c<c0H0oooo00050?ooohX0<c<cR`3<c<`60?ooo`001@3ooon:
+03<c<h/0c<c<1P3oool000D0ooooRP0c<c>;0<c<c0H0oooo00050?ooohX0<c<cR`3<c<`60?ooo`00
+1@3ooon:03<c<h/0c<c<1P3oool000D0ooooRP0c<c>;0<c<c0H0oooo00050?ooohX0<c<cR`3<c<`6
+0?ooo`001@3ooon:03<c<h/0c<c<1P3oool000D0ooooRP0c<c>;0<c<c0H0oooo00050?ooohX0<c<c
+R`3<c<`60?ooo`001@3ooon:03<c<h/0c<c<1P3oool000D0ooooRP0c<c>;0<c<c0H0oooo00050?oo
+ohX0<c<cR`3<c<`60?ooo`001@3ooon:03<c<h/0c<c<1P3oool000D0ooooRP0c<c>;0<c<c0H0oooo
+00050?ooohX0<c<cR`3<c<`60?ooo`001@3ooon:03<c<h/0c<c<1P3oool000D0ooooRP0c<c>;0<c<
+c0H0oooo00050?ooohX0<c<cR`3<c<`60?ooo`001@3ooon:03<c<h/0c<c<1P3oool000D0ooooRP0c
+<c>;0<c<c0H0oooo00050?ooohX0<c<cR`3<c<`60?ooo`001@3ooon:03<c<h/0c<c<1P3oool000D0
+ooooRP0c<c>;0<c<c0H0oooo00050?ooohX0<c<cR`3<c<`60?ooo`001@3ooon:03<c<h/0c<c<1P3o
+ool000D0ooooRP0c<c>;0<c<c0H0oooo00050?ooohX0<c<cR`3<c<`60?ooo`001@3ooon:03<c<h/0
+c<c<1P3oool000D0ooooRP0c<c>;0<c<c0H0oooo00050?ooohX0<c<cR`3<c<`60?ooo`001@3ooon:
+03<c<h/0c<c<1P3oool000D0ooooRP0c<c>;0<c<c0H0oooo00050?ooohX0<c<cR`3<c<`60?ooo`00
+1@3ooon:03<c<h/0c<c<1P3oool000D0ooooRP0c<c>;0<c<c0H0oooo00050?ooohX0<c<cR`3<c<`6
+0?ooo`001@3ooon:03<c<h/0c<c<1P3oool000D0ooooRP0c<c>;0<c<c0H0oooo00050?ooohX0<c<c
+R`3<c<`60?ooo`001@3ooon:03<c<h/0c<c<1P3oool000D0ooooRP0c<c>;0<c<c0H0oooo00050?oo
+ohX0<c<cR`3<c<`60?ooo`001@3ooon:03<c<h/0c<c<1P3oool000D0ooooRP0c<c>;0<c<c0H0oooo
+00050?ooohX0<c<cR`3<c<`60?ooo`001@3ooon:03<c<h/0c<c<1P3oool000D0ooooRP0c<c>;0<c<
+c0H0oooo00050?ooohX0<c<cR`3<c<`60?ooo`001@3ooon:03<c<h/0c<c<1P3oool000D0ooooRP0c
+<c>;0<c<c0H0oooo00050?ooohX0<c<cR`3<c<`60?ooo`001@3ooon:03<c<h/0c<c<1P3oool000D0
+ooooRP0c<c>;0<c<c0H0oooo00050?ooohX0<c<cR`3<c<`60?ooo`001@3ooon:03<c<h/0c<c<1P3o
+ool000D0ooooRP0c<c>;0<c<c0H0oooo00050?ooohX0<c<cR`3<c<`60?ooo`001@3ooon:03<c<h/0
+c<c<1P3oool000D0ooooRP0c<c>;0<c<c0H0oooo00050?ooohX0<c<cR`3<c<`60?ooo`001@3ooon:
+03<c<h/0c<c<1P3oool000D0ooooRP0c<c>;0<c<c0H0oooo00050?ooohX0<c<cR`3<c<`60?ooo`00
+1@3ooon:03<c<h/0c<c<1P3oool000D0ooooRP0c<c>;0<c<c0H0oooo00050?ooohX0<c<cR`3<c<`6
+0?ooo`001@3ooon:03<c<h/0c<c<1P3oool000D0ooooRP0c<c>;0<c<c0H0oooo00050?ooohX0<c<c
+R`3<c<`60?ooo`001@3ooon:03<c<h/0c<c<1P3oool000D0ooooRP0c<c>;0<c<c0H0oooo00050?oo
+ohX0<c<cR`3<c<`60?ooo`001@3ooon:03<c<h/0c<c<1P3oool000D0ooooRP0c<c>;0<c<c0H0oooo
+00050?ooohX0<c<cR`3<c<`60?ooo`001@3ooon:03<c<h/0c<c<1P3oool000D0ooooRP0c<c>;0<c<
+c0H0oooo00050?ooohX0<c<cR`3<c<`60?ooo`001@3ooon:03<c<h/0c<c<1P3oool000D0ooooRP0c
+<c>;0<c<c0H0oooo00050?ooohX0<c<cR`3<c<`60?ooo`001@3ooon:03<c<h/0c<c<1P3oool000D0
+ooooRP0c<c>;0<c<c0H0oooo00050?ooohX0<c<cR`3<c<`60?ooo`001@3ooon:03<c<h/0c<c<1P3o
+ool000D0ooooRP0c<c>;0<c<c0H0oooo00050?ooohX0<c<cR`3<c<`60?ooo`001@3ooon:03<c<h/0
+c<c<1P3oool000D0ooooRP0c<c>;0<c<c0H0oooo00050?ooohX0<c<cR`3<c<`60?ooo`001@3ooon:
+03<c<h/0c<c<1P3oool000D0ooooRP0c<c>;0<c<c0H0oooo00050?ooohX0<c<cR`3<c<`60?ooo`00
+1@3ooon:03<c<h/0c<c<1P3oool000D0ooooRP0c<c>;0<c<c0H0oooo00050?ooohX0<c<cR`3<c<`6
+0?ooo`001@3ooon:03<c<h/0c<c<1P3oool000D0ooooRP0c<c>;0<c<c0H0oooo00050?ooohX0<c<c
+R`3<c<`60?ooo`001@3ooon:03<c<h/0c<c<1P3oool000D0ooooRP0c<c>;0<c<c0H0oooo00050?oo
+ohX0<c<cR`3<c<`60?ooo`001@3ooon:03<c<h/0c<c<1P3oool000D0ooooRP0c<c>;0<c<c0H0oooo
+00050?ooohX0<c<cR`3<c<`60?ooo`001@3ooon:03<c<h/0c<c<1P3oool000D0ooooRP0c<c>;0<c<
+c0H0oooo00050?ooohX0<c<cR`3<c<`60?ooo`001@3ooon:03<c<h/0c<c<1P3oool000D0ooooRP0c
+<c>;0<c<c0H0oooo00050?ooohX0<c<cR`3<c<`60?ooo`001@3ooon:03<c<h/0c<c<1P3oool000D0
+ooooRP0c<c>;0<c<c0H0oooo00050?ooohX0<c<cR`3<c<`60?ooo`001@3ooon:03<c<h/0c<c<1P3o
+ool000D0ooooRP0c<c>;0<c<c0H0oooo00050?ooohX0<c<cR`3<c<`60?ooo`001@3ooon:03<c<h/0
+c<c<1P3oool000D0ooooRP0c<c>;0<c<c0H0oooo00050?ooohX0<c<cR`3<c<`60?ooo`001@3ooon:
+03<c<h/0c<c<1P3oool000D0ooooRP0c<c>;0<c<c0H0oooo00050?ooohX0<c<cR`3<c<`60?ooo`00
+1@3ooon:03<c<h/0c<c<1P3oool000D0ooooRP0c<c>;0<c<c0H0oooo00050?ooohX0<c<cR`3<c<`6
+0?ooo`001@3ooon:03<c<h/0c<c<1P3oool000D0ooooRP0c<c>;0<c<c0H0oooo00050?ooohX0<c<c
+R`3<c<`60?ooo`001@3ooon:03<c<h/0c<c<1P3oool000D0ooooRP0c<c>;0<c<c0H0oooo00050?oo
+ohX0<c<cR`3<c<`60?ooo`001@3ooon:03<c<h/0c<c<1P3oool000D0ooooRP0c<c>;0<c<c0H0oooo
+00050?ooohX0<c<cR`3<c<`60?ooo`001@3ooon:03<c<h/0c<c<1P3oool000D0ooooRP0c<c>;0<c<
+c0H0oooo00050?ooohX0<c<cR`3<c<`60?ooo`001@3ooon:03<c<h/0c<c<1P3oool000D0ooooRP0c
+<c>;0<c<c0H0oooo00050?ooohX0<c<cR`3<c<`60?ooo`001@3ooon:03<c<h/0c<c<1P3oool000D0
+ooooRP0c<c>;0<c<c0H0oooo00050?ooohX0<c<cR`3<c<`60?ooo`001@3ooon:03<c<h/0c<c<1P3o
+ool000D0ooooRP0c<c>;0<c<c0H0oooo00050?ooohX0<c<cR`3<c<`60?ooo`001@3ooon:03<c<h/0
+c<c<1P3oool000D0ooooRP0c<c>;0<c<c0H0oooo00050?ooohX0<c<cR`3<c<`60?ooo`001@3ooon:
+03<c<h/0c<c<1P3oool000D0ooooRP0c<c>;0<c<c0H0oooo00050?ooohX0<c<cR`3<c<`60?ooo`00
+1@3ooon:03<c<h/0c<c<1P3oool000D0ooooRP0c<c>;0<c<c0H0oooo00050?ooohX0<c<cR`3<c<`6
+0?ooo`001@3ooon:03<c<h/0c<c<1P3oool000D0ooooRP0c<c>;0<c<c0H0oooo00050?ooohX0<c<c
+R`3<c<`60?ooo`001@3ooon:03<c<h/0c<c<1P3oool000D0ooooRP0c<c>;0<c<c0H0oooo00050?oo
+ohX0<c<cR`3<c<`60?ooo`001@3ooon:03<c<h/0c<c<1P3oool000D0ooooRP0c<c>;0<c<c0H0oooo
+00050?ooohX0<c<cR`3<c<`60?ooo`001@3ooon:03<c<h/0c<c<1P3oool000D0ooooRP0c<c>;0<c<
+c0H0oooo00050?ooohX0<c<cR`3<c<`60?ooo`001@3ooon:03<c<h/0c<c<1P3oool000D0ooooRP0c
+<c>;0<c<c0H0oooo00050?ooohX0<c<cR`3<c<`60?ooo`001@3ooon:03<c<h/0c<c<1P3oool000D0
+ooooRP0c<c>;0<c<c0H0oooo00050?ooohX0<c<cR`3<c<`60?ooo`001@3ooon:03<c<h/0c<c<1P3o
+ool000D0ooooRP0c<c>;0<c<c0H0oooo00050?ooohX0<c<cR`3<c<`60?ooo`001@3ooon:03<c<h/0
+c<c<1P3oool000D0ooooRP0c<c>;0<c<c0H0oooo00050?ooohX0<c<cR`3<c<`60?ooo`001@3ooon:
+03<c<h/0c<c<1P3oool000D0ooooRP0c<c>;0<c<c0H0oooo00050?ooohX0<c<cR`3<c<`60?ooo`00
+1@3ooon:03<c<h/0c<c<1P3oool000D0ooooRP0c<c>;0<c<c0H0oooo00050?ooohX0<c<cR`3<c<`6
+0?ooo`001@3ooon:03<c<h/0c<c<1P3oool000D0ooooRP0c<c>;0<c<c0H0oooo00050?ooohX0<c<c
+R`3<c<`60?ooo`001@3ooon:03<c<h/0c<c<1P3oool000D0ooooRP0c<c>;0<c<c0H0oooo00050?oo
+ohX0<c<cR`3<c<`60?ooo`001@3ooon:03<c<h/0c<c<1P3oool000D0ooooRP0c<c>;0<c<c0H0oooo
+00050?ooohX0<c<cR`3<c<`60?ooo`001@3ooon:03<c<h/0c<c<1P3oool000D0ooooRP0c<c>;0<c<
+c0H0oooo00050?ooohX0<c<cR`3<c<`60?ooo`001@3ooon:03<c<h/0c<c<1P3oool000D0ooooRP0c
+<c>;0<c<c0H0oooo00050?ooohX0<c<cR`3<c<`60?ooo`001@3ooon:03<c<h/0c<c<1P3oool000D0
+ooooRP0c<c>;0<c<c0H0oooo00050?ooohX0<c<cR`3<c<`60?ooo`001@3ooon:03<c<h/0c<c<1P3o
+ool000D0ooooRP0c<c>;0<c<c0H0oooo00050?ooohX0<c<cR`3<c<`60?ooo`001@3ooon:03<c<h/0
+c<c<1P3oool000D0ooooRP0c<c>;0<c<c0H0oooo00050?ooohX0<c<cR`3<c<`60?ooo`001@3ooon:
+03<c<h/0c<c<1P3oool000D0ooooRP0c<c>;0<c<c0H0oooo00050?ooohX0<c<cR`3<c<`60?ooo`00
+1@3ooon:03<c<h/0c<c<1P3oool000D0ooooRP0c<c>;0<c<c0H0oooo00050?ooohX0<c<cR`3<c<`6
+0?ooo`001@3ooon:03<c<h/0c<c<1P3oool000D0ooooRP0c<c>;0<c<c0H0oooo00050?ooohX0<c<c
+R`3<c<`60?ooo`001@3ooon:03<c<h/0c<c<1P3oool000D0ooooRP0c<c>;0<c<c0H0oooo00050?oo
+ohX0<c<cR`3<c<`60?ooo`001@3ooon:03<c<h/0c<c<1P3oool000D0ooooRP0c<c>;0<c<c0H0oooo
+00050?ooohX0<c<cR`3<c<`60?ooo`001@3ooon:03<c<h/0c<c<1P3oool000D0ooooRP0c<c>;0<c<
+c0H0oooo003o0?ooob40oooo003o0?ooob40oooo003o0?ooob40oooo003o0?ooob40oooo003o0?oo
+ob40oooo003o0?ooob40oooo0000\
+\>"],
+  ImageRangeCache->{{{0, 287}, {287, 0}} -> {-0.600157, -0.600157, 0.108712, \
+0.108712}}]
+}, Open  ]],
+
+Cell["\<\
+Now, using the same parameters as were used for the ramp input in \
+Lecture 5, find the response produced by the recurrent lateral inhibition \
+equations to the step. Graph it. \
+\>", "Text"],
+
+Cell[BoxData[{\(size = 30;\), "\[IndentingNewLine]", \(spaceconstant = 
+        5;\), "\[IndentingNewLine]", \(maxstrength = 
+        0.05;\), "\[IndentingNewLine]", 
+    RowBox[{
+      RowBox[{"\[Epsilon]", 
+        StyleBox[" ",
+          FontFamily->"Symbol",
+          FontSize->14,
+          FontWeight->"Plain"], "=", ".3"}], ";"}]}], "Input"],
+
+Cell["\<\
+e \t= Join[Table[0,{i,N[size/2]}],Table[1,{i,N[size/2]}]];
+g0 \t= ListPlot[e, PlotRange -> \
+{{0,30},{-0.5,1.0}},PlotStyle->{RGBColor[1,0,0]},
+\t\tDisplayFunction -> Identity];\
+\>", "Input",
+  AspectRatioFixed->True],
+
+Cell["f := Table[Random[],{size}]", "Input",
+  AspectRatioFixed->True],
+
+Cell["\<\
+W =
+Table[N[-maxstrength Exp[-Abs[i-j]/spaceconstant],1],
+\t\t{i,size},{j,size}];\
+\>", "Input",
+  AspectRatioFixed->True],
+
+Cell["T[f_] := f + \[Epsilon] (e + W.f - f);", "Input",
+  AspectRatioFixed->True],
+
+Cell[BoxData[{
+    \(\(iterations = 15;\)\), "\[IndentingNewLine]", 
+    \(\(g1 = 
+        ListPlot[Nest[T, \ f, \ iterations], PlotJoined \[Rule] True, 
+          PlotRange \[Rule] {{0, 30}, {0, 1.0}}, 
+          PlotStyle \[Rule] {RGBColor[0, 0, 1]}, 
+          DisplayFunction \[Rule] Identity];\)\), "\[IndentingNewLine]", 
+    \(\(Show[g0, g1, 
+        Graphics[Text[iterations\ "\<iterations\>", {size/2, \(-0.4\)}]], 
+        DisplayFunction \[Rule] $DisplayFunction];\)\)}], "Input"],
+
+Cell["\<\Consider the model predictions. Does the model predict a bigger, \smaller, or the same size Mach band (at the bright knee) for the step than \for the ramp? \\>", "Text"],
+
+Cell[BoxData[
+    \(It\ should\ be\ a\ slightly\ larger\ Mach\ band\ than\ for\ the\ ramp . \
+\ Since\ the\ ramp\ has\ a\ gradual\ increase\ from\ the\ low\ value\ to\ the\
+\ high\ value, \ 
+    the\ effect\ of\ the\ change\ in\ the\ system\ is\ less . \ 
+        The\ response\ for\ the\ step\ has\ to\ account\ for\ an\ abrupt\ \
+change\ in\ values\ thus\ getting\ a\ higher\ peak\ than\ the\ \
+\(\(ramp\)\(.\)\)\)], "Output"]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Exercise 2: Plot state space trajectory", "Subsection",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData[{
+  "Use the function ",
+  StyleBox["NestList[]",
+    FontWeight->"Bold"],
+  " (instead of the ",
+  StyleBox["Nest[]",
+    FontWeight->"Bold"],
+  " used in Exercise 1) to produce a 12x30 matrix, called ",
+  StyleBox["responses",
+    FontWeight->"Bold"],
+  " whose rows are the responses or state vectors for each of iteration \
+states in Exercise 1. Although we can't view the dynamical trajectory in \
+state space of a 30 dimensional state vector (30 neurons), you can extract \
+the activities at each of the states of just 2 neurons at locations (say, at \
+11, and 12). Do this using the matrix extraction rule which produces ",
+  StyleBox["submatrix",
+    FontWeight->"Bold"],
+  " from matrix ",
+  StyleBox["m",
+    FontWeight->"Bold"],
+  ":"
+}], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell["\<\
+submatrix = m[[ Range[rowi, rowj], Range[columni,columnj] ]];\
+\>", \
+"Text",
+  Evaluatable->False,
+  TextAlignment->Center,
+  AspectRatioFixed->True,
+  FontWeight->"Bold",
+  FontSlant->"Plain",
+  FontTracking->"Plain",
+  FontVariations->{"Underline"->False,
+  "Outline"->False,
+  "Shadow"->False}],
+
+Cell[TextData[{
+  "Then use ",
+  StyleBox["ListPlot",
+    FontWeight->"Bold"],
+  " to plot the 2D part of the state vector (i.e. values at locations 11 and \
+12) for each state (each iteration). Do not use ",
+  StyleBox["PlotJoined->True",
+    FontWeight->"Bold"],
+  ", but do use ",
+  StyleBox["PlotRange",
+    FontWeight->"Bold"],
+  ", and ",
+  StyleBox["AxesOrigin",
+    FontWeight->"Bold"],
+  " to present the state vector evolution clearly."
+}], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[BoxData[{
+    \(\(responses = NestList[T, f, 12];\)\), "\[IndentingNewLine]", 
+    \(\(subresponse = 
+        responses[\([Range[1, 12], 
+            Range[11, 12]]\)];\)\), "\[IndentingNewLine]", 
+    \(\(r0 = 
+        ListPlot[\(Transpose[subresponse]\)[\([1]\)], 
+          PlotRange \[Rule] {{0, 12}, {\(-0.5\), 1.0}}, 
+          AxesOrigin \[Rule] {0, 0}, DisplayFunction \[Rule] Identity, 
+          PlotStyle \[Rule] {RGBColor[1, 0, 
+                0]}\ ];\)\), "\[IndentingNewLine]", 
+    \(\(r1 = 
+        ListPlot[\(Transpose[subresponse]\)[\([2]\)], 
+          PlotRange \[Rule] {{0, 12}, {\(-0.5\), 1.0}}, 
+          AxesOrigin \[Rule] {0, 0}, DisplayFunction \[Rule] Identity, 
+          PlotStyle \[Rule] {RGBColor[0, 0, 
+                1]}\ ];\)\), "\[IndentingNewLine]", 
+    \(\(Show[r0, r1, DisplayFunction \[Rule] $DisplayFunction];\)\)}], "Input"]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Exercise 3: Compare presence and absence of self-inhibition", \"Subsection",  Evaluatable->False,  AspectRatioFixed->True],
+
+Cell["\<\
+Make two graphs to compare the response of the network to the step \
+function with and without self-inhibition using the following initialization \
+parameters:\
+\>", "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData[{
+  "size = 30;\nspaceconstant =5;\nmaxstrength = 0.05;\nepsilon",
+  StyleBox[" ",
+    FontFamily->"Symbol",
+    FontSize->14,
+    FontWeight->"Plain"],
+  "= .3;"
+}], "Input",
+  AspectRatioFixed->False],
+
+Cell[BoxData[{
+    \(\(iterations = 14;\)\), "\[IndentingNewLine]", 
+    \(\(W1 = W;\)\), "\[IndentingNewLine]", 
+    \(\(For[i = 1, i <= size, \(i++\), 
+        W1[\([i, i]\)] = 0.0];\)\), "\[IndentingNewLine]", 
+    \(\(Y[f_] := 
+        f + \[Epsilon]\ \((e + W1 . f - f)\);\)\), "\[IndentingNewLine]", 
+    \(\(y1 = 
+        ListPlot[Nest[Y, \ f, \ iterations], PlotJoined \[Rule] True, 
+          PlotRange \[Rule] {{0, 30}, {0, 1.0}}, 
+          PlotStyle \[Rule] {RGBColor[1, 0, 0]}, 
+          DisplayFunction \[Rule] Identity];\)\), "\[IndentingNewLine]", 
+    \(\(g1 = 
+        ListPlot[Nest[T, \ f, \ iterations], PlotJoined \[Rule] True, 
+          PlotRange \[Rule] {{0, 30}, {0, 1.0}}, 
+          PlotStyle \[Rule] {RGBColor[0, 0, 1]}, 
+          DisplayFunction \[Rule] Identity];\)\), "\[IndentingNewLine]", 
+    \(\(Show[g0, g1, y1, 
+        Graphics[Text[iterations\ "\<iterations\>", {size/2, \(-0.4\)}]], 
+        DisplayFunction \[Rule] $DisplayFunction];\)\)}], "Input"],
+
+Cell["\<\
+How many iterations are required before the network stabilizes with \
+self-inhibition? Without self-inhibition?\
+\>", "Text"],
+
+Cell[BoxData[
+    \(Depending\ on\ what\ your\ definition\ of\ stability\ is, 
+    the\ number\ of\ iterations\ could\ vary\ from\ 12\ to\ 15. \ Without\ \
+self - inhibition, 
+    it\ appears\ that\ the\ steady - 
+      state\ solution\ is\ nearer\ to\ the\ input\ than\ with\ self - \
+\(\(inhibition\)\(.\)\)\)], "Output"]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Exercise 4: Feedforward steady-state solution", "Subsection",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData[{  "Given the above ramp input and weight matrix, find the steady-state \solution to the limulus equation, by solving a set of simultaneous linear \equations using the ",  StyleBox["Inverse[]",    FontWeight->"Bold"],  " function that computes the inverse of a matrix. Plot the solution along \with the input pattern ",  StyleBox["e",    FontWeight->"Bold"],  ", as we did in the lecture. Recall that there is a ",  StyleBox["Mathematica",    FontSlant->"Italic"],  "  function,",  StyleBox[" IdentityMatrix[],",    FontWeight->"Bold"],  " you might find useful."}], "Text",  Evaluatable->False,  AspectRatioFixed->True],
+
+Cell["\<\This steady state solution can be viewed as a simple linear \feedforward network.UseListPlotto show that the effective receptive field of \neurons in this feedforward network has a center-surround organization.Just \show the plot for effective weights of neuron 14.\\>", "Text"],
+
+Cell[BoxData[{
+    \(\(eramp = 
+        Join[Table[0, {i, N[size/3]}], Table[i/N[size/3], {i, N[size/3]}], 
+          Table[1, {i, N[size/3]}]];\)\), "\[IndentingNewLine]", 
+    \(\(s0 = 
+        ListPlot[eramp, PlotRange \[Rule] {{0, 30}, {\(-0.5\), 1.0}}, 
+          PlotStyle \[Rule] {RGBColor[0, 0, 1]}, 
+          DisplayFunction \[Rule] Identity];\)\)}], "Input"],
+
+Cell[BoxData[{
+    \(\(Wprime = 
+        Inverse[IdentityMatrix[size] - W];\)\), "\[IndentingNewLine]", 
+    \(\(f = Wprime . eramp;\)\)}], "Input"],
+
+Cell[BoxData[{
+    \(\(s1 = 
+        ListPlot[f, PlotJoined \[Rule] True, 
+          PlotRange \[Rule] {{0, 30}, {0, 1.0}}, 
+          PlotStyle \[Rule] {RGBColor[1, 0, 0]}, 
+          DisplayFunction \[Rule] Identity];\)\), "\[IndentingNewLine]", 
+    \(\(Show[s0, s1, DisplayFunction \[Rule] $DisplayFunction];\)\)}], "Input"],
+
+Cell[BoxData[
+    \(\(ListPlot[W[\([14]\)]];\)\)], "Input"]
+}, Closed]]
+},
+FrontEndVersion->"4.0 for X",
+ScreenRectangle->{{0, 1280}, {0, 1024}},
+WindowToolbars->{},
+CellGrouping->Manual,
+WindowSize->{945, 916},
+WindowMargins->{{91, Automatic}, {-22, Automatic}},
+PrintingCopies->1,
+PrintingPageRange->{1, Automatic},
+PrivateNotebookOptions->{"ColorPalette"->{RGBColor, 128}},
+ShowCellLabel->True,
+ShowCellTags->False,
+RenderingOptions->{"ObjectDithering"->True,
+"RasterDithering"->False},
+CharacterEncoding->"MacintoshAutomaticEncoding",
+StyleDefinitions -> "Classroom.nb"
+]
+
+
+(***********************************************************************
+Cached data follows.  If you edit this Notebook file directly, not using
+Mathematica, you must remove the line containing CacheID at the top of 
+the file.  The cache data will then be recreated when you save this file 
+from within Mathematica.
+***********************************************************************)
+
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+
+(*NotebookFileOutline
+Notebook[{
+Cell[1717, 49, 195, 11, 216, "Subtitle",
+  Evaluatable->False],
+Cell[1915, 62, 49, 3, 66, "Subtitle"],
+Cell[1967, 67, 27, 0, 33, "Author"],
+Cell[1997, 69, 28, 0, 57, "Section"],
+
+Cell[CellGroupData[{
+Cell[2050, 73, 154, 5, 46, "Subsection",
+  Evaluatable->False],
+Cell[2207, 80, 565, 12, 76, "Text",
+  Evaluatable->False],
+
+Cell[CellGroupData[{
+Cell[2797, 96, 374, 5, 95, "Input"],
+Cell[3174, 103, 11283, 192, 296, 2598, 80, "GraphicsData", "PostScript", \
+"Graphics"]
+}, Open  ]],
+Cell[14472, 298, 201, 4, 28, "Text"],
+Cell[14676, 304, 349, 8, 95, "Input"],
+Cell[15028, 314, 227, 6, 77, "Input"],
+Cell[15258, 322, 70, 1, 47, "Input"],
+Cell[15331, 325, 132, 5, 77, "Input"],
+Cell[15466, 332, 81, 1, 47, "Input"],
+Cell[15550, 335, 491, 9, 95, "Input"],
+Cell[16044, 346, 182, 4, 28, "Text"],
+Cell[16229, 352, 428, 7, 75, "Output"]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[16694, 364, 109, 2, 30, "Subsection",
+  Evaluatable->False],
+Cell[16806, 368, 819, 23, 64, "Text",
+  Evaluatable->False],
+Cell[17628, 393, 308, 12, 28, "Text",
+  Evaluatable->False],
+Cell[17939, 407, 506, 17, 46, "Text",
+  Evaluatable->False],
+Cell[18448, 426, 874, 17, 143, "Input"]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[19359, 448, 131, 3, 30, "Subsection",
+  Evaluatable->False],
+Cell[19493, 453, 231, 6, 28, "Text",
+  Evaluatable->False],
+Cell[19727, 461, 216, 8, 94, "Input"],
+Cell[19946, 471, 992, 19, 175, "Input"],
+Cell[20941, 492, 135, 3, 28, "Text"],
+Cell[21079, 497, 323, 6, 63, "Output"]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[21439, 508, 115, 2, 30, "Subsection",
+  Evaluatable->False],
+Cell[21557, 512, 653, 19, 64, "Text",
+  Evaluatable->False],
+Cell[22213, 533, 292, 5, 46, "Text"],
+Cell[22508, 540, 369, 7, 63, "Input"],
+Cell[22880, 549, 148, 3, 63, "Input"],
+Cell[23031, 554, 328, 6, 79, "Input"],
+Cell[23362, 562, 59, 1, 47, "Input"]
+}, Closed]]
+}
+]
+*)
+
+
+
+
+(***********************************************************************
+End of Mathematica Notebook file.
+***********************************************************************)
+

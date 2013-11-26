@@ -1,0 +1,3446 @@
+(***********************************************************************
+
+                    Mathematica-Compatible Notebook
+
+This notebook can be used on any computer system with Mathematica 4.0,
+MathReader 4.0, or any compatible application. The data for the notebook 
+starts with the line containing stars above.
+
+To get the notebook into a Mathematica-compatible application, do one of 
+the following:
+
+* Save the data starting with the line of stars above into a file
+  with a name ending in .nb, then open the file inside the application;
+
+* Copy the data starting with the line of stars above to the
+  clipboard, then use the Paste menu command inside the application.
+
+Data for notebooks contains only printable 7-bit ASCII and can be
+sent directly in email or through ftp in text mode.  Newlines can be
+CR, LF or CRLF (Unix, Macintosh or MS-DOS style).
+
+NOTE: If you modify the data for this notebook not in a Mathematica-
+compatible application, you must delete the line below containing the 
+word CacheID, otherwise Mathematica-compatible applications may try to 
+use invalid cache data.
+
+For more information on notebooks and Mathematica-compatible 
+applications, contact Wolfram Research:
+  web: http://www.wolfram.com
+  email: info@wolfram.com
+  phone: +1-217-398-0700 (U.S.)
+
+Notebook reader applications are available free of charge from 
+Wolfram Research.
+***********************************************************************)
+
+(*CacheID: 232*)
+
+
+(*NotebookFileLineBreakTest
+NotebookFileLineBreakTest*)
+(*NotebookOptionsPosition[     97111,       3371]*)
+(*NotebookOutlinePosition[     98051,       3403]*)
+(*  CellTagsIndexPosition[     98007,       3399]*)
+(*WindowFrame->Normal*)
+
+
+
+Notebook[{
+Cell["\<\
+Introduction to Neural Networks
+U. Minn. Psy 5038
+
+Problem Set 3
+\
+\>", "Subtitle",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell["\<\
+Robert F.K. Martin
+1505151\
+\>", "Subtitle"],
+
+Cell[CellGroupData[{
+
+Cell["Exercise 1 - Orthogonality of large random vectors", "Section",  Evaluatable->False,  AspectRatioFixed->True,  FontColor->RGBColor[1, 0, 1]],
+
+Cell[TextData[{
+  StyleBox["The assumption of orthogonality for the input patterns for the \
+linear associator would seem to make it useless as a memory advice for \
+arbitrary patterns. However, if the dimensionality of the input space is \
+large, the odds are pretty good that the cosine of the angle between any two \
+random vectors is close to zero. Make three histograms showing the \
+distributions of the cosines of random vectors for dimensions 10, 50 , and \
+250. The histograms should put the cosines in bins from -0.9 to 0.9 in steps \
+of 0.2. Sample the cosines one hundred times for each histogram. \nIf you \
+wish, you can use the function",
+    FontSize->12],
+  StyleBox[" BinCounts[]",
+    FontSize->12,
+    FontWeight->"Bold"],
+  StyleBox[" in ",
+    FontSize->12],
+  StyleBox["DataManipulation.m",
+    FontSize->12,
+    FontWeight->"Bold"],
+  StyleBox[" and ",
+    FontSize->12],
+  StyleBox["BarChart[]",
+    FontSize->12,
+    FontWeight->"Bold"],
+  StyleBox[" in",
+    FontSize->12],
+  StyleBox[" Graphics.m",
+    FontSize->12,
+    FontWeight->"Bold"],
+  StyleBox[". Here is an example to show the histogram for a uniform \
+distribution between -0.9 and 0.9:",
+    FontSize->12]
+}], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True,
+  FontSize->10],
+
+Cell["\<\
+<<Statistics`DataManipulation`
+<<Graphics`Graphics`\
+\>", "Input",
+  AspectRatioFixed->True]
+}, Open  ]],
+
+Cell[BoxData[{
+    \(\(rv[x_] := 
+        Table[Random[
+            Real, {\(-0.9\), 0.9}], {x}];\)\), "\[IndentingNewLine]", 
+    \(\(normalize[x_] := x/Sqrt[Dot[x, x]];\)\), "\[IndentingNewLine]", 
+    \(\(ipsample[x_, y_] := 
+        Table[normalize[rv[x]] . normalize[rv[x]], {i, 1, y}];\)\)}], "Input"],
+
+Cell[BoxData[{
+    \(\(bin = 0.2;\)\), "\[IndentingNewLine]", 
+    \(\(Freq[x_] := 
+        BinCounts[
+          ipsample[x, 100], {\(-0.9\), 0.9, 
+            bin}];\)\), "\[IndentingNewLine]", 
+    \(\(BarChart[Freq[50], 
+        BarLabels \[Rule] {\(-0.8\), \(-0.6\), \(-0.4\), \(-0.2\), 0, 0.2, 
+            0.4, 0.6, 0.8}, 
+        PlotRange \[Rule] {0, 100}];\)\), "\[IndentingNewLine]", 
+    \(\(BarChart[Freq[100], 
+        BarLabels \[Rule] {\(-0.8\), \(-0.6\), \(-0.4\), \(-0.2\), 0, 0.2, 
+            0.4, 0.6, 0.8}, 
+        PlotRange \[Rule] {0, 100}];\)\), "\[IndentingNewLine]", 
+    \(\(BarChart[Freq[250], 
+        BarLabels \[Rule] {\(-0.8\), \(-0.6\), \(-0.4\), \(-0.2\), 0, 0.2, 
+            0.4, 0.6, 0.8}, PlotRange \[Rule] {0, 100}];\)\)}], "Input"],
+
+Cell[CellGroupData[{
+
+Cell["Exercise 2 - Perceptron learning", "Section",  Evaluatable->False,  AspectRatioFixed->True,  FontColor->RGBColor[1, 0, 1]],
+
+Cell[TextData[{  "Write a program that uses a Perceptron-style threshold logic unit that \learns to classify two-dimensional vectors into \"a\" or \"b\" types. The \unit should have three inputs: {1,x,y},  where x and y are the coordinates of \the data to be classified. The first component, 1,  is the standard \"trick\" \used to incorporate the threshold into the weight vector. So three weights \will have to be learned: {w1,w2,w3}.  It may help to know something about \Conditionals in ",  StyleBox["Mathematica",    FontSlant->"Italic"],  "."}], "Text",  Evaluatable->False,  AspectRatioFixed->True],
+
+Cell[TextData[{  StyleBox[  "Your report should have the following six sections. Some are done for you, \but  ",    FontWeight->"Bold"],  StyleBox["Sections 3, 5 and 6",    FontWeight->"Bold",    FontColor->RGBColor[1, 0, 0]],  StyleBox[" require you to generate code.",    FontWeight->"Bold"]}], "Text",  Evaluatable->False,  AspectRatioFixed->True],
+
+Cell[TextData["1. Generation of synthetic classification data. "], "Subsubsection",  Evaluatable->False,  AspectRatioFixed->True],
+
+Cell[CellGroupData[{
+
+Cell[TextData["Generate 50 random points in the unit square, {{0,1},{0,1}} such that for \the \"a\" type points,\nx+y>0.6 and for the \"b\" points, x+y<0.4. Each pair \of points should have its corresponding label, a or b."], "Text",  Evaluatable->False,  AspectRatioFixed->True],
+
+Cell["\<\
+stuff = {};size = 50;
+While[Length[stuff]<size,
+\t\tWhich[(x= .5 Random[]) + (y= .5 Random[]) < .4,
+\t\t\tstuff=Append[stuff,{\"b\",1,x,y}],
+\t\t\tx + y > .6, stuff=Append[stuff,{\"a\",1,x,y}]
+\t\t\t]];\
+\>", "Input",
+  AspectRatioFixed->True]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(littlelimit = 0.8; \ biglimit = 0.9; size = 50; 
+    data = {};\), "\[IndentingNewLine]", 
+    \(\(While[Length[data] < size, 
+        Which[\((x = Random[])\) + \((y = Random[])\) \[LessEqual] 
+            littlelimit, data = Append[data, {x, y, "\<a\>"}], 
+          x + y >= biglimit, 
+          data = Append[
+              data, {x, y, "\<b\>"}]]];\)\), "\[IndentingNewLine]", 
+    \(\(g1 = 
+        TextListPlot[data, PlotRange \[Rule] {{0, 1}, {0, 1}}, 
+          AspectRatio \[Rule] 1];\)\)}], "Input"],
+
+Cell[GraphicsData["PostScript", "\<\
+%!
+%%Creator: Mathematica
+%%AspectRatio: 1 
+MathPictureStart
+/Mabs {
+Mgmatrix idtransform
+Mtmatrix dtransform
+} bind def
+/Mabsadd { Mabs
+3 -1 roll add
+3 1 roll add
+exch } bind def
+%% Graphics
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+/Courier findfont 10  scalefont  setfont
+% Scaling calculations
+0 1 0 1 [
+[.2 -0.0125 -9 -9 ]
+[.2 -0.0125 9 0 ]
+[.4 -0.0125 -9 -9 ]
+[.4 -0.0125 9 0 ]
+[.6 -0.0125 -9 -9 ]
+[.6 -0.0125 9 0 ]
+[.8 -0.0125 -9 -9 ]
+[.8 -0.0125 9 0 ]
+[1 -0.0125 -3 -9 ]
+[1 -0.0125 3 0 ]
+[-0.0125 .2 -18 -4.5 ]
+[-0.0125 .2 0 4.5 ]
+[-0.0125 .4 -18 -4.5 ]
+[-0.0125 .4 0 4.5 ]
+[-0.0125 .6 -18 -4.5 ]
+[-0.0125 .6 0 4.5 ]
+[-0.0125 .8 -18 -4.5 ]
+[-0.0125 .8 0 4.5 ]
+[-0.0125 1 -6 -4.5 ]
+[-0.0125 1 0 4.5 ]
+[ 0 0 0 0 ]
+[ 1 1 0 0 ]
+] MathScale
+% Start of Graphics
+1 setlinecap
+1 setlinejoin
+newpath
+0 g
+.25 Mabswid
+[ ] 0 setdash
+.2 0 m
+.2 .00625 L
+s
+[(0.2)] .2 -0.0125 0 1 Mshowa
+.4 0 m
+.4 .00625 L
+s
+[(0.4)] .4 -0.0125 0 1 Mshowa
+.6 0 m
+.6 .00625 L
+s
+[(0.6)] .6 -0.0125 0 1 Mshowa
+.8 0 m
+.8 .00625 L
+s
+[(0.8)] .8 -0.0125 0 1 Mshowa
+1 0 m
+1 .00625 L
+s
+[(1)] 1 -0.0125 0 1 Mshowa
+.125 Mabswid
+.05 0 m
+.05 .00375 L
+s
+.1 0 m
+.1 .00375 L
+s
+.15 0 m
+.15 .00375 L
+s
+.25 0 m
+.25 .00375 L
+s
+.3 0 m
+.3 .00375 L
+s
+.35 0 m
+.35 .00375 L
+s
+.45 0 m
+.45 .00375 L
+s
+.5 0 m
+.5 .00375 L
+s
+.55 0 m
+.55 .00375 L
+s
+.65 0 m
+.65 .00375 L
+s
+.7 0 m
+.7 .00375 L
+s
+.75 0 m
+.75 .00375 L
+s
+.85 0 m
+.85 .00375 L
+s
+.9 0 m
+.9 .00375 L
+s
+.95 0 m
+.95 .00375 L
+s
+.25 Mabswid
+0 0 m
+1 0 L
+s
+0 .2 m
+.00625 .2 L
+s
+[(0.2)] -0.0125 .2 1 0 Mshowa
+0 .4 m
+.00625 .4 L
+s
+[(0.4)] -0.0125 .4 1 0 Mshowa
+0 .6 m
+.00625 .6 L
+s
+[(0.6)] -0.0125 .6 1 0 Mshowa
+0 .8 m
+.00625 .8 L
+s
+[(0.8)] -0.0125 .8 1 0 Mshowa
+0 1 m
+.00625 1 L
+s
+[(1)] -0.0125 1 1 0 Mshowa
+.125 Mabswid
+0 .05 m
+.00375 .05 L
+s
+0 .1 m
+.00375 .1 L
+s
+0 .15 m
+.00375 .15 L
+s
+0 .25 m
+.00375 .25 L
+s
+0 .3 m
+.00375 .3 L
+s
+0 .35 m
+.00375 .35 L
+s
+0 .45 m
+.00375 .45 L
+s
+0 .5 m
+.00375 .5 L
+s
+0 .55 m
+.00375 .55 L
+s
+0 .65 m
+.00375 .65 L
+s
+0 .7 m
+.00375 .7 L
+s
+0 .75 m
+.00375 .75 L
+s
+0 .85 m
+.00375 .85 L
+s
+0 .9 m
+.00375 .9 L
+s
+0 .95 m
+.00375 .95 L
+s
+.25 Mabswid
+0 0 m
+0 1 L
+s
+0 0 m
+1 0 L
+1 1 L
+0 1 L
+closepath
+clip
+newpath
+gsave
+.00346 .38884 -66 -8.90625 Mabsadd m
+1 1 Mabs scale
+currentpoint translate
+/MISOfy
+{
+    /newfontname exch def
+    /oldfontname exch def
+
+    oldfontname findfont
+    dup length dict begin
+        {1 index /FID ne {def} {pop pop} ifelse} forall
+        /Encoding ISOLatin1Encoding def
+        currentdict
+    end
+
+    newfontname exch definefont pop
+} def
+
+0 17.8125 translate 1 -1 scale
+63.000 11.250 moveto
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+%%BeginResource: font Courier-MISO
+%%BeginFont: Courier-MISO
+/Courier /Courier-MISO MISOfy
+%%EndFont
+%%EndResource
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+63.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+(a) show
+69.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+1.000 setlinewidth
+grestore
+gsave
+.50862 .20494 -66 -8.90625 Mabsadd m
+1 1 Mabs scale
+currentpoint translate
+/MISOfy
+{
+    /newfontname exch def
+    /oldfontname exch def
+
+    oldfontname findfont
+    dup length dict begin
+        {1 index /FID ne {def} {pop pop} ifelse} forall
+        /Encoding ISOLatin1Encoding def
+        currentdict
+    end
+
+    newfontname exch definefont pop
+} def
+
+0 17.8125 translate 1 -1 scale
+63.000 11.250 moveto
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+%%BeginResource: font Courier-MISO
+%%BeginFont: Courier-MISO
+/Courier /Courier-MISO MISOfy
+%%EndFont
+%%EndResource
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+63.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+(a) show
+69.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+1.000 setlinewidth
+grestore
+gsave
+.32105 .08688 -66 -8.90625 Mabsadd m
+1 1 Mabs scale
+currentpoint translate
+/MISOfy
+{
+    /newfontname exch def
+    /oldfontname exch def
+
+    oldfontname findfont
+    dup length dict begin
+        {1 index /FID ne {def} {pop pop} ifelse} forall
+        /Encoding ISOLatin1Encoding def
+        currentdict
+    end
+
+    newfontname exch definefont pop
+} def
+
+0 17.8125 translate 1 -1 scale
+63.000 11.250 moveto
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+%%BeginResource: font Courier-MISO
+%%BeginFont: Courier-MISO
+/Courier /Courier-MISO MISOfy
+%%EndFont
+%%EndResource
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+63.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+(a) show
+69.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+1.000 setlinewidth
+grestore
+gsave
+.93773 .67194 -66 -8.90625 Mabsadd m
+1 1 Mabs scale
+currentpoint translate
+/MISOfy
+{
+    /newfontname exch def
+    /oldfontname exch def
+
+    oldfontname findfont
+    dup length dict begin
+        {1 index /FID ne {def} {pop pop} ifelse} forall
+        /Encoding ISOLatin1Encoding def
+        currentdict
+    end
+
+    newfontname exch definefont pop
+} def
+
+0 17.8125 translate 1 -1 scale
+63.000 11.250 moveto
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+%%BeginResource: font Courier-MISO
+%%BeginFont: Courier-MISO
+/Courier /Courier-MISO MISOfy
+%%EndFont
+%%EndResource
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+63.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+(b) show
+69.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+1.000 setlinewidth
+grestore
+gsave
+.93823 .14082 -66 -8.90625 Mabsadd m
+1 1 Mabs scale
+currentpoint translate
+/MISOfy
+{
+    /newfontname exch def
+    /oldfontname exch def
+
+    oldfontname findfont
+    dup length dict begin
+        {1 index /FID ne {def} {pop pop} ifelse} forall
+        /Encoding ISOLatin1Encoding def
+        currentdict
+    end
+
+    newfontname exch definefont pop
+} def
+
+0 17.8125 translate 1 -1 scale
+63.000 11.250 moveto
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+%%BeginResource: font Courier-MISO
+%%BeginFont: Courier-MISO
+/Courier /Courier-MISO MISOfy
+%%EndFont
+%%EndResource
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+63.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+(b) show
+69.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+1.000 setlinewidth
+grestore
+gsave
+.87388 .50217 -66 -8.90625 Mabsadd m
+1 1 Mabs scale
+currentpoint translate
+/MISOfy
+{
+    /newfontname exch def
+    /oldfontname exch def
+
+    oldfontname findfont
+    dup length dict begin
+        {1 index /FID ne {def} {pop pop} ifelse} forall
+        /Encoding ISOLatin1Encoding def
+        currentdict
+    end
+
+    newfontname exch definefont pop
+} def
+
+0 17.8125 translate 1 -1 scale
+63.000 11.250 moveto
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+%%BeginResource: font Courier-MISO
+%%BeginFont: Courier-MISO
+/Courier /Courier-MISO MISOfy
+%%EndFont
+%%EndResource
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+63.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+(b) show
+69.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+1.000 setlinewidth
+grestore
+gsave
+.86361 .69351 -66 -8.90625 Mabsadd m
+1 1 Mabs scale
+currentpoint translate
+/MISOfy
+{
+    /newfontname exch def
+    /oldfontname exch def
+
+    oldfontname findfont
+    dup length dict begin
+        {1 index /FID ne {def} {pop pop} ifelse} forall
+        /Encoding ISOLatin1Encoding def
+        currentdict
+    end
+
+    newfontname exch definefont pop
+} def
+
+0 17.8125 translate 1 -1 scale
+63.000 11.250 moveto
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+%%BeginResource: font Courier-MISO
+%%BeginFont: Courier-MISO
+/Courier /Courier-MISO MISOfy
+%%EndFont
+%%EndResource
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+63.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+(b) show
+69.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+1.000 setlinewidth
+grestore
+gsave
+.93861 .84062 -66 -8.90625 Mabsadd m
+1 1 Mabs scale
+currentpoint translate
+/MISOfy
+{
+    /newfontname exch def
+    /oldfontname exch def
+
+    oldfontname findfont
+    dup length dict begin
+        {1 index /FID ne {def} {pop pop} ifelse} forall
+        /Encoding ISOLatin1Encoding def
+        currentdict
+    end
+
+    newfontname exch definefont pop
+} def
+
+0 17.8125 translate 1 -1 scale
+63.000 11.250 moveto
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+%%BeginResource: font Courier-MISO
+%%BeginFont: Courier-MISO
+/Courier /Courier-MISO MISOfy
+%%EndFont
+%%EndResource
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+63.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+(b) show
+69.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+1.000 setlinewidth
+grestore
+gsave
+.80093 .99023 -66 -8.90625 Mabsadd m
+1 1 Mabs scale
+currentpoint translate
+/MISOfy
+{
+    /newfontname exch def
+    /oldfontname exch def
+
+    oldfontname findfont
+    dup length dict begin
+        {1 index /FID ne {def} {pop pop} ifelse} forall
+        /Encoding ISOLatin1Encoding def
+        currentdict
+    end
+
+    newfontname exch definefont pop
+} def
+
+0 17.8125 translate 1 -1 scale
+63.000 11.250 moveto
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+%%BeginResource: font Courier-MISO
+%%BeginFont: Courier-MISO
+/Courier /Courier-MISO MISOfy
+%%EndFont
+%%EndResource
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+63.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+(b) show
+69.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+1.000 setlinewidth
+grestore
+gsave
+.08733 .32739 -66 -8.90625 Mabsadd m
+1 1 Mabs scale
+currentpoint translate
+/MISOfy
+{
+    /newfontname exch def
+    /oldfontname exch def
+
+    oldfontname findfont
+    dup length dict begin
+        {1 index /FID ne {def} {pop pop} ifelse} forall
+        /Encoding ISOLatin1Encoding def
+        currentdict
+    end
+
+    newfontname exch definefont pop
+} def
+
+0 17.8125 translate 1 -1 scale
+63.000 11.250 moveto
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+%%BeginResource: font Courier-MISO
+%%BeginFont: Courier-MISO
+/Courier /Courier-MISO MISOfy
+%%EndFont
+%%EndResource
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+63.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+(a) show
+69.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+1.000 setlinewidth
+grestore
+gsave
+.74023 .20228 -66 -8.90625 Mabsadd m
+1 1 Mabs scale
+currentpoint translate
+/MISOfy
+{
+    /newfontname exch def
+    /oldfontname exch def
+
+    oldfontname findfont
+    dup length dict begin
+        {1 index /FID ne {def} {pop pop} ifelse} forall
+        /Encoding ISOLatin1Encoding def
+        currentdict
+    end
+
+    newfontname exch definefont pop
+} def
+
+0 17.8125 translate 1 -1 scale
+63.000 11.250 moveto
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+%%BeginResource: font Courier-MISO
+%%BeginFont: Courier-MISO
+/Courier /Courier-MISO MISOfy
+%%EndFont
+%%EndResource
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+63.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+(b) show
+69.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+1.000 setlinewidth
+grestore
+gsave
+.78356 .30233 -66 -8.90625 Mabsadd m
+1 1 Mabs scale
+currentpoint translate
+/MISOfy
+{
+    /newfontname exch def
+    /oldfontname exch def
+
+    oldfontname findfont
+    dup length dict begin
+        {1 index /FID ne {def} {pop pop} ifelse} forall
+        /Encoding ISOLatin1Encoding def
+        currentdict
+    end
+
+    newfontname exch definefont pop
+} def
+
+0 17.8125 translate 1 -1 scale
+63.000 11.250 moveto
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+%%BeginResource: font Courier-MISO
+%%BeginFont: Courier-MISO
+/Courier /Courier-MISO MISOfy
+%%EndFont
+%%EndResource
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+63.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+(b) show
+69.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+1.000 setlinewidth
+grestore
+gsave
+.73678 .81345 -66 -8.90625 Mabsadd m
+1 1 Mabs scale
+currentpoint translate
+/MISOfy
+{
+    /newfontname exch def
+    /oldfontname exch def
+
+    oldfontname findfont
+    dup length dict begin
+        {1 index /FID ne {def} {pop pop} ifelse} forall
+        /Encoding ISOLatin1Encoding def
+        currentdict
+    end
+
+    newfontname exch definefont pop
+} def
+
+0 17.8125 translate 1 -1 scale
+63.000 11.250 moveto
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+%%BeginResource: font Courier-MISO
+%%BeginFont: Courier-MISO
+/Courier /Courier-MISO MISOfy
+%%EndFont
+%%EndResource
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+63.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+(b) show
+69.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+1.000 setlinewidth
+grestore
+gsave
+.27494 .09739 -66 -8.90625 Mabsadd m
+1 1 Mabs scale
+currentpoint translate
+/MISOfy
+{
+    /newfontname exch def
+    /oldfontname exch def
+
+    oldfontname findfont
+    dup length dict begin
+        {1 index /FID ne {def} {pop pop} ifelse} forall
+        /Encoding ISOLatin1Encoding def
+        currentdict
+    end
+
+    newfontname exch definefont pop
+} def
+
+0 17.8125 translate 1 -1 scale
+63.000 11.250 moveto
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+%%BeginResource: font Courier-MISO
+%%BeginFont: Courier-MISO
+/Courier /Courier-MISO MISOfy
+%%EndFont
+%%EndResource
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+63.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+(a) show
+69.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+1.000 setlinewidth
+grestore
+gsave
+.41573 .72657 -66 -8.90625 Mabsadd m
+1 1 Mabs scale
+currentpoint translate
+/MISOfy
+{
+    /newfontname exch def
+    /oldfontname exch def
+
+    oldfontname findfont
+    dup length dict begin
+        {1 index /FID ne {def} {pop pop} ifelse} forall
+        /Encoding ISOLatin1Encoding def
+        currentdict
+    end
+
+    newfontname exch definefont pop
+} def
+
+0 17.8125 translate 1 -1 scale
+63.000 11.250 moveto
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+%%BeginResource: font Courier-MISO
+%%BeginFont: Courier-MISO
+/Courier /Courier-MISO MISOfy
+%%EndFont
+%%EndResource
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+63.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+(b) show
+69.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+1.000 setlinewidth
+grestore
+gsave
+.33721 .42545 -66 -8.90625 Mabsadd m
+1 1 Mabs scale
+currentpoint translate
+/MISOfy
+{
+    /newfontname exch def
+    /oldfontname exch def
+
+    oldfontname findfont
+    dup length dict begin
+        {1 index /FID ne {def} {pop pop} ifelse} forall
+        /Encoding ISOLatin1Encoding def
+        currentdict
+    end
+
+    newfontname exch definefont pop
+} def
+
+0 17.8125 translate 1 -1 scale
+63.000 11.250 moveto
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+%%BeginResource: font Courier-MISO
+%%BeginFont: Courier-MISO
+/Courier /Courier-MISO MISOfy
+%%EndFont
+%%EndResource
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+63.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+(a) show
+69.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+1.000 setlinewidth
+grestore
+gsave
+.47751 .58575 -66 -8.90625 Mabsadd m
+1 1 Mabs scale
+currentpoint translate
+/MISOfy
+{
+    /newfontname exch def
+    /oldfontname exch def
+
+    oldfontname findfont
+    dup length dict begin
+        {1 index /FID ne {def} {pop pop} ifelse} forall
+        /Encoding ISOLatin1Encoding def
+        currentdict
+    end
+
+    newfontname exch definefont pop
+} def
+
+0 17.8125 translate 1 -1 scale
+63.000 11.250 moveto
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+%%BeginResource: font Courier-MISO
+%%BeginFont: Courier-MISO
+/Courier /Courier-MISO MISOfy
+%%EndFont
+%%EndResource
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+63.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+(b) show
+69.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+1.000 setlinewidth
+grestore
+gsave
+.46333 .92328 -66 -8.90625 Mabsadd m
+1 1 Mabs scale
+currentpoint translate
+/MISOfy
+{
+    /newfontname exch def
+    /oldfontname exch def
+
+    oldfontname findfont
+    dup length dict begin
+        {1 index /FID ne {def} {pop pop} ifelse} forall
+        /Encoding ISOLatin1Encoding def
+        currentdict
+    end
+
+    newfontname exch definefont pop
+} def
+
+0 17.8125 translate 1 -1 scale
+63.000 11.250 moveto
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+%%BeginResource: font Courier-MISO
+%%BeginFont: Courier-MISO
+/Courier /Courier-MISO MISOfy
+%%EndFont
+%%EndResource
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+63.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+(b) show
+69.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+1.000 setlinewidth
+grestore
+gsave
+.61389 .89224 -66 -8.90625 Mabsadd m
+1 1 Mabs scale
+currentpoint translate
+/MISOfy
+{
+    /newfontname exch def
+    /oldfontname exch def
+
+    oldfontname findfont
+    dup length dict begin
+        {1 index /FID ne {def} {pop pop} ifelse} forall
+        /Encoding ISOLatin1Encoding def
+        currentdict
+    end
+
+    newfontname exch definefont pop
+} def
+
+0 17.8125 translate 1 -1 scale
+63.000 11.250 moveto
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+%%BeginResource: font Courier-MISO
+%%BeginFont: Courier-MISO
+/Courier /Courier-MISO MISOfy
+%%EndFont
+%%EndResource
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+63.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+(b) show
+69.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+1.000 setlinewidth
+grestore
+gsave
+.52472 .08266 -66 -8.90625 Mabsadd m
+1 1 Mabs scale
+currentpoint translate
+/MISOfy
+{
+    /newfontname exch def
+    /oldfontname exch def
+
+    oldfontname findfont
+    dup length dict begin
+        {1 index /FID ne {def} {pop pop} ifelse} forall
+        /Encoding ISOLatin1Encoding def
+        currentdict
+    end
+
+    newfontname exch definefont pop
+} def
+
+0 17.8125 translate 1 -1 scale
+63.000 11.250 moveto
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+%%BeginResource: font Courier-MISO
+%%BeginFont: Courier-MISO
+/Courier /Courier-MISO MISOfy
+%%EndFont
+%%EndResource
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+63.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+(a) show
+69.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+1.000 setlinewidth
+grestore
+gsave
+.81297 .90201 -66 -8.90625 Mabsadd m
+1 1 Mabs scale
+currentpoint translate
+/MISOfy
+{
+    /newfontname exch def
+    /oldfontname exch def
+
+    oldfontname findfont
+    dup length dict begin
+        {1 index /FID ne {def} {pop pop} ifelse} forall
+        /Encoding ISOLatin1Encoding def
+        currentdict
+    end
+
+    newfontname exch definefont pop
+} def
+
+0 17.8125 translate 1 -1 scale
+63.000 11.250 moveto
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+%%BeginResource: font Courier-MISO
+%%BeginFont: Courier-MISO
+/Courier /Courier-MISO MISOfy
+%%EndFont
+%%EndResource
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+63.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+(b) show
+69.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+1.000 setlinewidth
+grestore
+gsave
+.43739 .75528 -66 -8.90625 Mabsadd m
+1 1 Mabs scale
+currentpoint translate
+/MISOfy
+{
+    /newfontname exch def
+    /oldfontname exch def
+
+    oldfontname findfont
+    dup length dict begin
+        {1 index /FID ne {def} {pop pop} ifelse} forall
+        /Encoding ISOLatin1Encoding def
+        currentdict
+    end
+
+    newfontname exch definefont pop
+} def
+
+0 17.8125 translate 1 -1 scale
+63.000 11.250 moveto
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+%%BeginResource: font Courier-MISO
+%%BeginFont: Courier-MISO
+/Courier /Courier-MISO MISOfy
+%%EndFont
+%%EndResource
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+63.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+(b) show
+69.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+1.000 setlinewidth
+grestore
+gsave
+.07273 .69972 -66 -8.90625 Mabsadd m
+1 1 Mabs scale
+currentpoint translate
+/MISOfy
+{
+    /newfontname exch def
+    /oldfontname exch def
+
+    oldfontname findfont
+    dup length dict begin
+        {1 index /FID ne {def} {pop pop} ifelse} forall
+        /Encoding ISOLatin1Encoding def
+        currentdict
+    end
+
+    newfontname exch definefont pop
+} def
+
+0 17.8125 translate 1 -1 scale
+63.000 11.250 moveto
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+%%BeginResource: font Courier-MISO
+%%BeginFont: Courier-MISO
+/Courier /Courier-MISO MISOfy
+%%EndFont
+%%EndResource
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+63.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+(a) show
+69.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+1.000 setlinewidth
+grestore
+gsave
+.65383 .45295 -66 -8.90625 Mabsadd m
+1 1 Mabs scale
+currentpoint translate
+/MISOfy
+{
+    /newfontname exch def
+    /oldfontname exch def
+
+    oldfontname findfont
+    dup length dict begin
+        {1 index /FID ne {def} {pop pop} ifelse} forall
+        /Encoding ISOLatin1Encoding def
+        currentdict
+    end
+
+    newfontname exch definefont pop
+} def
+
+0 17.8125 translate 1 -1 scale
+63.000 11.250 moveto
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+%%BeginResource: font Courier-MISO
+%%BeginFont: Courier-MISO
+/Courier /Courier-MISO MISOfy
+%%EndFont
+%%EndResource
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+63.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+(b) show
+69.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+1.000 setlinewidth
+grestore
+gsave
+.33596 .88627 -66 -8.90625 Mabsadd m
+1 1 Mabs scale
+currentpoint translate
+/MISOfy
+{
+    /newfontname exch def
+    /oldfontname exch def
+
+    oldfontname findfont
+    dup length dict begin
+        {1 index /FID ne {def} {pop pop} ifelse} forall
+        /Encoding ISOLatin1Encoding def
+        currentdict
+    end
+
+    newfontname exch definefont pop
+} def
+
+0 17.8125 translate 1 -1 scale
+63.000 11.250 moveto
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+%%BeginResource: font Courier-MISO
+%%BeginFont: Courier-MISO
+/Courier /Courier-MISO MISOfy
+%%EndFont
+%%EndResource
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+63.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+(b) show
+69.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+1.000 setlinewidth
+grestore
+gsave
+.37889 .35555 -66 -8.90625 Mabsadd m
+1 1 Mabs scale
+currentpoint translate
+/MISOfy
+{
+    /newfontname exch def
+    /oldfontname exch def
+
+    oldfontname findfont
+    dup length dict begin
+        {1 index /FID ne {def} {pop pop} ifelse} forall
+        /Encoding ISOLatin1Encoding def
+        currentdict
+    end
+
+    newfontname exch definefont pop
+} def
+
+0 17.8125 translate 1 -1 scale
+63.000 11.250 moveto
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+%%BeginResource: font Courier-MISO
+%%BeginFont: Courier-MISO
+/Courier /Courier-MISO MISOfy
+%%EndFont
+%%EndResource
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+63.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+(a) show
+69.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+1.000 setlinewidth
+grestore
+gsave
+.92023 .1597 -66 -8.90625 Mabsadd m
+1 1 Mabs scale
+currentpoint translate
+/MISOfy
+{
+    /newfontname exch def
+    /oldfontname exch def
+
+    oldfontname findfont
+    dup length dict begin
+        {1 index /FID ne {def} {pop pop} ifelse} forall
+        /Encoding ISOLatin1Encoding def
+        currentdict
+    end
+
+    newfontname exch definefont pop
+} def
+
+0 17.8125 translate 1 -1 scale
+63.000 11.250 moveto
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+%%BeginResource: font Courier-MISO
+%%BeginFont: Courier-MISO
+/Courier /Courier-MISO MISOfy
+%%EndFont
+%%EndResource
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+63.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+(b) show
+69.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+1.000 setlinewidth
+grestore
+gsave
+.04168 .9301 -66 -8.90625 Mabsadd m
+1 1 Mabs scale
+currentpoint translate
+/MISOfy
+{
+    /newfontname exch def
+    /oldfontname exch def
+
+    oldfontname findfont
+    dup length dict begin
+        {1 index /FID ne {def} {pop pop} ifelse} forall
+        /Encoding ISOLatin1Encoding def
+        currentdict
+    end
+
+    newfontname exch definefont pop
+} def
+
+0 17.8125 translate 1 -1 scale
+63.000 11.250 moveto
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+%%BeginResource: font Courier-MISO
+%%BeginFont: Courier-MISO
+/Courier /Courier-MISO MISOfy
+%%EndFont
+%%EndResource
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+63.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+(b) show
+69.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+1.000 setlinewidth
+grestore
+gsave
+.44272 .57395 -66 -8.90625 Mabsadd m
+1 1 Mabs scale
+currentpoint translate
+/MISOfy
+{
+    /newfontname exch def
+    /oldfontname exch def
+
+    oldfontname findfont
+    dup length dict begin
+        {1 index /FID ne {def} {pop pop} ifelse} forall
+        /Encoding ISOLatin1Encoding def
+        currentdict
+    end
+
+    newfontname exch definefont pop
+} def
+
+0 17.8125 translate 1 -1 scale
+63.000 11.250 moveto
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+%%BeginResource: font Courier-MISO
+%%BeginFont: Courier-MISO
+/Courier /Courier-MISO MISOfy
+%%EndFont
+%%EndResource
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+63.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+(b) show
+69.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+1.000 setlinewidth
+grestore
+gsave
+.57835 .00682 -66 -8.90625 Mabsadd m
+1 1 Mabs scale
+currentpoint translate
+/MISOfy
+{
+    /newfontname exch def
+    /oldfontname exch def
+
+    oldfontname findfont
+    dup length dict begin
+        {1 index /FID ne {def} {pop pop} ifelse} forall
+        /Encoding ISOLatin1Encoding def
+        currentdict
+    end
+
+    newfontname exch definefont pop
+} def
+
+0 17.8125 translate 1 -1 scale
+63.000 11.250 moveto
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+%%BeginResource: font Courier-MISO
+%%BeginFont: Courier-MISO
+/Courier /Courier-MISO MISOfy
+%%EndFont
+%%EndResource
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+63.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+(a) show
+69.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+1.000 setlinewidth
+grestore
+gsave
+.82883 .68172 -66 -8.90625 Mabsadd m
+1 1 Mabs scale
+currentpoint translate
+/MISOfy
+{
+    /newfontname exch def
+    /oldfontname exch def
+
+    oldfontname findfont
+    dup length dict begin
+        {1 index /FID ne {def} {pop pop} ifelse} forall
+        /Encoding ISOLatin1Encoding def
+        currentdict
+    end
+
+    newfontname exch definefont pop
+} def
+
+0 17.8125 translate 1 -1 scale
+63.000 11.250 moveto
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+%%BeginResource: font Courier-MISO
+%%BeginFont: Courier-MISO
+/Courier /Courier-MISO MISOfy
+%%EndFont
+%%EndResource
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+63.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+(b) show
+69.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+1.000 setlinewidth
+grestore
+gsave
+.05363 .92415 -66 -8.90625 Mabsadd m
+1 1 Mabs scale
+currentpoint translate
+/MISOfy
+{
+    /newfontname exch def
+    /oldfontname exch def
+
+    oldfontname findfont
+    dup length dict begin
+        {1 index /FID ne {def} {pop pop} ifelse} forall
+        /Encoding ISOLatin1Encoding def
+        currentdict
+    end
+
+    newfontname exch definefont pop
+} def
+
+0 17.8125 translate 1 -1 scale
+63.000 11.250 moveto
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+%%BeginResource: font Courier-MISO
+%%BeginFont: Courier-MISO
+/Courier /Courier-MISO MISOfy
+%%EndFont
+%%EndResource
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+63.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+(b) show
+69.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+1.000 setlinewidth
+grestore
+gsave
+.01586 .77971 -66 -8.90625 Mabsadd m
+1 1 Mabs scale
+currentpoint translate
+/MISOfy
+{
+    /newfontname exch def
+    /oldfontname exch def
+
+    oldfontname findfont
+    dup length dict begin
+        {1 index /FID ne {def} {pop pop} ifelse} forall
+        /Encoding ISOLatin1Encoding def
+        currentdict
+    end
+
+    newfontname exch definefont pop
+} def
+
+0 17.8125 translate 1 -1 scale
+63.000 11.250 moveto
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+%%BeginResource: font Courier-MISO
+%%BeginFont: Courier-MISO
+/Courier /Courier-MISO MISOfy
+%%EndFont
+%%EndResource
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+63.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+(a) show
+69.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+1.000 setlinewidth
+grestore
+gsave
+.61624 .16888 -66 -8.90625 Mabsadd m
+1 1 Mabs scale
+currentpoint translate
+/MISOfy
+{
+    /newfontname exch def
+    /oldfontname exch def
+
+    oldfontname findfont
+    dup length dict begin
+        {1 index /FID ne {def} {pop pop} ifelse} forall
+        /Encoding ISOLatin1Encoding def
+        currentdict
+    end
+
+    newfontname exch definefont pop
+} def
+
+0 17.8125 translate 1 -1 scale
+63.000 11.250 moveto
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+%%BeginResource: font Courier-MISO
+%%BeginFont: Courier-MISO
+/Courier /Courier-MISO MISOfy
+%%EndFont
+%%EndResource
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+63.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+(a) show
+69.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+1.000 setlinewidth
+grestore
+gsave
+.94313 .07999 -66 -8.90625 Mabsadd m
+1 1 Mabs scale
+currentpoint translate
+/MISOfy
+{
+    /newfontname exch def
+    /oldfontname exch def
+
+    oldfontname findfont
+    dup length dict begin
+        {1 index /FID ne {def} {pop pop} ifelse} forall
+        /Encoding ISOLatin1Encoding def
+        currentdict
+    end
+
+    newfontname exch definefont pop
+} def
+
+0 17.8125 translate 1 -1 scale
+63.000 11.250 moveto
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+%%BeginResource: font Courier-MISO
+%%BeginFont: Courier-MISO
+/Courier /Courier-MISO MISOfy
+%%EndFont
+%%EndResource
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+63.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+(b) show
+69.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+1.000 setlinewidth
+grestore
+gsave
+.96241 .71593 -66 -8.90625 Mabsadd m
+1 1 Mabs scale
+currentpoint translate
+/MISOfy
+{
+    /newfontname exch def
+    /oldfontname exch def
+
+    oldfontname findfont
+    dup length dict begin
+        {1 index /FID ne {def} {pop pop} ifelse} forall
+        /Encoding ISOLatin1Encoding def
+        currentdict
+    end
+
+    newfontname exch definefont pop
+} def
+
+0 17.8125 translate 1 -1 scale
+63.000 11.250 moveto
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+%%BeginResource: font Courier-MISO
+%%BeginFont: Courier-MISO
+/Courier /Courier-MISO MISOfy
+%%EndFont
+%%EndResource
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+63.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+(b) show
+69.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+1.000 setlinewidth
+grestore
+gsave
+.58353 .36038 -66 -8.90625 Mabsadd m
+1 1 Mabs scale
+currentpoint translate
+/MISOfy
+{
+    /newfontname exch def
+    /oldfontname exch def
+
+    oldfontname findfont
+    dup length dict begin
+        {1 index /FID ne {def} {pop pop} ifelse} forall
+        /Encoding ISOLatin1Encoding def
+        currentdict
+    end
+
+    newfontname exch definefont pop
+} def
+
+0 17.8125 translate 1 -1 scale
+63.000 11.250 moveto
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+%%BeginResource: font Courier-MISO
+%%BeginFont: Courier-MISO
+/Courier /Courier-MISO MISOfy
+%%EndFont
+%%EndResource
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+63.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+(b) show
+69.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+1.000 setlinewidth
+grestore
+gsave
+.68695 .03401 -66 -8.90625 Mabsadd m
+1 1 Mabs scale
+currentpoint translate
+/MISOfy
+{
+    /newfontname exch def
+    /oldfontname exch def
+
+    oldfontname findfont
+    dup length dict begin
+        {1 index /FID ne {def} {pop pop} ifelse} forall
+        /Encoding ISOLatin1Encoding def
+        currentdict
+    end
+
+    newfontname exch definefont pop
+} def
+
+0 17.8125 translate 1 -1 scale
+63.000 11.250 moveto
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+%%BeginResource: font Courier-MISO
+%%BeginFont: Courier-MISO
+/Courier /Courier-MISO MISOfy
+%%EndFont
+%%EndResource
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+63.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+(a) show
+69.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+1.000 setlinewidth
+grestore
+gsave
+.54185 .43027 -66 -8.90625 Mabsadd m
+1 1 Mabs scale
+currentpoint translate
+/MISOfy
+{
+    /newfontname exch def
+    /oldfontname exch def
+
+    oldfontname findfont
+    dup length dict begin
+        {1 index /FID ne {def} {pop pop} ifelse} forall
+        /Encoding ISOLatin1Encoding def
+        currentdict
+    end
+
+    newfontname exch definefont pop
+} def
+
+0 17.8125 translate 1 -1 scale
+63.000 11.250 moveto
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+%%BeginResource: font Courier-MISO
+%%BeginFont: Courier-MISO
+/Courier /Courier-MISO MISOfy
+%%EndFont
+%%EndResource
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+63.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+(b) show
+69.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+1.000 setlinewidth
+grestore
+gsave
+.24422 .46006 -66 -8.90625 Mabsadd m
+1 1 Mabs scale
+currentpoint translate
+/MISOfy
+{
+    /newfontname exch def
+    /oldfontname exch def
+
+    oldfontname findfont
+    dup length dict begin
+        {1 index /FID ne {def} {pop pop} ifelse} forall
+        /Encoding ISOLatin1Encoding def
+        currentdict
+    end
+
+    newfontname exch definefont pop
+} def
+
+0 17.8125 translate 1 -1 scale
+63.000 11.250 moveto
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+%%BeginResource: font Courier-MISO
+%%BeginFont: Courier-MISO
+/Courier /Courier-MISO MISOfy
+%%EndFont
+%%EndResource
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+63.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+(a) show
+69.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+1.000 setlinewidth
+grestore
+gsave
+.9635 .42345 -66 -8.90625 Mabsadd m
+1 1 Mabs scale
+currentpoint translate
+/MISOfy
+{
+    /newfontname exch def
+    /oldfontname exch def
+
+    oldfontname findfont
+    dup length dict begin
+        {1 index /FID ne {def} {pop pop} ifelse} forall
+        /Encoding ISOLatin1Encoding def
+        currentdict
+    end
+
+    newfontname exch definefont pop
+} def
+
+0 17.8125 translate 1 -1 scale
+63.000 11.250 moveto
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+%%BeginResource: font Courier-MISO
+%%BeginFont: Courier-MISO
+/Courier /Courier-MISO MISOfy
+%%EndFont
+%%EndResource
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+63.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+(b) show
+69.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+1.000 setlinewidth
+grestore
+gsave
+.4154 .77834 -66 -8.90625 Mabsadd m
+1 1 Mabs scale
+currentpoint translate
+/MISOfy
+{
+    /newfontname exch def
+    /oldfontname exch def
+
+    oldfontname findfont
+    dup length dict begin
+        {1 index /FID ne {def} {pop pop} ifelse} forall
+        /Encoding ISOLatin1Encoding def
+        currentdict
+    end
+
+    newfontname exch definefont pop
+} def
+
+0 17.8125 translate 1 -1 scale
+63.000 11.250 moveto
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+%%BeginResource: font Courier-MISO
+%%BeginFont: Courier-MISO
+/Courier /Courier-MISO MISOfy
+%%EndFont
+%%EndResource
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+63.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+(b) show
+69.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+1.000 setlinewidth
+grestore
+gsave
+.90987 .4993 -66 -8.90625 Mabsadd m
+1 1 Mabs scale
+currentpoint translate
+/MISOfy
+{
+    /newfontname exch def
+    /oldfontname exch def
+
+    oldfontname findfont
+    dup length dict begin
+        {1 index /FID ne {def} {pop pop} ifelse} forall
+        /Encoding ISOLatin1Encoding def
+        currentdict
+    end
+
+    newfontname exch definefont pop
+} def
+
+0 17.8125 translate 1 -1 scale
+63.000 11.250 moveto
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+%%BeginResource: font Courier-MISO
+%%BeginFont: Courier-MISO
+/Courier /Courier-MISO MISOfy
+%%EndFont
+%%EndResource
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+63.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+(b) show
+69.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+1.000 setlinewidth
+grestore
+gsave
+.39954 .99863 -66 -8.90625 Mabsadd m
+1 1 Mabs scale
+currentpoint translate
+/MISOfy
+{
+    /newfontname exch def
+    /oldfontname exch def
+
+    oldfontname findfont
+    dup length dict begin
+        {1 index /FID ne {def} {pop pop} ifelse} forall
+        /Encoding ISOLatin1Encoding def
+        currentdict
+    end
+
+    newfontname exch definefont pop
+} def
+
+0 17.8125 translate 1 -1 scale
+63.000 11.250 moveto
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+%%BeginResource: font Courier-MISO
+%%BeginFont: Courier-MISO
+/Courier /Courier-MISO MISOfy
+%%EndFont
+%%EndResource
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+63.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+(b) show
+69.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+1.000 setlinewidth
+grestore
+gsave
+.29363 .33042 -66 -8.90625 Mabsadd m
+1 1 Mabs scale
+currentpoint translate
+/MISOfy
+{
+    /newfontname exch def
+    /oldfontname exch def
+
+    oldfontname findfont
+    dup length dict begin
+        {1 index /FID ne {def} {pop pop} ifelse} forall
+        /Encoding ISOLatin1Encoding def
+        currentdict
+    end
+
+    newfontname exch definefont pop
+} def
+
+0 17.8125 translate 1 -1 scale
+63.000 11.250 moveto
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+%%BeginResource: font Courier-MISO
+%%BeginFont: Courier-MISO
+/Courier /Courier-MISO MISOfy
+%%EndFont
+%%EndResource
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+63.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+(a) show
+69.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+1.000 setlinewidth
+grestore
+gsave
+.45641 .91864 -66 -8.90625 Mabsadd m
+1 1 Mabs scale
+currentpoint translate
+/MISOfy
+{
+    /newfontname exch def
+    /oldfontname exch def
+
+    oldfontname findfont
+    dup length dict begin
+        {1 index /FID ne {def} {pop pop} ifelse} forall
+        /Encoding ISOLatin1Encoding def
+        currentdict
+    end
+
+    newfontname exch definefont pop
+} def
+
+0 17.8125 translate 1 -1 scale
+63.000 11.250 moveto
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+%%BeginResource: font Courier-MISO
+%%BeginFont: Courier-MISO
+/Courier /Courier-MISO MISOfy
+%%EndFont
+%%EndResource
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+63.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+(b) show
+69.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+1.000 setlinewidth
+grestore
+gsave
+.33121 .61449 -66 -8.90625 Mabsadd m
+1 1 Mabs scale
+currentpoint translate
+/MISOfy
+{
+    /newfontname exch def
+    /oldfontname exch def
+
+    oldfontname findfont
+    dup length dict begin
+        {1 index /FID ne {def} {pop pop} ifelse} forall
+        /Encoding ISOLatin1Encoding def
+        currentdict
+    end
+
+    newfontname exch definefont pop
+} def
+
+0 17.8125 translate 1 -1 scale
+63.000 11.250 moveto
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+%%BeginResource: font Courier-MISO
+%%BeginFont: Courier-MISO
+/Courier /Courier-MISO MISOfy
+%%EndFont
+%%EndResource
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+63.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+(b) show
+69.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+1.000 setlinewidth
+grestore
+gsave
+.84924 .72493 -66 -8.90625 Mabsadd m
+1 1 Mabs scale
+currentpoint translate
+/MISOfy
+{
+    /newfontname exch def
+    /oldfontname exch def
+
+    oldfontname findfont
+    dup length dict begin
+        {1 index /FID ne {def} {pop pop} ifelse} forall
+        /Encoding ISOLatin1Encoding def
+        currentdict
+    end
+
+    newfontname exch definefont pop
+} def
+
+0 17.8125 translate 1 -1 scale
+63.000 11.250 moveto
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+%%BeginResource: font Courier-MISO
+%%BeginFont: Courier-MISO
+/Courier /Courier-MISO MISOfy
+%%EndFont
+%%EndResource
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+63.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+(b) show
+69.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+1.000 setlinewidth
+grestore
+gsave
+.74769 .25412 -66 -8.90625 Mabsadd m
+1 1 Mabs scale
+currentpoint translate
+/MISOfy
+{
+    /newfontname exch def
+    /oldfontname exch def
+
+    oldfontname findfont
+    dup length dict begin
+        {1 index /FID ne {def} {pop pop} ifelse} forall
+        /Encoding ISOLatin1Encoding def
+        currentdict
+    end
+
+    newfontname exch definefont pop
+} def
+
+0 17.8125 translate 1 -1 scale
+63.000 11.250 moveto
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+%%BeginResource: font Courier-MISO
+%%BeginFont: Courier-MISO
+/Courier /Courier-MISO MISOfy
+%%EndFont
+%%EndResource
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+63.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+(b) show
+69.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+1.000 setlinewidth
+grestore
+gsave
+.20584 .82385 -66 -8.90625 Mabsadd m
+1 1 Mabs scale
+currentpoint translate
+/MISOfy
+{
+    /newfontname exch def
+    /oldfontname exch def
+
+    oldfontname findfont
+    dup length dict begin
+        {1 index /FID ne {def} {pop pop} ifelse} forall
+        /Encoding ISOLatin1Encoding def
+        currentdict
+    end
+
+    newfontname exch definefont pop
+} def
+
+0 17.8125 translate 1 -1 scale
+63.000 11.250 moveto
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+%%BeginResource: font Courier-MISO
+%%BeginFont: Courier-MISO
+/Courier /Courier-MISO MISOfy
+%%EndFont
+%%EndResource
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+63.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+(b) show
+69.000 11.250 moveto
+%%IncludeResource: font Courier-MISO
+%%IncludeFont: Courier-MISO
+/Courier-MISO findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+1.000 setlinewidth
+grestore
+% End of Graphics
+MathPictureEnd
+\
+\>"], "Graphics",
+  ImageSize->{288, 288},
+  ImageMargins->{{0, 0}, {0, 0}},
+  ImageRegion->{{0, 1}, {0, 1}},
+  ImageCache->GraphicsData["Bitmap", "\<\
+CF5dJ6E]HGAYHf4PAg9QL6QYHg<PAVmbKF5d0`40004P000182000`400?l00000o`00003oo`3ooolQ
+0?ooo`00o`3ooolQ0?ooo`00o`3ooolQ0?ooo`00o`3ooolQ0?ooo`00o`3ooolQ0?ooo`00o`3ooolQ
+0?ooo`00@P3oool2000000@0oooo00<000000?ooo`3oool00P3oool4000002H0oooo0P0000040?oo
+o`030000003oool0oooo00@0oooo00<000000?ooo`3oool0903oool2000000@0oooo00<000000?oo
+o`3oool00`3oool2000002L0oooo0P0000040?ooo`030000003oool0oooo00<0oooo0P00000/0?oo
+o`@000000P3oool00440oooo00@000000?ooo`3oool00000203oool00`000000oooo0?ooo`0V0?oo
+o`040000003oool0oooo000000X0oooo00<000000?ooo`3oool08`3oool010000000oooo0?ooo`00
+00080?ooo`040000003oool0oooo000002D0oooo00@000000?ooo`3oool00000203oool010000000
+oooo0?ooo`00000]0?ooo`030000003oool0oooo0040oooo00110?ooo`040000003oool0oooo0000
+00T0oooo00<000000?ooo`3oool09@3oool010000000oooo0?ooo`0000070?ooo`D00000903oool0
+10000000oooo0?ooo`0000080?ooo`040000003oool0oooo000002D0oooo00@000000?ooo`3oool0
+0000203oool010000000oooo0?ooo`00000]0?ooo`030000003oool0oooo0040oooo00110?ooo`04
+0000003oool0oooo000000X0oooo00<000000?ooo`3oool0903oool010000000oooo0?ooo`000007
+0?ooo`040000003oool0oooo000002D0oooo00@000000?ooo`3oool00000203oool3000002H0oooo
+00@000000?ooo`3oool000002@3oool2000002h0oooo00<000000?ooo`3oool00@3oool00440oooo
+00@000000?ooo`3oool000002`3oool00`000000oooo0?ooo`0S0?ooo`040000003oool0oooo0000
+00P0oooo00<000000?ooo`0000009@3oool010000000oooo0?ooo`0000080?ooo`030000003oool0
+oooo02H0oooo00@000000?ooo`3oool00000203oool010000000oooo0?ooo`00000]0?ooo`030000
+003oool0oooo0040oooo00110?ooo`040000003oool0oooo000000P0oooo00@000000?ooo`3oool0
+00009@3oool010000000oooo0?ooo`0000090?ooo`8000009@3oool010000000oooo0?ooo`000008
+0?ooo`030000003oool0oooo02H0oooo00@000000?ooo`3oool00000203oool010000000oooo0?oo
+o`00000[0?ooo`<000000`3oool00480oooo0P00000:0?ooo`8000009`3oool2000000/0oooo00<0
+00000?ooo`3oool0903oool2000000X0oooo0`00000V0?ooo`8000002P3oool2000002h0oooo00<0
+00000?ooo`3oool00@3oool00?l0oooo8@3oool00?l0oooo8@3oool00?l0oooo8@3oool00?l0oooo
+8@3oool001D0ooooo`000009000000<0oooo000E0?ooo`030000003oool0oooo00X0oooo00<00000
+0?ooo`3oool02P3oool00`000000oooo0?ooo`0:0?ooo`030000003oool0oooo00X0oooo00<00000
+0?ooo`3oool02P3oool00`000000oooo0?ooo`0;0?ooo`030000003oool0oooo00X0oooo00<00000
+0?ooo`3oool02P3oool00`000000oooo0?ooo`0:0?ooo`030000003oool0oooo00X0oooo00<00000
+0?ooo`3oool02P3oool00`000000oooo0?ooo`030?ooo`040000003oool0oooo000000<0oooo00<0
+00000?ooo`3oool02`3oool00`000000oooo0?ooo`0:0?ooo`030000003oool0oooo00X0oooo00<0
+00000?ooo`3oool02P3oool00`000000oooo0?ooo`0:0?ooo`030000003oool0oooo00X0oooo00<0
+00000?ooo`3oool02P3oool00`000000oooo0?ooo`0;0?ooo`030000003oool0oooo0040oooo000E
+0?ooo`030000003oool0oooo09@0oooo0`00001a0?ooo`005@3oool00`000000oooo0?ooo`2F0?oo
+o`030000003oool0oooo06l0oooo000E0?ooo`030000003oool0oooo09@0oooo0P00001b0?ooo`00
+5@3oool00`000000oooo0?ooo`3o0?ooo`T0oooo000E0?ooo`030000003oool0oooo0?l0oooo2@3o
+ool001D0oooo00<000000?ooo`3oool0/03oool2000000030?ooo`000000oooo05<0oooo000E0?oo
+o`030000003oool0oooo0:l0oooo00@000000?ooo`3oool00000E@3oool001D0oooo00<000000?oo
+o`3oool0/03oool3000005D0oooo000E0?ooo`030000003oool0oooo0;80oooo00<000000?ooo`3o
+ool0D`3oool001D0oooo00<000000?ooo`3oool0/03oool2000005H0oooo000E0?ooo`030000003o
+ool0oooo0?l0oooo2@3oool001D0oooo0P00003o0?ooo`X0oooo000E0?ooo`030000003oool0oooo
+0?l0oooo2@3oool001D0oooo00<000000?ooo`3oool0o`3oool90?ooo`005@3oool00`000000oooo
+0?ooo`3o0?ooo`T0oooo000E0?ooo`030000003oool0oooo0?l0oooo2@3oool001D0oooo00<00000
+0?ooo`3oool0o`3oool90?ooo`005@3oool00`000000oooo0?ooo`3b0?ooo`@000004P3oool001D0
+oooo00<000000?ooo`3oool0QP3oool2000000030?ooo`000000oooo06P0oooo00@000000?ooo`3o
+ool000004@3oool001D0oooo00<000000?ooo`3oool0D03oool2000000030?ooo`000000oooo0300
+oooo00@000000?ooo`3oool00000JP3oool010000000oooo0?ooo`00000A0?ooo`005@3oool00`00
+0000oooo0?ooo`1?0?ooo`040000003oool0oooo000003<0oooo0`00001Z0?ooo`040000003oool0
+oooo00000140oooo000E0?ooo`030000003oool0oooo0500oooo0`00000e0?ooo`030000003oool0
+oooo06P0oooo0`00000B0?ooo`005@3oool00`000000oooo0?ooo`140?ooo`80000000<0oooo0000
+003oool02@3oool00`000000oooo0?ooo`0a0?ooo`800000J`3oool00`000000oooo0?ooo`0B0?oo
+o`005@3oool00`000000oooo0?ooo`130?ooo`040000003oool0oooo000000T0oooo0P00002P0?oo
+o`800000503oool001D0oooo0P0000150?ooo`<00000`@3oool001D0oooo00<000000?ooo`3oool0
+AP3oool00`000000oooo0?ooo`2o0?ooo`005@3oool00`000000oooo0?ooo`140?ooo`800000`P3o
+ool001D0oooo00<000000?ooo`3oool0o`3oool90?ooo`005@3oool00`000000oooo0?ooo`3o0?oo
+o`T0oooo000E0?ooo`030000003oool0oooo0?l0oooo2@3oool001D0oooo00<000000?ooo`3oool0
+o`3oool90?ooo`005@3oool00`000000oooo0?ooo`3o0?ooo`T0oooo000E0?ooo`030000003oool0
+oooo0?l0oooo2@3oool001D0oooo00<000000?ooo`3oool0l03oool4000001@0oooo000E0?ooo`03
+0000003oool0oooo0?40oooo00@000000?ooo`3oool000004`3oool001D0oooo00<000000?ooo`3o
+ool0l@3oool010000000oooo0?ooo`00000C0?ooo`005@3oool00`000000oooo0?ooo`3a0?ooo`04
+0000003oool0oooo000001<0oooo000E0?ooo`800000lP3oool3000001@0oooo000E0?ooo`030000
+003oool0oooo0>`0oooo100000000`3oool000000?ooo`0E0?ooo`005@3oool00`000000oooo0?oo
+o`3]0?ooo`030000003oool0oooo008000005P3oool001D0oooo00<000000?ooo`3oool0k@3oool0
+10000000oooo0?ooo`00000G0?ooo`005@3oool00`000000oooo0?ooo`2N0?ooo`80000000<0oooo
+0000003oool0BP3oool010000000oooo0?ooo`00000G0?ooo`005@3oool00`000000oooo0?ooo`2M
+0?ooo`040000003oool0oooo000004`0oooo0`00000H0?ooo`005@3oool00`000000oooo0?ooo`2N
+0?ooo`<00000C03oool00`000000oooo0?ooo`0H0?ooo`005@3oool00`000000oooo0?ooo`2P0?oo
+o`030000003oool0oooo04T0oooo0P00000J0?ooo`005@3oool00`000000oooo0?ooo`2N0?ooo`80
+0000J03oool001D0oooo00<000000?ooo`3oool0o`3oool90?ooo`005@3oool00`000000oooo0?oo
+o`3o0?ooo`T0oooo00020?ooo`800000103oool00`000000oooo0?ooo`020?ooo`@00000103oool0
+0`000000oooo0?ooo`3o0?ooo`T0oooo00001@3oool000000?ooo`3oool0000000P0oooo00<00000
+0?ooo`3oool01@3oool00`000000oooo0?ooo`2l0?ooo`@00000B03oool000050?ooo`000000oooo
+0?ooo`0000002@3oool00`000000oooo0?ooo`040?ooo`800000PP3oool2000000030?ooo`000000
+oooo03L0oooo00@000000?ooo`3oool00000A`3oool000050?ooo`000000oooo0?ooo`0000002P3o
+ool00`000000oooo0?ooo`030?ooo`030000003oool0oooo0800oooo00@000000?ooo`3oool00000
+>@3oool010000000oooo0?ooo`0000170?ooo`0000D0oooo0000003oool0oooo0000000;0?ooo`03
+0000003oool0oooo0080oooo00<000000?ooo`3oool0P@3oool3000003T0oooo00@000000?ooo`3o
+ool00000A`3oool000050?ooo`000000oooo0?ooo`000000203oool010000000oooo0?ooo`000004
+0?ooo`030000003oool0oooo08<0oooo00<000000?ooo`3oool0=`3oool3000004P0oooo00020?oo
+o`8000002P3oool2000000D0oooo00<000000?ooo`3oool0P@3oool2000003X0oooo00<000000?oo
+o`3oool0B03oool001D0oooo00<000000?ooo`3oool0_03oool2000004X0oooo000E0?ooo`030000
+003oool0oooo0?l0oooo2@3oool001D0oooo00<000000?ooo`3oool0o`3oool90?ooo`005@3oool0
+0`000000oooo0?ooo`3o0?ooo`T0oooo000E0?ooo`030000003oool0oooo0?l0oooo2@3oool001D0
+oooo00<000000?ooo`3oool0o`3oool90?ooo`005@3oool00`000000oooo0?ooo`3o0?ooo`T0oooo
+000E0?ooo`030000003oool0oooo0?l0oooo2@3oool001D0oooo0P00002o0?ooo`@00000AP3oool0
+01D0oooo00<000000?ooo`3oool0_`3oool010000000oooo0?ooo`0000150?ooo`005@3oool00`00
+0000oooo0?ooo`2o0?ooo`040000003oool0oooo000004D0oooo000E0?ooo`030000003oool0oooo
+0;l0oooo00@000000?ooo`3oool00000A@3oool001D0oooo00<000000?ooo`3oool0_`3oool30000
+04H0oooo000E0?ooo`030000003oool0oooo0;l0oooo00<000000?ooo`3oool0AP3oool001D0oooo
+00<000000?ooo`3oool0_P3oool2000004P0oooo000E0?ooo`030000003oool0oooo0?l0oooo2@3o
+ool001D0oooo00<000000?ooo`3oool0o`3oool90?ooo`005@3oool00`000000oooo0?ooo`3o0?oo
+o`T0oooo000E0?ooo`030000003oool0oooo0?l0oooo2@3oool001D0oooo00<000000?ooo`3oool0
+o`3oool90?ooo`005@3oool00`000000oooo0?ooo`3o0?ooo`T0oooo000E0?ooo`800000b@3oool4
+000003`0oooo000E0?ooo`030000003oool0oooo0<T0oooo00@000000?ooo`3oool00000>`3oool0
+01D0oooo00<000000?ooo`3oool0b@3oool010000000oooo0?ooo`00000k0?ooo`005@3oool00`00
+0000oooo0?ooo`390?ooo`040000003oool0oooo000003/0oooo000E0?ooo`030000003oool0oooo
+0<T0oooo0`00000l0?ooo`005@3oool00`000000oooo0?ooo`390?ooo`030000003oool0oooo03`0
+oooo000E0?ooo`030000003oool0oooo01<0oooo0P0000000`3oool000000?ooo`2`0?ooo`800000
+?P3oool001D0oooo00<000000?ooo`3oool04P3oool010000000oooo0?ooo`00000c0?ooo`800000
+00<0oooo0000003oool0^P3oool001D0oooo00<000000?ooo`3oool04`3oool300000380oooo00@0
+00000?ooo`3oool00000_03oool001D0oooo00<000000?ooo`3oool05@3oool00`000000oooo0?oo
+o`0a0?ooo`<00000_03oool001D0oooo00<000000?ooo`3oool04`3oool2000003H0oooo00<00000
+0?ooo`3oool0^P3oool001D0oooo00<000000?ooo`3oool0B@3oool200000;d0oooo000E0?ooo`03
+0000003oool0oooo0?l0oooo2@3oool001D0oooo0P00003o0?ooo`X0oooo000E0?ooo`030000003o
+ool0oooo05l0oooo0P0000000`3oool000000?ooo`2T0?ooo`005@3oool00`000000oooo0?ooo`1N
+0?ooo`040000003oool0oooo00000340oooo1000001a0?ooo`005@3oool00`000000oooo0?ooo`1O
+0?ooo`<00000<P3oool010000000oooo0?ooo`00001`0?ooo`005@3oool00`000000oooo0?ooo`1Q
+0?ooo`030000003oool0oooo0300oooo00@000000?ooo`3oool00000L03oool001D0oooo00<00000
+0?ooo`3oool0G`3oool2000003<0oooo00@000000?ooo`3oool00000L03oool001D0oooo00<00000
+0?ooo`3oool0U03oool300000740oooo000E0?ooo`030000003oool0oooo09@0oooo00<000000?oo
+o`3oool0L@3oool001D0oooo00<000000?ooo`3oool0T`3oool2000007<0oooo000E0?ooo`800000
+00<0oooo0000003oool0o`3oool70?ooo`00503oool2000000030?ooo`000000oooo0?l0oooo203o
+ool001D0oooo0`00003o0?ooo`T0oooo00020?ooo`800000103oool00`000000oooo0?ooo`040?oo
+o`030000003oool0oooo00<0oooo00<000000?ooo`000000o`3oool90?ooo`0000D0oooo0000003o
+ool0oooo0000000:0?ooo`030000003oool0oooo00<0oooo0P00003o0?ooo`X0oooo00001@3oool0
+00000?ooo`3oool0000000L0oooo1@0000040?ooo`800000o`3oool:0?ooo`0000D0oooo0000003o
+ool0oooo000000070?ooo`040000003oool0oooo000000D0oooo00<000000?ooo`3oool0o`3oool9
+0?ooo`0000D0oooo0000003oool0oooo000000080?ooo`030000003oool0000000D0oooo00<00000
+0?ooo`3oool0o`3oool90?ooo`0000D0oooo0000003oool0oooo000000090?ooo`8000001@3oool0
+0`000000oooo0?ooo`3o0?ooo`T0oooo00020?ooo`8000002`3oool00`000000oooo0?ooo`030?oo
+o`030000003oool0oooo0?L0oooo1000000=0?ooo`005@3oool00`000000oooo0?ooo`1D0?ooo`80
+000000<0oooo0000003oool0W`3oool010000000oooo0?ooo`00000<0?ooo`005@3oool00`000000
+oooo0?ooo`1C0?ooo`040000003oool0oooo00000340oooo1000001/0?ooo`040000003oool0oooo
+000000`0oooo000E0?ooo`030000003oool0oooo05@0oooo0`00000b0?ooo`040000003oool0oooo
+000006/0oooo00@000000?ooo`3oool00000303oool001D0oooo00<000000?ooo`3oool0EP3oool0
+0`000000oooo0?ooo`0`0?ooo`040000003oool0oooo000006/0oooo0`00000=0?ooo`005@3oool0
+0`000000oooo0?ooo`1D0?ooo`800000<`3oool010000000oooo0?ooo`00001[0?ooo`030000003o
+ool0oooo00d0oooo000E0?ooo`030000003oool0oooo08T0oooo0`00001[0?ooo`8000003`3oool0
+01D0oooo00<000000?ooo`3oool0R@3oool00`000000oooo0?ooo`1l0?ooo`005@3oool00`000000
+oooo0?ooo`280?ooo`800000703oool4000005h0oooo000E0?ooo`800000Z03oool010000000oooo
+0?ooo`00001M0?ooo`005@3oool00`000000oooo0?ooo`0l0?ooo`80000000<0oooo0000003oool0
+IP3oool010000000oooo0?ooo`00001M0?ooo`005@3oool00`000000oooo0?ooo`0k0?ooo`040000
+003oool0oooo000006P0oooo00@000000?ooo`3oool00000G@3oool001D0oooo00<000000?ooo`3o
+ool0?03oool3000006P0oooo0`00001N0?ooo`005@3oool00`000000oooo0?ooo`0n0?ooo`030000
+003oool0oooo06H0oooo00<000000?ooo`3oool0GP3oool001D0oooo00<000000?ooo`3oool0?03o
+ool2000006P0oooo0P00001P0?ooo`005@3oool00`000000oooo0?ooo`3o0?ooo`T0oooo000E0?oo
+o`030000003oool0oooo0?l0oooo2@3oool001D0oooo00<000000?ooo`3oool0o`3oool90?ooo`00
+5@3oool00`000000oooo0?ooo`3o0?ooo`T0oooo000E0?ooo`030000003oool0oooo0?l0oooo2@3o
+ool001D0oooo00<000000?ooo`3oool0j@3oool4000001/0oooo000E0?ooo`030000003oool0oooo
+0=l0oooo100000070?ooo`040000003oool0oooo000001X0oooo000E0?ooo`800000h@3oool01000
+0000oooo0?ooo`0000060?ooo`040000003oool0oooo000001X0oooo000E0?ooo`030000003oool0
+oooo0>00oooo00@000000?ooo`3oool000001P3oool010000000oooo0?ooo`00000J0?ooo`005@3o
+ool00`000000oooo0?ooo`3P0?ooo`040000003oool0oooo000000H0oooo0`00000K0?ooo`005@3o
+ool00`000000oooo0?ooo`3P0?ooo`<000001`3oool00`000000oooo0?ooo`0K0?ooo`005@3oool0
+0`000000oooo0?ooo`3P0?ooo`030000003oool0oooo00H0oooo0P00000M0?ooo`005@3oool00`00
+0000oooo0?ooo`3O0?ooo`8000009`3oool001D0oooo00<000000?ooo`3oool0o`3oool90?ooo`00
+5@3oool00`000000oooo0?ooo`3o0?ooo`T0oooo000E0?ooo`030000003oool0oooo0?l0oooo2@3o
+ool001D0oooo00<000000?ooo`3oool0o`3oool90?ooo`005@3oool00`000000oooo0?ooo`3o0?oo
+o`T0oooo000E0?ooo`030000003oool0oooo0?l0oooo2@3oool001D0oooo00<000000?ooo`3oool0
+o`3oool90?ooo`005@3oool200000?l0oooo2P3oool001D0oooo00<000000?ooo`3oool0o`3oool9
+0?ooo`005@3oool00`000000oooo0?ooo`3o0?ooo`T0oooo000E0?ooo`030000003oool0oooo0?l0
+oooo2@3oool001D0oooo00<000000?ooo`3oool0o`3oool90?ooo`005@3oool00`000000oooo0?oo
+o`1^0?ooo`@00000UP3oool001D0oooo00<000000?ooo`3oool0K`3oool010000000oooo0?ooo`00
+002E0?ooo`005@3oool00`000000oooo0?ooo`1_0?ooo`040000003oool0oooo000009D0oooo000E
+0?ooo`030000003oool0oooo06l0oooo00@000000?ooo`3oool00000103oool4000008d0oooo000E
+0?ooo`030000003oool0oooo06l0oooo0`0000060?ooo`040000003oool0oooo000008`0oooo000E
+0?ooo`030000003oool0oooo06l0oooo00<000000?ooo`3oool01P3oool010000000oooo0?ooo`00
+002<0?ooo`000P3oool2000000@0oooo00<000000?ooo`3oool00`3oool2000000D0oooo00<00000
+0?ooo`3oool0KP3oool2000000P0oooo00@000000?ooo`3oool00000S03oool000050?ooo`000000
+oooo0?ooo`000000203oool010000000oooo0?ooo`0000040?ooo`030000003oool0oooo07P0oooo
+0`00002=0?ooo`0000D0oooo0000003oool0oooo000000080?ooo`040000003oool0oooo000000@0
+oooo0P00001i0?ooo`030000003oool0oooo08d0oooo00001@3oool000000?ooo`3oool0000000P0
+oooo0`0000050?ooo`030000003oool0oooo07L0oooo0P00002?0?ooo`0000D0oooo0000003oool0
+oooo000000080?ooo`030000003oool0oooo00D0oooo00<000000?ooo`3oool0o`3oool90?ooo`00
+00D0oooo0000003oool0oooo000000080?ooo`030000003oool0oooo00D0oooo00<000000?ooo`3o
+ool0D@3oool400000;<0oooo00020?ooo`8000002P3oool3000000@0oooo00<000000?ooo`3oool0
+DP3oool010000000oooo0?ooo`00002b0?ooo`005@3oool00`000000oooo0?ooo`1B0?ooo`040000
+003oool0oooo00000;80oooo000E0?ooo`030000003oool0oooo0580oooo00@000000?ooo`3oool0
+0000/P3oool001D0oooo00<000000?ooo`3oool0DP3oool300000;<0oooo000E0?ooo`030000003o
+ool0oooo0580oooo00<000000?ooo`3oool0/`3oool001D0oooo00<000000?ooo`3oool0D@3oool2
+00000;D0oooo000E0?ooo`030000003oool0oooo0?l0oooo2@3oool001D0oooo00<000000?ooo`3o
+ool0o`3oool90?ooo`005@3oool00`000000oooo0?ooo`3o0?ooo`T0oooo000E0?ooo`800000o`3o
+ool:0?ooo`005@3oool00`000000oooo0?ooo`3o0?ooo`T0oooo000E0?ooo`030000003oool0oooo
+0?l0oooo2@3oool001D0oooo00<000000?ooo`3oool0o`3oool90?ooo`005@3oool00`000000oooo
+0?ooo`3o0?ooo`T0oooo000E0?ooo`030000003oool0oooo0?00oooo1000000D0?ooo`005@3oool0
+0`000000oooo0?ooo`3a0?ooo`040000003oool0oooo000001<0oooo000E0?ooo`030000003oool0
+oooo0=@0oooo1000000I0?ooo`040000003oool0oooo000001<0oooo000E0?ooo`030000003oool0
+oooo0=D0oooo00@000000?ooo`3oool00000603oool010000000oooo0?ooo`00000C0?ooo`005@3o
+ool00`000000oooo0?ooo`3E0?ooo`040000003oool0oooo000001P0oooo0`00000D0?ooo`005@3o
+ool00`000000oooo0?ooo`3E0?ooo`040000003oool0oooo000000@0oooo1000000@0?ooo`030000
+003oool0oooo01@0oooo000E0?ooo`030000003oool0oooo0=D0oooo0`0000060?ooo`040000003o
+ool0oooo000000h0oooo0P00000F0?ooo`005@3oool00`000000oooo0?ooo`0?0?ooo`80000000<0
+oooo0000003oool0`@3oool00`000000oooo0?ooo`060?ooo`040000003oool0oooo000002H0oooo
+000E0?ooo`8000003`3oool010000000oooo0?ooo`0000320?ooo`800000203oool010000000oooo
+0?ooo`00000V0?ooo`005@3oool00`000000oooo0?ooo`0?0?ooo`<00000c03oool3000002L0oooo
+000E0?ooo`030000003oool0oooo0140oooo00<000000?ooo`3oool0bP3oool00`000000oooo0?oo
+o`0W0?ooo`005@3oool00`000000oooo0?ooo`0?0?ooo`800000c03oool2000001P0oooo1000000=
+0?ooo`005@3oool00`000000oooo0?ooo`3h0?ooo`040000003oool0oooo000000`0oooo000E0?oo
+o`030000003oool0oooo0?P0oooo00@000000?ooo`3oool00000303oool001D0oooo00<000000?oo
+o`3oool0I`3oool4000006h0oooo1000000K0?ooo`040000003oool0oooo000000`0oooo000E0?oo
+o`030000003oool0oooo06P0oooo00@000000?ooo`3oool00000KP3oool010000000oooo0?ooo`00
+000J0?ooo`<000003@3oool001D0oooo00<000000?ooo`3oool0J03oool010000000oooo0?ooo`00
+001^0?ooo`040000003oool0oooo000001X0oooo00<000000?ooo`3oool03@3oool001D0oooo00<0
+00000?ooo`3oool0J03oool010000000oooo0?ooo`00001^0?ooo`040000003oool0oooo000001T0
+oooo0P00000?0?ooo`005@3oool00`000000oooo0?ooo`1X0?ooo`<00000K`3oool3000002/0oooo
+000E0?ooo`030000003oool0oooo06P0oooo00<000000?ooo`3oool0K`3oool00`000000oooo0?oo
+o`0[0?ooo`005@3oool00`000000oooo0?ooo`1W0?ooo`800000L03oool2000002d0oooo000E0?oo
+o`030000003oool0oooo0?l0oooo2@3oool001D0oooo0P00001^0?ooo`@00000U`3oool001D0oooo
+00<000000?ooo`3oool0KP3oool010000000oooo0?ooo`00002F0?ooo`005@3oool00`000000oooo
+0?ooo`1^0?ooo`040000003oool0oooo000009H0oooo000E0?ooo`030000003oool0oooo06h0oooo
+00@000000?ooo`3oool00000UP3oool001D0oooo00<000000?ooo`3oool0KP3oool3000009L0oooo
+000E0?ooo`030000003oool0oooo06h0oooo00<000000?ooo`3oool0U`3oool001D0oooo00<00000
+0?ooo`3oool00P0000000`3oool000000?ooo`1R0?ooo`@000000P3oool2000009T0oooo000E0?oo
+o`030000003oool000000080oooo00<000000?ooo`3oool0H`3oool010000000oooo0?ooo`00002L
+0?ooo`005@3oool00`000000oooo0?ooo`03000006D0oooo00@000000?ooo`3oool00000W03oool0
+01D0oooo00<000000?ooo`3oool00P3oool00`000000oooo0?ooo`1S0?ooo`040000003oool0oooo
+000009`0oooo000E0?ooo`030000003oool0oooo00800000IP3oool3000009d0oooo00020?ooo`80
+0000103oool00`000000oooo0?ooo`030?ooo`8000001@3oool00`000000oooo0?ooo`1X0?ooo`03
+0000003oool0oooo09d0oooo00001@3oool000000?ooo`3oool0000000P0oooo00@000000?ooo`3o
+ool00000103oool00`000000oooo0?ooo`1W0?ooo`800000W`3oool000050?ooo`000000oooo0?oo
+o`000000203oool010000000oooo0?ooo`0000040?ooo`800000o`3oool:0?ooo`0000D0oooo0000
+003oool0oooo000000090?ooo`8000001@3oool00`000000oooo0?ooo`3o0?ooo`T0oooo00001@3o
+ool000000?ooo`3oool0000000P0oooo00@000000?ooo`3oool00000103oool00`000000oooo0?oo
+o`2k0?ooo`@00000B@3oool000050?ooo`000000oooo0?ooo`000000203oool010000000oooo0?oo
+o`0000040?ooo`030000003oool0oooo0;`0oooo00@000000?ooo`3oool00000B03oool00080oooo
+0P00000:0?ooo`8000001@3oool00`000000oooo0?ooo`2l0?ooo`040000003oool0oooo000004P0
+oooo000E0?ooo`030000003oool0oooo0300oooo100000280?ooo`040000003oool0oooo000004P0
+oooo000E0?ooo`030000003oool0oooo0340oooo00@000000?ooo`3oool00000Q`3oool3000004T0
+oooo000E0?ooo`030000003oool0oooo0340oooo00@000000?ooo`3oool00000Q`3oool00`000000
+oooo0?ooo`190?ooo`005@3oool00`000000oooo0?ooo`0a0?ooo`040000003oool0oooo000008H0
+oooo0P00001;0?ooo`005@3oool00`000000oooo0?ooo`0a0?ooo`<00000_03oool4000001@0oooo
+000E0?ooo`030000003oool0oooo0340oooo00<000000?ooo`3oool0_@3oool010000000oooo0?oo
+o`00000C0?ooo`005@3oool00`000000oooo0?ooo`0`0?ooo`800000_`3oool010000000oooo0?oo
+o`00000C0?ooo`005@3oool00`000000oooo0?ooo`3a0?ooo`040000003oool0oooo000001<0oooo
+000E0?ooo`800000lP3oool3000001@0oooo000E0?ooo`030000003oool0oooo0?40oooo00<00000
+0?ooo`3oool0503oool001D0oooo00<000000?ooo`3oool0l03oool2000001H0oooo000E0?ooo`03
+0000003oool0oooo0?l0oooo2@3oool001D0oooo00<000000?ooo`3oool0o`3oool90?ooo`005@3o
+ool00`000000oooo0?ooo`3o0?ooo`T0oooo000E0?ooo`030000003oool0oooo0?l0oooo2@3oool0
+01D0oooo00<000000?ooo`3oool0o`3oool90?ooo`005@3oool00`000000oooo0?ooo`1B0?ooo`@0
+0000/P3oool001D0oooo00<000000?ooo`3oool0D`3oool010000000oooo0?ooo`00002a0?ooo`00
+5@3oool00`000000oooo0?ooo`1C0?ooo`040000003oool0oooo000004@0oooo1000001Y0?ooo`00
+5@3oool00`000000oooo0?ooo`1C0?ooo`040000003oool0oooo000004D0oooo00@000000?ooo`3o
+ool00000J03oool001D0oooo00<000000?ooo`3oool0D`3oool3000004H0oooo00@000000?ooo`3o
+ool00000;`3oool4000003D0oooo000E0?ooo`800000E03oool00`000000oooo0?ooo`160?ooo`04
+0000003oool0oooo00000300oooo00@000000?ooo`3oool00000=03oool001D0oooo00<000000?oo
+o`3oool0DP3oool2000004P0oooo0`00000a0?ooo`040000003oool0oooo000003@0oooo000E0?oo
+o`030000003oool0oooo09`0oooo00<000000?ooo`3oool0<@3oool010000000oooo0?ooo`00000d
+0?ooo`005@3oool00`000000oooo0?ooo`2K0?ooo`800000<`3oool3000003D0oooo000E0?ooo`03
+0000003oool0oooo0780oooo1000001J0?ooo`030000003oool0oooo03D0oooo000E0?ooo`030000
+003oool0oooo00P0oooo1000001W0?ooo`D00000E`3oool2000003L0oooo000E0?ooo`030000003o
+ool0oooo00T0oooo00@000000?ooo`3oool00000IP3oool01P000000oooo000000000000oooo0000
+08l0oooo000E0?ooo`030000003oool0oooo00D0oooo1@0000020?ooo`030000003oool0oooo06@0
+oooo00H000000?ooo`00000000000?ooo`00002?0?ooo`005@3oool00`000000oooo0?ooo`060?oo
+o`040000003oool0oooo00000080oooo00<000000?ooo`3oool0I03oool300000080oooo00<00000
+0?ooo`3oool0S@3oool001D0oooo00<000000?ooo`3oool01P3oool00`000000oooo0?ooo`030000
+06L0oooo00<000000?ooo`0000000P00002@0?ooo`005@3oool00`000000oooo0?ooo`060?ooo`04
+0000003oool0oooo000006P0oooo0P0000000`3oool000000?ooo`2A0?ooo`005@3oool00`000000
+oooo0?ooo`060?ooo`@00000JP3oool200000980oooo000E0?ooo`030000003oool0oooo00H0oooo
+00<000000?ooo`3oool0o`3oool001D0oooo0P0000060?ooo`800000o`3oool20?ooo`005@3oool0
+0`000000oooo0?ooo`3o0?ooo`T0oooo000E0?ooo`030000003oool0oooo0?l0oooo2@3oool001D0
+oooo00<000000?ooo`3oool0o`3oool90?ooo`005@3oool00`000000oooo0?ooo`3o0?ooo`T0oooo
+000E0?ooo`030000003oool0oooo0?l0oooo2@3oool001D0oooo00<000000?ooo`3oool0o`3oool9
+0?ooo`005@3oool00`000000oooo0?ooo`3o0?ooo`T0oooo000E0?ooo`030000003oool0oooo0?l0
+oooo2@3oool001D0oooo00<000000?ooo`3oool0c03oool4000003P0oooo000E0?ooo`030000003o
+ool0oooo0<d0oooo00@000000?ooo`3oool00000=`3oool000d0oooo100000040?ooo`030000003o
+ool0oooo0<d0oooo00@000000?ooo`3oool00000=`3oool000l0oooo00<000000?ooo`3oool00`3o
+ool00`000000oooo0?ooo`1S0?ooo`@00000IP3oool010000000oooo0?ooo`00000g0?ooo`003`3o
+ool00`000000oooo0?ooo`030?ooo`800000I@3oool010000000oooo0?ooo`00001U0?ooo`<00000
+>03oool000l0oooo00<000000?ooo`3oool0JP3oool010000000oooo0?ooo`00001U0?ooo`030000
+003oool0oooo03P0oooo000?0?ooo`030000003oool0oooo06X0oooo00@000000?ooo`3oool00000
+I03oool2000003X0oooo000=0?ooo`<00000K03oool300000:40oooo000?0?ooo`030000003oool0
+oooo06X0oooo00<000000?ooo`3oool0X@3oool007/0oooo0P00002S0?ooo`00o`3ooolQ0?ooo`00
+o`3ooolQ0?ooo`00o`3ooolQ0?ooo`00\
+\>"],
+  ImageRangeCache->{{{0, 287}, {287, 0}} -> {-0.0810208, -0.061037, \
+0.00380643, 0.00380643}}]
+}, Closed]],
+
+Cell[BoxData[
+    \(I\ changed\ the\ boundaries\ of\ the\ groups\ to\ make\ convergence\ \
+more\ interesting . \ 
+        The\ original\ limits\ often\ gave\ convergence\ within\ 10\ \
+\(\(iterations\)\(.\)\)\)], "Output"],
+
+Cell[CellGroupData[{
+
+Cell["2. Define threshold function", "Subsubsection",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData[{  "Define a function that is -1 for x <0 and +1 for x>= 0. Here we use the \conditional ",  StyleBox["If[]",    FontWeight->"Bold"],  "."}], "Text",  Evaluatable->False,  AspectRatioFixed->True],
+
+Cell["threshold[x_] := If[x<0,-1,1];", "Input",
+  AspectRatioFixed->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[TextData["3. Perceptron learning algorithm"], "Subsubsection",  Evaluatable->False,  AspectRatioFixed->True,  FontColor->RGBColor[1, 0, 0]],
+
+Cell["\<\
+Write a program that will run through your training pairs. Start \
+off with a weight vector of: {-.3, -.05, 0.5}.  If a point is classified \
+correctly (e.g. as an \"a\" type), do nothing to the weights. If the point is \
+actually an \"a\" type, but is incorrectly classified, increment the weights \
+in some proportion (e.g. c = 0.1) of the point vector. If a \"b\" point is \
+incorrectly classified, decrement the weight vector in proportion (e.g. c = - \
+0.1) to the values of coordinates of the training point.
+ Make a list to record the changes in the weight vector. Note that the three \
+components of the weight vector determine the intercept and the slope of the \
+line separating the \"a\" and \"b\" points.
+Note that you may have to iterate through the list of training pairs more \
+than once to obtain convergence--remember convergence is guaranteed for \
+linearly separable data sets.\
+\>", "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True]
+}, Open  ]],
+
+Cell[BoxData[{
+    \(w1 = \(-0.3\); w2 = \(- .05\); theta = \(-0.5\); \ 
+    c = 0.1;\), "\[IndentingNewLine]", 
+    \(\(w = \(origW = {w1, w2, \(-theta\)}\);\)\)}], "Input"],
+
+Cell[BoxData[{
+    \(\(iterW = {};\)\), "\[IndentingNewLine]", 
+    \(\(For[i = 1, i <= 50, i = i + 1, 
+        Which[threshold[w . Append[\(data[\([i]\)]\)[\([{1, 2}]\)], 1]] < 0 && 
+            data[\([i, 3]\)] \[Equal] "\<a\>", 
+          w = w + c\ Append[\(data[\([i]\)]\)[\([{1, 2}]\)], 1], 
+          threshold[w . Append[\(data[\([i]\)]\)[\([{1, 2}]\)], 1]] > 0 && 
+            data[\([i, 3]\)] \[Equal] "\<b\>"\ , 
+          w = w - c\ Append[\(data[\([i]\)]\)[\([{1, 2}]\)], 1]]; 
+        iterW = Append[iterW, w]];\)\)}], "Input"],
+
+Cell[CellGroupData[{
+
+Cell["4. Table of classifications", "Subsubsection",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData["Make a list {{c1,out1},c2,out2},,,,} where ci is the correct classification, \and outi is the output of your threshold logic unit with weight w or w0."],   "Text",  Evaluatable->False,  AspectRatioFixed->True],
+
+Cell[BoxData[{
+    \(\(tblBefore = 
+        Table[{data[\([i, 3]\)], 
+            threshold[
+              Append[\(data[\([i]\)]\)[\([{1, 2}]\)], 1] . origW]}, {i, 1, 
+            Length[data]}];\)\), "\[IndentingNewLine]", 
+    \(\(tblAfter = 
+        Table[{data[\([i, 3]\)], 
+            threshold[
+              Append[\(data[\([i]\)]\)[\([{1, 2}]\)], 1] . 
+                iterW[\([49]\)]]}, {i, 1, Length[data]}];\)\)}], "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+5. Proportion of correction classifications - before and \
+after\
+\>", "Subsubsection",
+  Evaluatable->False,
+  AspectRatioFixed->True,
+  FontColor->RGBColor[1, 0, 0]],
+
+Cell[TextData["Write a procedure (or function) that will give the proportion of correct \classifications before and after the weight vector has been trained."], "Text",\  Evaluatable->False,  AspectRatioFixed->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(For[correct = 0; i = 1, i <= Length[tblBefore], i = i + 1, 
+        Which[tblBefore[\([i, 1]\)] \[Equal] "\<a\>" && 
+            tblBefore[\([i, 2]\)] \[Equal] 1, correct = correct + 1, 
+          tblBefore[\([i, 1]\)] \[Equal] "\<b\>" && 
+            tblBefore[\([i, 2]\)] \[Equal] \(-1\), 
+          correct = correct + 1]];\)\), "\[IndentingNewLine]", 
+    \(correct = 100*correct/50\)}], "Input"],
+
+Cell[BoxData[
+    \(30\)], "Output"]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(For[correct = 0; i = 1, i <= Length[tblAfter], i = i + 1, 
+        Which[tblAfter[\([i, 1]\)] \[Equal] "\<a\>" && 
+            tblAfter[\([i, 2]\)] \[Equal] 1, correct = correct + 1, 
+          tblAfter[\([i, 1]\)] \[Equal] "\<b\>" && 
+            tblAfter[\([i, 2]\)] \[Equal] \(-1\), 
+          correct = correct + 1]];\)\), "\[IndentingNewLine]", 
+    \(correct = 100*correct/50\)}], "Input"],
+
+Cell[BoxData[
+    \(100\)], "Output"]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell[TextData[StyleBox["6. Plots of discriminant line",
+  FontColor->RGBColor[1, 0, 0]]], "Subsubsection",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[CellGroupData[{
+
+Cell[TextData[{
+  "Make a series of plots showing how the weights evolve through the learning \
+phase. Show the input data to be classified on the same plot. Don't show all \
+of the iterations (there would be too many and you might run out of space), \
+but show a subset of about 10. By grouping your plots, you can use animate \
+selected graphics (in the ",
+  StyleBox["Graph",
+    FontWeight->"Bold"],
+  " menu) to animate them and watch your discriminant line move around until \
+it has finally settled into a region that works.\n ",
+  StyleBox[" w={a,b,c};\n Plot[(-c/b) x - (a/b), \
+{x,0,1},PlotRange->{{0,1},{0,1}},\n\tAspectRatio->1];",
+    FontFamily->"Courier",
+    FontWeight->"Bold"]
+}], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell["Here is an example:", "Text"],
+
+Cell["\<\
+For[i=1,i<=Length[iterW],i=i+5,
+\tg2=Plot[(-iterW[[i,1]] x - \
+iterW[[i,3]])/iterW[[i,2]],{x,0,1},DisplayFunction\[Rule]Identity,PlotRange->{\
+{0,1},{0,1}},AspectRatio->1];
+Show[{g1,g2},DisplayFunction\[Rule]$DisplayFunction]]\
+\>", "Input",
+  AspectRatioFixed->True]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+},
+FrontEndVersion->"4.0 for X",
+ScreenRectangle->{{0, 1280}, {0, 1024}},
+WindowToolbars->{},
+CellGrouping->Manual,
+WindowSize->{956, 721},
+WindowMargins->{{Automatic, 142}, {Automatic, 40}},
+PrivateNotebookOptions->{"ColorPalette"->{RGBColor, 128}},
+ShowCellLabel->True,
+ShowCellTags->False,
+RenderingOptions->{"ObjectDithering"->True,
+"RasterDithering"->False},
+CharacterEncoding->"MacintoshAutomaticEncoding",
+StyleDefinitions -> "Classroom.nb"
+]
+
+
+(***********************************************************************
+Cached data follows.  If you edit this Notebook file directly, not using
+Mathematica, you must remove the line containing CacheID at the top of 
+the file.  The cache data will then be recreated when you save this file 
+from within Mathematica.
+***********************************************************************)
+
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+
+(*NotebookFileOutline
+Notebook[{
+Cell[1717, 49, 141, 8, 141, "Subtitle",
+  Evaluatable->False],
+Cell[1861, 59, 54, 3, 66, "Subtitle"],
+
+Cell[CellGroupData[{
+Cell[1940, 66, 149, 3, 57, "Section",
+  Evaluatable->False],
+Cell[2092, 71, 1271, 35, 130, "Text",
+  Evaluatable->False],
+Cell[3366, 108, 102, 4, 62, "Input"]
+}, Open  ]],
+Cell[3483, 115, 307, 6, 79, "Input"],
+Cell[3793, 123, 772, 16, 111, "Input"],
+
+Cell[CellGroupData[{
+Cell[4590, 143, 131, 3, 57, "Section",
+  Evaluatable->False],
+Cell[4724, 148, 617, 13, 64, "Text",
+  Evaluatable->False],
+Cell[5344, 163, 362, 12, 28, "Text",
+  Evaluatable->False],
+Cell[5709, 177, 132, 3, 36, "Subsubsection",
+  Evaluatable->False],
+
+Cell[CellGroupData[{
+Cell[5866, 184, 284, 5, 58, "Text",
+  Evaluatable->False],
+Cell[6153, 191, 253, 8, 122, "Input"]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[6443, 204, 531, 11, 91, "Input"],
+Cell[6977, 217, 84032, 2968, 296, 62621, 2699, "GraphicsData", "PostScript", \
+"Graphics"]
+}, Closed]],
+Cell[91024, 3188, 222, 4, 59, "Output"],
+
+Cell[CellGroupData[{
+Cell[91271, 3196, 101, 2, 36, "Subsubsection",
+  Evaluatable->False],
+Cell[91375, 3200, 217, 8, 28, "Text",
+  Evaluatable->False],
+Cell[91595, 3210, 73, 1, 47, "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[91705, 3216, 147, 3, 36, "Subsubsection",
+  Evaluatable->False],
+Cell[91855, 3221, 968, 16, 142, "Text",
+  Evaluatable->False]
+}, Open  ]],
+Cell[92838, 3240, 174, 3, 63, "Input"],
+Cell[93015, 3245, 541, 9, 95, "Input"],
+
+Cell[CellGroupData[{
+Cell[93581, 3258, 100, 2, 36, "Subsubsection",
+  Evaluatable->False],
+Cell[93684, 3262, 229, 5, 28, "Text",
+  Evaluatable->False],
+Cell[93916, 3269, 436, 10, 63, "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[94389, 3284, 177, 6, 36, "Subsubsection",
+  Evaluatable->False],
+Cell[94569, 3292, 220, 5, 28, "Text",
+  Evaluatable->False]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[94826, 3302, 423, 7, 95, "Input"],
+Cell[95252, 3311, 36, 1, 47, "Output"]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[95325, 3317, 418, 7, 91, "Input"],
+Cell[95746, 3326, 37, 1, 47, "Output"]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[95820, 3332, 154, 3, 28, "Subsubsection",
+  Evaluatable->False],
+
+Cell[CellGroupData[{
+Cell[95999, 3339, 754, 16, 152, "Text",
+  Evaluatable->False],
+Cell[96756, 3357, 35, 0, 28, "Text"],
+Cell[96794, 3359, 277, 7, 92, "Input"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
+
+
+
+(***********************************************************************
+End of Mathematica Notebook file.
+***********************************************************************)
+

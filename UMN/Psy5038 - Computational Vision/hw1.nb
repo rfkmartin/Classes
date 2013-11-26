@@ -1,0 +1,474 @@
+(************** Content-type: application/mathematica **************
+
+                    Mathematica-Compatible Notebook
+
+This notebook can be used with any Mathematica-compatible
+application, such as Mathematica, MathReader or Publicon. The data
+for the notebook starts with the line containing stars above.
+
+To get the notebook into a Mathematica-compatible application, do
+one of the following:
+
+* Save the data starting with the line of stars above into a file
+  with a name ending in .nb, then open the file inside the
+  application;
+
+* Copy the data starting with the line of stars above to the
+  clipboard, then use the Paste menu command inside the application.
+
+Data for notebooks contains only printable 7-bit ASCII and can be
+sent directly in email or through ftp in text mode.  Newlines can be
+CR, LF or CRLF (Unix, Macintosh or MS-DOS style).
+
+NOTE: If you modify the data for this notebook not in a Mathematica-
+compatible application, you must delete the line below containing
+the word CacheID, otherwise Mathematica-compatible applications may
+try to use invalid cache data.
+
+For more information on notebooks and Mathematica-compatible 
+applications, contact Wolfram Research:
+  web: http://www.wolfram.com
+  email: info@wolfram.com
+  phone: +1-217-398-0700 (U.S.)
+
+Notebook reader applications are available free of charge from 
+Wolfram Research.
+*******************************************************************)
+
+(*CacheID: 232*)
+
+
+(*NotebookFileLineBreakTest
+NotebookFileLineBreakTest*)
+(*NotebookOptionsPosition[     11643,        371]*)
+(*NotebookOutlinePosition[     12586,        402]*)
+(*  CellTagsIndexPosition[     12542,        398]*)
+(*WindowFrame->Normal*)
+
+
+
+Notebook[{
+Cell["\<\
+Introduction to Neural Networks
+U. Minn. Psy 5038
+
+Daniel Kersten
+
+Problem Set 1\
+\>", "Subtitle",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell["", "Subsection"],
+
+Cell["\<\
+Robert Martin
+ID# 1505151\
+\>", "Subtitle"],
+
+Cell["Problem Set 1", "Section",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[CellGroupData[{
+
+Cell["Exercise 1", "Subsection",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData[{
+  StyleBox["1A.",
+    FontWeight->"Bold"],
+  " Let  ",
+  StyleBox["w",
+    FontWeight->"Bold"],
+  " be a weight vector representing a template pattern. Let {",
+  StyleBox["x",
+    FontWeight->"Bold"],
+  "} be a collection of pattern vectors all of unit length.  Show \
+theoretically that the cross-correlator gives maximum response to the pattern \
+which matches the form of the template pattern. Recall that the response is \
+determined by the dot-product of the input vector with the weight vector."
+}], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData[{
+  StyleBox["1B.",
+    FontWeight->"Bold"],
+  " Now write a ",
+  StyleBox["Mathematica",
+    FontSlant->"Italic"],
+  "  program to demonstrate this property of cross-correlators. Use the ",
+  StyleBox["Table",
+    FontWeight->"Bold"],
+  " function to  fill a 32x32 matrix ",
+  StyleBox["R",
+    FontWeight->"Bold"],
+  " with random numbers. Use the built-in function ",
+  StyleBox["Random[].  ",
+    FontWeight->"Bold"],
+  "Then define a function",
+  StyleBox[" normalize[x] ",
+    FontWeight->"Bold"],
+  "that takes as input a vector",
+  StyleBox[" x",
+    FontWeight->"Bold"],
+  ", and returns a normalized version of",
+  StyleBox[" x",
+    FontWeight->"Bold"],
+  ". Use the ",
+  StyleBox["Table",
+    FontWeight->"Bold"],
+  " function again to turn ",
+  StyleBox["R",
+    FontWeight->"Bold"],
+  " into a matrix ",
+  StyleBox["R2",
+    FontWeight->"Bold"],
+  " whose rows are normalized to unit length. Calculate the matrix product of \
+",
+  StyleBox["R2",
+    FontWeight->"Bold"],
+  " with the 8th row of ",
+  StyleBox["R2",
+    FontWeight->"Bold"],
+  ". Use ",
+  StyleBox["ListPlot",
+    FontWeight->"Bold"],
+  " to show that the maximum of the product occurs at element 8.  Make \
+several more plots using other rows of ",
+  StyleBox["R2",
+    FontWeight->"Bold"],
+  ", and show the maximum always occurs at the row that matches the input \
+vector."
+}], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[BoxData[{
+    \(\(R := 
+        Table[Random[], {i, 1, 32}, {j, 1, 32}];\)\), "\[IndentingNewLine]", 
+    \(\(normalize[x_] := x/Sqrt[Dot[x, x]];\)\), "\[IndentingNewLine]", 
+    \(\(R2 = 
+        Table[normalize[\(R[\([{x}]\)]\)[\([1]\)]], {x, 1, 
+            32}];\)\), "\[IndentingNewLine]", 
+    \(ListPlot[Dot[R2, \(R2[\([{8}]\)]\)[\([1]\)]], 
+      PlotJoined \[Rule] True]\), "\[IndentingNewLine]", 
+    \(ListPlot[Dot[R2, \(R2[\([{2}]\)]\)[\([1]\)]], 
+      PlotJoined \[Rule] True]\), "\[IndentingNewLine]", 
+    \(ListPlot[Dot[R2, \(R2[\([{19}]\)]\)[\([1]\)]], 
+      PlotJoined \[Rule] True]\), "\[IndentingNewLine]", 
+    \(ListPlot[Dot[R2, \(R2[\([{31}]\)]\)[\([1]\)]], 
+      PlotJoined \[Rule] True]\)}], "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[TextData["Exercise 2"], "Subsection",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData[{
+  "Use a set of rules to define a semi-linear  \"squashing\" function,",
+  StyleBox[" limit[x]",
+    FontWeight->"Bold"],
+  ", which is:  \n\t\t\t\t                        -1 for x < -1; \n\t\t\t\t   \
+                     x for 1 >=x >= -1; \n\t\t\t\t                        1 \
+for x> 1. \nPlot ",
+  StyleBox["limit[x]",
+    FontWeight->"Bold"],
+  " from x = -2 to 2."
+}], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[BoxData[{
+    \(\(mylimit[x_] := \ \(-1\) /; x < \(-1\);\)\), "\[IndentingNewLine]", 
+    \(\(mylimit[x_] := 
+        x /; x \[GreaterEqual] \(-1\)\  && \ 
+            x \[LessEqual] 1;\)\), "\[IndentingNewLine]", 
+    \(\(mylimit[x_] := 1 /; x > 1;\)\), "\[IndentingNewLine]", 
+    \(Plot[mylimit[x], {x, \(-2\), 2}]\)}], "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[TextData["Exercise 3"], "Subsection",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData[{
+  "Using ",
+  StyleBox["Mathematica",
+    FontSlant->"Italic"],
+  "'s ability to find derivatives of functions, define a function  ",
+  StyleBox["dsquash[]",
+    FontWeight->"Bold"],
+  " to be equal to the derivative of the logistic function:"
+}], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell["squash[r_] := 1/(1 + Exp[-r]);", "Input",
+  AspectRatioFixed->True],
+
+Cell["Plot dsquash from r = -2 to 2. ", "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData[{
+  StyleBox["Mathematica",
+    FontSlant->"Italic"],
+  " Hint: You can't just define a function dsquash[x_]:=D[squash, etc..]. But \
+there are (at least three ways of doing it). \n1)  You can use the function \
+Evaluate[ ] to do the define dsquash all in one line.\n2) Alternatively, you \
+may wish to use the ",
+  StyleBox["Mathematica",
+    FontSlant->"Italic"],
+  " rule for replacing a variable with a value in an expression. This would \
+also enable you to define the derivative function all on one line. \n3) \
+Otherwise, a brute-force method is to compute the derivative, copy it, and \
+then turn that copied cell into an ",
+  StyleBox["input cell ",
+    FontWeight->"Bold"],
+  "type. (Use ",
+  StyleBox["Cell menu>Convert To",
+    FontWeight->"Bold"],
+  "). \nLater on, when we study back-propagation networks we will  need to \
+use the derivative of the non-linear squashing function in our derviation of \
+a learning rule for neural networks. For this reason, it is useful to have a \
+squashing function that has a closed form solution for the derivative."
+}], "Text"],
+
+Cell[BoxData[{
+    \(\(dsquash[x_] := 
+        Evaluate[D[squash[x], x]];\)\), "\[IndentingNewLine]", 
+    \(Plot[dsquash[x], {x, \(-2\), 2}]\)}], "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Exercise 4", "Subsection",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell["\<\
+There are neurons in the primary visual cortex of mammals called \
+\"simple cells\". One model for these cells is a linear cross-corelator \
+followed by a thresholding non-linearity (e.g. the half-wave rectification of \
+a diode).  The receptive field weights of this cross-correlator typically \
+show a \"center-surround\" organization. In one dimension, a much reduced \
+model weight vector could look like this:\
+\>", "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell["w = {-2,-1,6,-1,-2};", "Input",
+  AspectRatioFixed->True],
+
+Cell[TextData[{
+  "Define a threshold function",
+  StyleBox[" thresh[s]",
+    FontWeight->"Bold"],
+  " that is zero for ",
+  StyleBox["s",
+    FontWeight->"Bold"],
+  " less than zero, and equal to ",
+  StyleBox["s",
+    FontWeight->"Bold"],
+  " for values of ",
+  StyleBox["s",
+    FontWeight->"Bold"],
+  " greater than or equal to 0. \n\nUse the above weight vector ",
+  StyleBox["w",
+    FontWeight->"Bold"],
+  ", and your",
+  StyleBox[" thresh[]",
+    FontWeight->"Bold"],
+  " function to model the response of a simple cell. What is the response of \
+your cell to an input ",
+  StyleBox["x",
+    FontWeight->"Bold"],
+  ":\na) ",
+  StyleBox["x = {-1,-.5,3,-.5,-1}",
+    FontWeight->"Bold"],
+  "\nor\nb) ",
+  StyleBox["x = {2, 1, 0, 1, 2} ?",
+    FontWeight->"Bold"]
+}], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[BoxData[{
+    \(\(thresh[x_] := 0 /; x < 0;\)\), "\[IndentingNewLine]", 
+    \(\(thresh[x_] := x /; x \[GreaterEqual] 0;\)\)}], "Input"],
+
+Cell[BoxData[{
+    \(\(x1 = {\(-1\), \(- .5\), 
+          3, \(- .5\), \(-1\)};\)\), "\[IndentingNewLine]", 
+    \(\(x2 = {2, 1, 0, 2, 1};\)\), "\[IndentingNewLine]", 
+    \(thresh[Dot[w, x1]]\), "\[IndentingNewLine]", 
+    \(thresh[Dot[w, x2]]\)}], "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Exercise 5 (Requires material in Lecture notes 4 or 5)", "Subsection",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData["Express the vector:"], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell["h = {1,2,3,4,5,6,7,8};", "Input",
+  AspectRatioFixed->True],
+
+Cell[TextData[{
+  "as a linear sum of normalized Walsh vectors (feel free to copy and paste \
+code from Lecture 4 or 5). Plot the \"spectrum\" of ",
+  StyleBox["h",
+    FontWeight->"Bold"],
+  ". In particular use ",
+  StyleBox["ListPlot",
+    FontWeight->"Bold"],
+  " to show the spectrum, which consists of the eight values of the \
+projections of",
+  StyleBox[" h",
+    FontWeight->"Bold"],
+  " onto the 8 Walsh functions. Verify your answer by reconstructing ",
+  StyleBox["h",
+    FontWeight->"Bold"],
+  " from the projections."
+}], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True]
+}, Open  ]],
+
+Cell[BoxData[{
+    \(\(v1 = {1, 1, 1, 1, 1, 1, 1, 1};\)\), "\n", 
+    \(\(v2 = {1, \(-1\), \(-1\), 1, 1, \(-1\), \(-1\), 1};\)\), "\n", 
+    \(\(v3 = {1, 1, \(-1\), \(-1\), \(-1\), \(-1\), 1, 1};\)\), "\n", 
+    \(\(v4 = {1, \(-1\), 1, \(-1\), \(-1\), 1, \(-1\), 1};\)\), "\n", 
+    \(\(v5 = {1, 1, 1, 1, \(-1\), \(-1\), \(-1\), \(-1\)};\)\), "\n", 
+    \(\(v6 = {1, \(-1\), \(-1\), 1, \(-1\), 1, 1, \(-1\)};\)\), "\n", 
+    \(\(v7 = {1, 1, \(-1\), \(-1\), 1, 1, \(-1\), \(-1\)};\)\), "\n", 
+    \(\(v8 = {1, \(-1\), 1, \(-1\), 1, \(-1\), 1, \(-1\)};\)\)}], "Input"],
+
+Cell[BoxData[{
+    \(\(hspectrum = {h . \ v1, h . \ v2, \ h . \ v3, \ h . \ v4, \ 
+          h . \ v5, \ h . \ v6, \ h . \ v7, \ 
+          h . \ v8};\)\), "\[IndentingNewLine]", 
+    \(\(ListPlot[hspectrum, PlotJoined \[Rule] \ True];\)\)}], "Input"],
+
+Cell[BoxData[
+    \(hrecovered = \((hspectrum[\([1]\)] v1 + hspectrum[\([2]\)] v2 + 
+            hspectrum[\([3]\)] v3 + hspectrum[\([4]\)] v4 + 
+            hspectrum[\([5]\)] v5 + \ hspectrum[\([6]\)] v6 + 
+            hspectrum[\([7]\)] v7 + hspectrum[\([8]\)] v8)\)/
+        Dot[v1, v1]\)], "Input"]
+},
+FrontEndVersion->"4.1 for Microsoft Windows",
+ScreenRectangle->{{0, 1024}, {0, 695}},
+WindowToolbars->{},
+CellGrouping->Manual,
+WindowSize->{1016, 668},
+WindowMargins->{{0, Automatic}, {Automatic, 0}},
+PrivateNotebookOptions->{"ColorPalette"->{RGBColor, 128}},
+ShowCellLabel->True,
+ShowCellTags->False,
+RenderingOptions->{"ObjectDithering"->True,
+"RasterDithering"->False},
+CharacterEncoding->"MacintoshAutomaticEncoding",
+StyleDefinitions -> "Classroom.nb"
+]
+
+(*******************************************************************
+Cached data follows.  If you edit this Notebook file directly, not
+using Mathematica, you must remove the line containing CacheID at
+the top of  the file.  The cache data will then be recreated when
+you save this file from within Mathematica.
+*******************************************************************)
+
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+
+(*NotebookFileOutline
+Notebook[{
+Cell[1705, 50, 156, 9, 166, "Subtitle",
+  Evaluatable->False],
+Cell[1864, 61, 22, 0, 52, "Subsection"],
+Cell[1889, 63, 53, 3, 66, "Subtitle"],
+Cell[1945, 68, 80, 2, 62, "Section",
+  Evaluatable->False],
+
+Cell[CellGroupData[{
+Cell[2050, 74, 80, 2, 52, "Subsection",
+  Evaluatable->False],
+Cell[2133, 78, 577, 15, 48, "Text",
+  Evaluatable->False],
+Cell[2713, 95, 1429, 51, 86, "Text",
+  Evaluatable->False],
+Cell[4145, 148, 733, 14, 170, "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[4915, 167, 90, 2, 52, "Subsection",
+  Evaluatable->False],
+Cell[5008, 171, 446, 12, 153, "Text",
+  Evaluatable->False],
+Cell[5457, 185, 336, 6, 110, "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[5830, 196, 90, 2, 52, "Subsection",
+  Evaluatable->False],
+Cell[5923, 200, 319, 10, 29, "Text",
+  Evaluatable->False],
+Cell[6245, 212, 73, 1, 50, "Input"],
+Cell[6321, 215, 95, 2, 29, "Text",
+  Evaluatable->False],
+Cell[6419, 219, 1093, 22, 172, "Text"],
+Cell[7515, 243, 155, 3, 70, "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[7707, 251, 80, 2, 52, "Subsection",
+  Evaluatable->False],
+Cell[7790, 255, 486, 9, 48, "Text",
+  Evaluatable->False],
+Cell[8279, 266, 63, 1, 50, "Input"],
+Cell[8345, 269, 828, 31, 184, "Text",
+  Evaluatable->False],
+Cell[9176, 302, 141, 2, 70, "Input"],
+Cell[9320, 306, 258, 5, 110, "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[9615, 316, 124, 2, 52, "Subsection",
+  Evaluatable->False],
+Cell[9742, 320, 93, 2, 29, "Text",
+  Evaluatable->False],
+Cell[9838, 324, 65, 1, 50, "Input"],
+Cell[9906, 327, 592, 18, 48, "Text",
+  Evaluatable->False]
+}, Open  ]],
+Cell[10513, 348, 566, 8, 190, "Input"],
+Cell[11082, 358, 251, 4, 70, "Input"],
+Cell[11336, 364, 303, 5, 90, "Input"]
+}
+]
+*)
+
+
+
+(*******************************************************************
+End of Mathematica Notebook file.
+*******************************************************************)
+

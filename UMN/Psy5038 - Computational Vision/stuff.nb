@@ -1,0 +1,226 @@
+(***********************************************************************
+
+                    Mathematica-Compatible Notebook
+
+This notebook can be used on any computer system with Mathematica 4.0,
+MathReader 4.0, or any compatible application. The data for the notebook 
+starts with the line containing stars above.
+
+To get the notebook into a Mathematica-compatible application, do one of 
+the following:
+
+* Save the data starting with the line of stars above into a file
+  with a name ending in .nb, then open the file inside the application;
+
+* Copy the data starting with the line of stars above to the
+  clipboard, then use the Paste menu command inside the application.
+
+Data for notebooks contains only printable 7-bit ASCII and can be
+sent directly in email or through ftp in text mode.  Newlines can be
+CR, LF or CRLF (Unix, Macintosh or MS-DOS style).
+
+NOTE: If you modify the data for this notebook not in a Mathematica-
+compatible application, you must delete the line below containing the 
+word CacheID, otherwise Mathematica-compatible applications may try to 
+use invalid cache data.
+
+For more information on notebooks and Mathematica-compatible 
+applications, contact Wolfram Research:
+  web: http://www.wolfram.com
+  email: info@wolfram.com
+  phone: +1-217-398-0700 (U.S.)
+
+Notebook reader applications are available free of charge from 
+Wolfram Research.
+***********************************************************************)
+
+(*CacheID: 232*)
+
+
+(*NotebookFileLineBreakTest
+NotebookFileLineBreakTest*)
+(*NotebookOptionsPosition[      8680,        179]*)
+(*NotebookOutlinePosition[      9343,        203]*)
+(*  CellTagsIndexPosition[      9299,        199]*)
+(*WindowFrame->Normal*)
+
+
+
+Notebook[{
+Cell[BoxData[
+    \(\(yourArray[rx_, ry_] := 
+        Table[Random[Integer, {0, 255}], {x, 0, rx - 1}, {y, 0, 
+            ry - 1}];\)\)], "Input"],
+
+Cell[BoxData[{
+    \(\(cells = 
+        yourArray[144, 144];\)\[IndentingNewLine] (*\(For[i = 1, 
+          i \[LessEqual] 144, \(i++\), 
+          cells[\([i]\)] = 
+            normalize[
+              cells[\([i]\)]]];\)*) \[IndentingNewLine] (*\(ListDensityPlot[
+          cells];\)*) \), "\[IndentingNewLine]", 
+    \(\(Astar = c;\)\), "\[IndentingNewLine]", 
+    \(\(For[ix = 1, ix < 16, \(ix++\), rearrange[Astar, 64]; 
+        ListDensityPlot[Astar]];\)\), "\[IndentingNewLine]", 
+    \(\(ListDensityPlot[Astar];\)\[IndentingNewLine]\)}], "Input"],
+
+Cell[BoxData[
+    \(rearrange[A_, len_] := 
+      For[rootLen = Sqrt[len]; 
+        Astar = Table[0, {x, 0, len - 1}, {y, 0, len - 1}]; l = 1; i = 1, 
+        i <= len, \(i++\); 
+        l = 1, \[IndentingNewLine]For[j = 1, j \[LessEqual] rootLen, \(j++\), 
+          For[k = 1, k \[LessEqual] rootLen, \(k++\); \(l++\), 
+            temp = \(A[\([i]\)]\)[\([l]\)]; 
+            temp2 = Astar[\([j + rootLen \((Ceiling[i/rootLen] - 1)\)]\)]; 
+            temp2[\([k + rootLen*Mod[i + 1, rootLen]]\)] = temp; 
+            Astar[\([j + rootLen \((Ceiling[i/rootLen] - 1)\)]\)] = 
+              temp2]]]\)], "Input"],
+
+Cell[BoxData[{
+    \(\(c = Table[2\ x, {x, 0, 64}, {y, 0, 64}];\)\), "\[IndentingNewLine]", 
+    \(\(ListDensityPlot[c];\)\), "\[IndentingNewLine]", 
+    \(\(rearrange[c, 64];\)\), "\[IndentingNewLine]", 
+    \(\(ListDensityPlot[Astar];\)\)}], "Input"],
+
+Cell[BoxData[
+    \(\(normalize[x_] := N[x/Sqrt[x . x]];\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(SprimeAbs[a_, mu_, sigma_] := 
+        Map[f, Transpose[
+            Transpose[
+                Transpose[
+                  Transpose[a] - {Mean[a[\([1]\)]], Mean[a[\([2]\)]], 
+                      Mean[a[\([3]\)]], 
+                      Mean[a[\([4]\)]]}]]/{StandardDeviation[a[\([1]\)]], 
+                StandardDeviation[a[\([2]\)]], StandardDeviation[a[\([3]\)]], 
+                StandardDeviation[a[\([4]\)]]}], {2}];\)\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(N[SprimeAbs[
+        astar, {Mean[astar[\([1]\)]], Mean[astar[\([2]\)]], 
+          Mean[astar[\([3]\)]], 
+          Mean[astar[\([4]\)]]}, {StandardDeviation[astar[\([1]\)]], 
+          StandardDeviation[astar[\([2]\)]], 
+          StandardDeviation[astar[\([3]\)]], 
+          StandardDeviation[astar[\([4]\)]]}]]\)], "Input"],
+
+Cell[BoxData[
+    \({{1.`[\(\(\(0.18257418583505536`\)\(\[InvisibleSpace]\)\) - 1.`\ \
+Mean[{0.18257418583505536`, 0.3651483716701107`, 0.5477225575051661`, \
+0.7302967433402214`}]\)\/StandardDeviation[{0.18257418583505536`, \
+0.3651483716701107`, 0.5477225575051661`, 0.7302967433402214`}]], 
+        1.`[\(\(\(0.3651483716701107`\)\(\[InvisibleSpace]\)\) - 1.`\ \
+Mean[{0.37904902178945166`, 0.454858826147342`, 0.5306686305052324`, \
+0.6064784348631227`}]\)\/StandardDeviation[{0.37904902178945166`, \
+0.454858826147342`, 0.5306686305052324`, 0.6064784348631227`}]], 
+        1.`[\(\(\(0.5477225575051661`\)\(\[InvisibleSpace]\)\) - 1.`\ \
+Mean[{0.4261623514293405`, 0.4735137238103784`, 0.5208650961914162`, \
+0.568216468572454`}]\)\/StandardDeviation[{0.4261623514293405`, \
+0.4735137238103784`, 0.5208650961914162`, 0.568216468572454`}]], 
+        1.`[\(\(\(0.7302967433402214`\)\(\[InvisibleSpace]\)\) - 1.`\ \
+Mean[{0.4469492067121438`, 0.48132991492077026`, 0.5157106231293966`, \
+0.5500913313380231`}]\)\/StandardDeviation[{0.4469492067121438`, \
+0.48132991492077026`, 0.5157106231293966`, 0.5500913313380231`}]]}, {1.`[\(\(\
+\(0.37904902178945166`\)\(\[InvisibleSpace]\)\) - 1.`\ \
+Mean[{0.18257418583505536`, 0.3651483716701107`, 0.5477225575051661`, \
+0.7302967433402214`}]\)\/StandardDeviation[{0.18257418583505536`, \
+0.3651483716701107`, 0.5477225575051661`, 0.7302967433402214`}]], 
+        1.`[\(\(\(0.454858826147342`\)\(\[InvisibleSpace]\)\) - 1.`\ \
+Mean[{0.37904902178945166`, 0.454858826147342`, 0.5306686305052324`, \
+0.6064784348631227`}]\)\/StandardDeviation[{0.37904902178945166`, \
+0.454858826147342`, 0.5306686305052324`, 0.6064784348631227`}]], 
+        1.`[\(\(\(0.5306686305052324`\)\(\[InvisibleSpace]\)\) - 1.`\ \
+Mean[{0.4261623514293405`, 0.4735137238103784`, 0.5208650961914162`, \
+0.568216468572454`}]\)\/StandardDeviation[{0.4261623514293405`, \
+0.4735137238103784`, 0.5208650961914162`, 0.568216468572454`}]], 
+        1.`[\(\(\(0.6064784348631227`\)\(\[InvisibleSpace]\)\) - 1.`\ \
+Mean[{0.4469492067121438`, 0.48132991492077026`, 0.5157106231293966`, \
+0.5500913313380231`}]\)\/StandardDeviation[{0.4469492067121438`, \
+0.48132991492077026`, 0.5157106231293966`, 0.5500913313380231`}]]}, {1.`[\(\(\
+\(0.4261623514293405`\)\(\[InvisibleSpace]\)\) - 1.`\ \
+Mean[{0.18257418583505536`, 0.3651483716701107`, 0.5477225575051661`, \
+0.7302967433402214`}]\)\/StandardDeviation[{0.18257418583505536`, \
+0.3651483716701107`, 0.5477225575051661`, 0.7302967433402214`}]], 
+        1.`[\(\(\(0.4735137238103784`\)\(\[InvisibleSpace]\)\) - 1.`\ \
+Mean[{0.37904902178945166`, 0.454858826147342`, 0.5306686305052324`, \
+0.6064784348631227`}]\)\/StandardDeviation[{0.37904902178945166`, \
+0.454858826147342`, 0.5306686305052324`, 0.6064784348631227`}]], 
+        1.`[\(\(\(0.5208650961914162`\)\(\[InvisibleSpace]\)\) - 1.`\ \
+Mean[{0.4261623514293405`, 0.4735137238103784`, 0.5208650961914162`, \
+0.568216468572454`}]\)\/StandardDeviation[{0.4261623514293405`, \
+0.4735137238103784`, 0.5208650961914162`, 0.568216468572454`}]], 
+        1.`[\(\(\(0.568216468572454`\)\(\[InvisibleSpace]\)\) - 1.`\ \
+Mean[{0.4469492067121438`, 0.48132991492077026`, 0.5157106231293966`, \
+0.5500913313380231`}]\)\/StandardDeviation[{0.4469492067121438`, \
+0.48132991492077026`, 0.5157106231293966`, 0.5500913313380231`}]]}, {1.`[\(\(\
+\(0.4469492067121438`\)\(\[InvisibleSpace]\)\) - 1.`\ \
+Mean[{0.18257418583505536`, 0.3651483716701107`, 0.5477225575051661`, \
+0.7302967433402214`}]\)\/StandardDeviation[{0.18257418583505536`, \
+0.3651483716701107`, 0.5477225575051661`, 0.7302967433402214`}]], 
+        1.`[\(\(\(0.48132991492077026`\)\(\[InvisibleSpace]\)\) - 1.`\ \
+Mean[{0.37904902178945166`, 0.454858826147342`, 0.5306686305052324`, \
+0.6064784348631227`}]\)\/StandardDeviation[{0.37904902178945166`, \
+0.454858826147342`, 0.5306686305052324`, 0.6064784348631227`}]], 
+        1.`[\(\(\(0.5157106231293966`\)\(\[InvisibleSpace]\)\) - 1.`\ \
+Mean[{0.4261623514293405`, 0.4735137238103784`, 0.5208650961914162`, \
+0.568216468572454`}]\)\/StandardDeviation[{0.4261623514293405`, \
+0.4735137238103784`, 0.5208650961914162`, 0.568216468572454`}]], 
+        1.`[\(\(\(0.5500913313380231`\)\(\[InvisibleSpace]\)\) - 1.`\ \
+Mean[{0.4469492067121438`, 0.48132991492077026`, 0.5157106231293966`, \
+0.5500913313380231`}]\)\/StandardDeviation[{0.4469492067121438`, \
+0.48132991492077026`, 0.5157106231293966`, 0.5500913313380231`}]]}}\)], \
+"Output"]
+}, Open  ]]
+},
+FrontEndVersion->"4.0 for X",
+ScreenRectangle->{{0, 1280}, {0, 1024}},
+CellGrouping->Manual,
+WindowSize->{1109, 839},
+WindowMargins->{{Automatic, 53}, {Automatic, 35}}
+]
+
+
+(***********************************************************************
+Cached data follows.  If you edit this Notebook file directly, not using
+Mathematica, you must remove the line containing CacheID at the top of 
+the file.  The cache data will then be recreated when you save this file 
+from within Mathematica.
+***********************************************************************)
+
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+
+(*NotebookFileOutline
+Notebook[{
+Cell[1717, 49, 147, 3, 27, "Input"],
+Cell[1867, 54, 554, 11, 123, "Input"],
+Cell[2424, 67, 613, 11, 59, "Input"],
+Cell[3040, 80, 252, 4, 75, "Input"],
+Cell[3295, 86, 71, 1, 27, "Input"],
+Cell[3369, 89, 464, 9, 59, "Input"],
+
+Cell[CellGroupData[{
+Cell[3858, 102, 348, 7, 43, "Input"],
+Cell[4209, 111, 4455, 65, 319, "Output"]
+}, Open  ]]
+}
+]
+*)
+
+
+
+
+(***********************************************************************
+End of Mathematica Notebook file.
+***********************************************************************)
+

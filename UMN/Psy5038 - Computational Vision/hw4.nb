@@ -1,0 +1,1118 @@
+(***********************************************************************
+
+                    Mathematica-Compatible Notebook
+
+This notebook can be used on any computer system with Mathematica 4.0,
+MathReader 4.0, or any compatible application. The data for the notebook 
+starts with the line containing stars above.
+
+To get the notebook into a Mathematica-compatible application, do one of 
+the following:
+
+* Save the data starting with the line of stars above into a file
+  with a name ending in .nb, then open the file inside the application;
+
+* Copy the data starting with the line of stars above to the
+  clipboard, then use the Paste menu command inside the application.
+
+Data for notebooks contains only printable 7-bit ASCII and can be
+sent directly in email or through ftp in text mode.  Newlines can be
+CR, LF or CRLF (Unix, Macintosh or MS-DOS style).
+
+NOTE: If you modify the data for this notebook not in a Mathematica-
+compatible application, you must delete the line below containing the 
+word CacheID, otherwise Mathematica-compatible applications may try to 
+use invalid cache data.
+
+For more information on notebooks and Mathematica-compatible 
+applications, contact Wolfram Research:
+  web: http://www.wolfram.com
+  email: info@wolfram.com
+  phone: +1-217-398-0700 (U.S.)
+
+Notebook reader applications are available free of charge from 
+Wolfram Research.
+***********************************************************************)
+
+(*CacheID: 232*)
+
+
+(*NotebookFileLineBreakTest
+NotebookFileLineBreakTest*)
+(*NotebookOptionsPosition[     24371,        857]*)
+(*NotebookOutlinePosition[     25621,        897]*)
+(*  CellTagsIndexPosition[     25577,        893]*)
+(*WindowFrame->Normal*)
+
+
+
+Notebook[{
+Cell["\<\
+Introduction to Neural Networks
+U. Minn. Psy 5038
+
+Problem Set 4
+\
+\>", "Subtitle",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell["\<\
+Robert F.K. Martin
+1505151\
+\>", "Subtitle"],
+
+Cell[CellGroupData[{
+
+Cell["Exercise 1 - Regression and Widrow-Hoff learning", "Subsection",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell["\<\
+Make a function: rline[slope_,intercept_] to generate pairs of random numbers \
+{x,y} where x ranges between 0 and 10, and whose y coordinate is a straight \
+line with slope, slope_ and intercept, intercept_  but perturbed by additive \
+uniform random noise over the range -2 to 2.\
+\>", "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[BoxData[
+    \(\(Off[General::spell1];\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(rline[slope_, intercept_] := 
+        N[Table[{xrfk = Random[Real, {0, 10}], 
+              slope*xrfk + intercept + 
+                Random[Real, {\(-2\), 2}]}, {1}]];\)\)], "Input"],
+
+Cell["\<\
+Generate a data set from rline with 200 samples with slope 11 and intercept \
+0. \
+\>", "Text"],
+
+Cell[BoxData[{
+    \(\(dataset = 
+        Table[\(rline[11, 0]\)[\([1]\)], {200}];\)\), "\[IndentingNewLine]", 
+    \(\(ListPlot[dataset];\)\)}], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[TextData[{
+  "Use the function ",
+  StyleBox["Fit[]",
+    FontWeight->"Bold"],
+  " to find the slope and intercept of this data set. Here is an example of \
+how it works:"
+}], "Text"],
+
+Cell[CellGroupData[{
+
+Cell["Fit[{{1,3},{2,5},{3,7.1}}, {1,x}, x]", "Input",
+  AspectRatioFixed->True],
+
+Cell[BoxData[
+    \(\(\(0.9333333333333338`\)\(\[InvisibleSpace]\)\) + 
+      2.0499999999999994`\ x\)], "Output"]
+}, Open  ]],
+
+Cell["\<\
+If you wanted to fit a line through the origin, you would write: \
+Fit[{{1,3},{2,5},{3,7.1}}, {x}, x], and a quadratic fit as: \
+Fit[{{1,3},{2,5},{3,7.1}}, {1,x,x^2}, x].\
+\>", "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True]
+}, Closed]],
+
+Cell[BoxData[
+    \(Fit[dataset, {x}, x]\)], "Input"],
+
+Cell[TextData[{
+  "Now implement a Widrow-Hoff algorithm to find the slope of the data. \
+Assume the data goes through the origin, and initialize the slope to zero for \
+the first iteration.  Use ",
+  StyleBox["ListPlot",
+    FontWeight->"Bold"],
+  " to show the values of the slope as a function of the iterations from 1 to \
+200. What is a suitable range for the learning constant?"
+}], "Text"],
+
+Cell["\<\
+ww1=0;ww1list={};
+i=0;eta = 0.5;
+While[i<Length[dataset],
+\t++i;
+\tin = dataset[[i,1]] ; out = dataset[[i,2]];
+\tww1 = ww1 + (eta/i)(out - ww1 in) in;
+\tww1list = Append[ww1list,ww1];]
+\tww1
+ListPlot[ww1list];\
+\>", "Input",
+  AspectRatioFixed->True]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+Exercise 2 - The biggest eigenvector of an autoassociative memory\
+\>", "Subsection",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell["\<\
+ In Anderson's BSB model of memory, memories are can be formed by the simple \
+autossociation. \
+\>", "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[CellGroupData[{
+
+Cell[GraphicsData["PICT", "\<\
+06P0A01;04h0E@0A0_l<0?ooool0B`0004@0001E0000CP000000000100X0A01;
+04h0E@2@0080A01;04h0E@1404/0CP1E04@0B`1>05D00@00O0120480@P1l0400
+@01000000?l\>"], "Graphics",
+  Evaluatable->False,
+  AspectRatioFixed->True,
+  ImageSize->{45, 45},
+  ImageMargins->{{164, Inherited}, {Inherited, 9}}],
+
+Cell["\<\
+Pmatrix = {
+  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, 
+  {0, 1, 0, 0, 0, 0, 0, 0, 0, 0}, 
+  {0, 1, 0, 0, 0, 0, 0, 0, 0, 0}, 
+  {0, 1, 0, 0, 0, 0, 0, 0, 0, 0}, 
+  {0, 1, 1, 1, 1, 0, 0, 0, 0, 0}, 
+  {0, 1, 0, 0, 0, 1, 0, 0, 0, 0}, 
+  {0, 1, 0, 0, 0, 1, 0, 0, 0, 0}, 
+  {0, 1, 1, 1, 1, 0, 0, 0, 0, 0}, 
+  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, 
+  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};\
+\>", "Input",
+  AspectRatioFixed->True]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell[GraphicsData["PICT", "\<\
+06P0AP1O0500J@0A0_l<0?ooool0G`0004H0001Y0000D0000000000100X0AP1O
+0500J@2@0080AP1O0500J@1605l0D01Y04H0G`1@06T00@000P0200800P020080
+0P0200000?l\>"], "Graphics",
+  Evaluatable->False,
+  AspectRatioFixed->True,
+  ImageSize->{45, 45},
+  ImageMargins->{{155, Inherited}, {Inherited, 5}}],
+
+Cell["\<\
+Imatrix = {
+  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, 
+  {0, 0, 0, 0, 0, 0, 0, 1, 0, 0}, 
+  {0, 0, 0, 0, 0, 0, 0, 1, 0, 0}, 
+  {0, 0, 0, 0, 0, 0, 0, 1, 0, 0}, 
+  {0, 0, 0, 0, 0, 0, 0, 1, 0, 0}, 
+  {0, 0, 0, 0, 0, 0, 0, 1, 0, 0}, 
+  {0, 0, 0, 0, 0, 0, 0, 1, 0, 0}, 
+  {0, 0, 0, 0, 0, 0, 0, 1, 0, 0}, 
+  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, 
+  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};\
+\>", "Input",
+  AspectRatioFixed->True]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell[GraphicsData["PICT", "\<\
+06P0A@1F04l0H00A0_l<0?ooool0EP0004D0001P0000C`000000000100X0A@1F
+04l0H02@0080A@1F04l0H01505H0C`1P04D0EP1?06000@00O`0800P0200800P0
+200800000?l\>"], "Graphics",
+  Evaluatable->False,
+  AspectRatioFixed->True,
+  ImageSize->{45, 45},
+  ImageMargins->{{163, Inherited}, {Inherited, 4}}],
+
+Cell["\<\
+Tmatrix = {
+  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, 
+  {0, 0, 0, 0, 0, 0, 1, 0, 0, 0}, 
+  {0, 0, 0, 0, 0, 0, 1, 0, 0, 0}, 
+  {0, 0, 0, 0, 0, 0, 1, 0, 0, 0}, 
+  {0, 0, 0, 0, 0, 0, 1, 0, 0, 0}, 
+  {0, 0, 0, 0, 0, 0, 1, 0, 0, 0}, 
+  {0, 0, 0, 0, 0, 0, 1, 0, 0, 0}, 
+  {0, 0, 0, 0, 0, 0, 1, 0, 0, 0}, 
+  {0, 0, 0, 0, 1, 1, 1, 1, 1, 0}, 
+  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};\
+\>", "Input",
+  AspectRatioFixed->True]
+}, Open  ]],
+
+Cell["\<\
+normalize[x_] := N[x/Sqrt[x.x]];
+Tv = normalize[Flatten[Tmatrix]];
+Iv = normalize[Flatten[Imatrix]];
+Pv = normalize[Flatten[Pmatrix]];\
+\>", "Input",
+  AspectRatioFixed->True],
+
+Cell[TextData[{
+  "Find the autoassociative weight matrix in which has \"seen\" the ",
+  StyleBox["T",
+    FontWeight->"Bold"],
+  " 10 times, the",
+  StyleBox[" I",
+    FontWeight->"Bold"],
+  " 3 times, and",
+  StyleBox[" P",
+    FontWeight->"Bold"],
+  " only once."
+}], "Text"],
+
+Cell[BoxData[
+    \(\(Weight = 
+        10\ Outer[Times, Tv, Tv]\  + \ 3\ Outer[Times, Iv, Iv]\  + \ 
+          Outer[Times, Pv, Pv];\)\)], "Input"],
+
+Cell[TextData[{
+  "Find the eigenvector of the weight matrix with the biggest eigenvalue. \
+Make a",
+  StyleBox[" ListDensityPlot",
+    FontWeight->"Bold"],
+  " of this eigenvector."
+}], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[BoxData[{
+    \(\(Eigenvalues[Weight];\)\), "\[IndentingNewLine]", 
+    \(\(eigv = Eigenvectors[Weight];\)\), "\[IndentingNewLine]", 
+    \(\(ListDensityPlot[Partition[eigv[\([1]\)], 10]];\)\)}], "Input"]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+Exercise 3- Use backprop to classify letters independent of orientation\
+\>", "Subsection",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell["\<\
+Define two classes of patterns, T's and C's. Each class has four members for \
+rotations of 0,90,180, and 270 degrees. Train a non-linear feedforward net \
+with one layer of hidden units to correctly classify the eight patterns as T \
+or C. To get you started, here are exemplars for T and C on a 3x3 grid:\
+\>", "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell["\<\
+T1 = {{0.9,0.9,0.9},{0.1,0.9,0.1},{0.1,0.9,0.1}};
+T2 = Transpose[T1];
+T3 = {{0.1,0.9,0.1},{0.1,0.9,0.1},{0.9,0.9,0.9}};
+T4 = Transpose[T3];
+C1 = {{0.9,0.9,0.9},{0.9,0.1,0.1},{0.9,0.9,0.9}};
+C2 = Transpose[C1];
+C3 = {{0.9,0.9,0.9},{0.1,0.1,0.9},{0.9,0.9,0.9}};
+C4 = Transpose[C3];
+
+T1v=Flatten[T1];
+T2v=Flatten[T2];
+T3v=Flatten[T3];
+T4v=Flatten[T4];
+C1v=Flatten[C1];
+C2v=Flatten[C2];
+C3v=Flatten[C3];
+C4v=Flatten[C4];\
+\>", "Input",
+  AspectRatioFixed->True],
+
+Cell["\<\
+Fix the learning constant at 1. What is the minimum numbers of hidden units \
+you can find that will still converge in under 600 iterations?
+For this number of hidden units, what is the maximum value of the learning \
+constant (eta) that still allows convergence?\
+\>", "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[BoxData[{
+    \(\(SetDirectory["\</home/grad03/martin/class/psy5038\>"];\)\), "\
+\[IndentingNewLine]", 
+    \(<< Backpropagation.m\)}], "Input"],
+
+Cell[BoxData[
+    \(\(CTio = {{T1v, 1.0}, {T2v, 1.0}, {T3v, 1.0}, {T4v, 1.0}, {C1v, 
+            0.0}, {C2v, 0.0}, {C3v, 0.0}, {C4v, 0.0}};\)\)], "Input"],
+
+Cell[BoxData[
+    RowBox[{
+      RowBox[{\(bpnStandard[inNumber_, hidNumber_, outNumber_, ioPairs_, 
+          eta_, numIters_]\), ":=", 
+        RowBox[{"Module", "[", 
+          
+          RowBox[{\({errors, hidWts, outWts, ioP, inputs, outDesired, 
+              hidOuts, outputs, outErrors, outDelta, hidDelta}\), ",", 
+            
+            RowBox[{\(hidWts = 
+                Table[Table[
+                    Random[Real, {\(-0.1\), 
+                        0.1}], {inNumber}], {hidNumber}]\), ";", 
+              "\[IndentingNewLine]", \(outWts = 
+                Table[Table[
+                    Random[Real, {\(-0.1\), 
+                        0.1}], {hidNumber}], {outNumber}]\), ";", 
+              "\[IndentingNewLine]", 
+              RowBox[{"errors", "=", 
+                RowBox[{"Table", "[", "\[IndentingNewLine]", 
+                  StyleBox[\( (*\ select\ ioPair\ *) \),
+                    FontWeight->"Bold"], "\[IndentingNewLine]", 
+                  RowBox[{
+                    
+                    RowBox[{\(ioP = 
+                        ioPairs[\([Random[
+                              Integer, {1, Length[ioPairs]}]]\)]\), ";", 
+                      "\[IndentingNewLine]", 
+                      "\[IndentingNewLine]", \(inputs = ioP[\([1]\)]\), ";", 
+                      "\[IndentingNewLine]", \(outDesired = ioP[\([2]\)]\), 
+                      ";", "\[IndentingNewLine]", 
+                      "\[IndentingNewLine]", \( (*forward\ pass*) \), 
+                      "\[IndentingNewLine]", \(hidOuts = 
+                        sigmoid[hidWts . inputs]\), ";", 
+                      "\[IndentingNewLine]", \(outputs = 
+                        sigmoid[outWts . hidOuts]\), ";", 
+                      StyleBox[\( (*\ determine\ errors\ and\ deltas\ *) \),
+                        FontWeight->"Bold"], \(outErrors = 
+                        outDesired - outputs\), ";", 
+                      "\[IndentingNewLine]", \(outDelta = 
+                        outErrors\ \((outputs\ \((1 - outputs)\))\)\), ";", 
+                      "\[IndentingNewLine]", \(hidDelta = \((hidOuts\ \((1 - 
+                                  hidOuts)\))\)\ Transpose[outWts] . 
+                            outDelta\), ";", "\[IndentingNewLine]", 
+                      "\[IndentingNewLine]", \( (*update\ weights*) \), 
+                      "\[IndentingNewLine]", \(outWts += 
+                        eta\ Outer[Times, outDelta, hidOuts]\), ";", 
+                      "\[IndentingNewLine]", \(hidWts += 
+                        eta\ Outer[Times, hidDelta, inputs]\), ";", 
+                      "\[IndentingNewLine]", "\[IndentingNewLine]", 
+                      StyleBox[\( (*\ add\ squared\ error\ to\ Table\ *) \),
+                        FontWeight->"Bold"], 
+                      "\[IndentingNewLine]", \(outErrors . outErrors\)}], 
+                    ",", \({numIters}\)}], "]"}]}], ";", 
+              "\[IndentingNewLine]", \( (*end\ of\ Table*) \), 
+              "\[IndentingNewLine]", \(Return[{hidWts, outWts, errors}]\), 
+              ";"}]}], "]"}]}], ";"}]], "Input"],
+
+Cell["Test with 5 hidden units", "Subsection"],
+
+Cell[BoxData[
+    \(\(outs = bpnStandard[9, 5, 1, CTio, 10, 600];\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(ListPlot[outs[\([3]\)]];\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(bpnTest[outs[\([1]\)], outs[\([2]\)], CTio];\)\)], "Input"],
+
+Cell["Maximum learning constant", "Subsection"],
+
+Cell[BoxData[
+    \(The\ maximum\ learning\ constant\ appears\ to\ be\ 9. \ The\ mean\ \
+squared\ error\ jumps\ from\ 0.01  %\ to\ over\ 10  %\ by\ increasing\ the\ \
+learning\ constant\ from\ 9  to\ 10. \)], "Output"]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Exercise 4 - Oja's rule for weight growth", "Subsection",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell["\<\
+Recall that there is nothing in the outer product version of the Hebb \
+learning rule to prevent the weights from growing without bound.  Assume a \
+linear model of a neuron with n inputs:
+ y = w1*x1 + w2*x2 +...+wn*xn.
+Show that Oja's modification of the Hebb rule tends to normalize the weights \
+according to the following rule:
+Sum[w1^2+w2^2+...+wn^2] = 1\
+\>", "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData[{
+  "Your proof needn't use ",
+  StyleBox["Mathematica",
+    FontSlant->"Italic"],
+  "."
+}], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[CellGroupData[{
+
+Cell["Answer", "Exercise"],
+
+Cell["\<\
+With Oja's rule, we have this for the update:
+W1=W0+y(x-W0.y)
+Since y=wx, we can substitute and get:
+W1=W0+W0.x(x-W0.W0.x)
+Pulling out the x in parentheses we can reduce to:
+W1=W0+W0.x.x(1-W0.W0)
+W1=W0+W0.||x||(1-||W0||)
+So, when W is no longer getting updated, the additive term is 0. That would \
+be the equivalent of saying ||W||=1.\
+\>", "Text"]
+}, Closed]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Exercise 5 (easy) - Hopfield network ", "Subsection",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+Notes on continuous response Hopfield network (from Lecture notes)\
+\>", "Subsection",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell["\<\
+Definitions and functions that you will find useful for the exercises below \
+in this problem set are reproduced from Lecture notes in this section.\
+\>", "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[CellGroupData[{
+
+Cell["Definitions", "Subsubsection",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData[{
+  "We will let the resistances and capacitances all be one, and the current \
+input I",
+  StyleBox["i",
+    FontVariations->{"CompatibilityType"->"Subscript"}],
+  " be zero. De",
+  "fine the sigmoid function, ",
+  StyleBox["g[]",
+    FontWeight->"Bold"],
+  " and its inverse, ",
+  StyleBox["inverseg[]",
+    FontWeight->"Bold"],
+  ":"
+}], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell["\<\
+a1 := (2/Pi); b1 := Pi 1.4 / 2;
+g[x_] := N[a1 ArcTan[b1 x]]; 
+inverseg[x_] := N[(1/b1) Tan[x/a1]];\
+\>", "Input",
+  AspectRatioFixed->False]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Initialization of starting values", "Subsubsection",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData[{
+  "The",
+  " initialization ",
+  "section sets the starting output values of the two neurons \n",
+  StyleBox["V = {0.2, -0.5}",
+    FontWeight->"Bold"],
+  ", and the internal values ",
+  StyleBox["u = inverseg[V]",
+    FontWeight->"Bold"],
+  ", the step size, ",
+  StyleBox["dt=0.3",
+    FontWeight->"Bold"],
+  ", and the 2x2 weight matrix, ",
+  StyleBox["Tm",
+    FontWeight->"Bold"],
+  " such that the synaptic weights between neurons are both 1. The synaptic \
+weight between each neuron and itself is zero.\n"
+}], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell["\<\
+dt = 0.3;
+Tm = {{0,1},{1,0}};
+V = {0.5,0.01};
+u = inverseg[V];
+result = {};\
+\>", "Input",
+  AspectRatioFixed->False]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Main Program", "Subsubsection",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData[{
+  "The following function computes the output of the ith neuron for the \
+network with a list of neural values ",
+  StyleBox["uu",
+    FontWeight->"Bold"],
+  ", and a weight matrix ",
+  StyleBox["Tm",
+    FontWeight->"Bold"],
+  ". "
+}], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell["\<\
+Hopfield[uu_,i_] := uu[[i]] + dt ((Tm.g[uu])[[i]] - uu[[i]]);\
+\>", "Input",
+  AspectRatioFixed->True],
+
+Cell["\<\
+Let's accumulate some results for a series of 80 iterations. Then we will \
+plot the pairs of activities of the two neurons over the 80 iterations.\
+\>", "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell["\<\
+result = Table[{k=Random[Integer,{1,2}],u[[k]] = Hopfield[u,k],u}, {80}];\
+\>", "Input",
+  AspectRatioFixed->True],
+
+Cell["\<\
+result = Transpose[result][[3]];
+gresults = ListPlot[g[result],
+\tPlotJoined->False,AxesOrigin->{0,0},
+\tPlotRange->{{-1,1},{-1,1}},PlotStyle->{RGBColor[1,0,0]},
+\tFrame->True, AspectRatio->1,Ticks->None];\
+\>", "Input",
+  AspectRatioFixed->True]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Energy landscape", "Subsubsection",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell["Here is a contour plot of the energy landscape.", "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell["\<\
+inig[x_] := -N[(a1*Log[Cos[x/a1]])/b1];
+energy[Vv_] := -0.5 (Tm.Vv).Vv +
+\tSum[inig[Vv][[i]], {i,Length[Vv]}];\
+\>", "Input",
+  AspectRatioFixed->True],
+
+Cell["\<\
+gcontour = ContourPlot[energy[{x,y}],{x,-1,1},{y,-1,1},
+\tAxesOrigin->{0,0}, ContourShading->False,
+\tPlotRange->{-.1,.8}, Contours->32, PlotPoints->30];\
+\>", "Input",
+  AspectRatioFixed->False],
+
+Cell["Show[gresults, gcontour];", "Input",
+  AspectRatioFixed->True]
+}, Closed]]
+}, Closed]],
+
+Cell[TextData[{
+  "Run the above simulation (in \"Notes on continuous...\") of a 2-neuron \
+continous response Hopfield net with a starting value of ",
+  StyleBox["V",
+    FontWeight->"Bold"],
+  " that will allow the state vector to be drawn to the other attractor \
+basin. Plot the trajectory superimposed on the energy contour plot as shown \
+above."
+}], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Exercise 6 - Synchronous updating for Hopfield network", "Subsection",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData[{
+  "Define a function ",
+  StyleBox["syncHopfield[uu_] ",
+    FontWeight->"Bold"],
+  "to do deterministic synchronous updating rather than the asynchronous \
+updating rule specified in the above Hopfield network.Use ",
+  StyleBox["results = NestList[syncHopfield,*,*]",
+    FontWeight->"Bold"],
+  "  with 40 iterations to list the state space trajectory. Plot the results \
+as shown below.  \nUse the same starting values used in Lecture notes (see \
+also above).\nNow use  asynchronous iterations (as in the above insert from \
+Lecture notes) to compute 20 trajectories all from the same starting point. \
+Compute the average trajectory, and plot both this average trajectory and the \
+deterministic synchronous trajectory together on the same contour plot to  \
+compare the descent with the asynchronous case.\nWhich one appears to be \
+closest to a steepest descent?"
+}], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[CellGroupData[{
+
+Cell["Deterministic", "ExerciseMain"],
+
+Cell[CellGroupData[{
+
+Cell["Definitions", "Subsubsection",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData[{
+  "We will let the resistances and capacitances all be one, and the current \
+input I",
+  StyleBox["i",
+    FontVariations->{"CompatibilityType"->"Subscript"}],
+  " be zero. D",
+  "efine the sigmoid function, ",
+  StyleBox["g[]",
+    FontWeight->"Bold"],
+  " and its inverse, ",
+  StyleBox["inverseg[]",
+    FontWeight->"Bold"],
+  ":"
+}], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell["\<\
+a1 := (2/Pi); b1 := Pi 1.4 / 2;
+g[x_] := N[a1 ArcTan[b1 x]]; 
+inverseg[x_] := N[(1/b1) Tan[x/a1]];\
+\>", "Input",
+  AspectRatioFixed->False]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Initialization of starting values", "Subsubsection",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell["\<\
+dt = 0.3;
+Tm = {{0,1},{1,0}};
+V = {0.5,-0.2};
+u = inverseg[V];\
+\>", "Input",
+  AspectRatioFixed->False]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Main Program", "Subsubsection",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell["syncHopfield[uu_] := uu + dt ((Tm.g[uu]) - uu);", "Input",
+  AspectRatioFixed->True],
+
+Cell["syncresult = NestList[syncHopfield,u,40];", "Input",
+  AspectRatioFixed->True],
+
+Cell["\<\
+gsyncresults = ListPlot[g[syncresult],
+\tPlotJoined->False,AxesOrigin->{0,0},
+\tPlotRange->{{-1,1},{-1,1}},PlotStyle->{RGBColor[0,0,1]},
+\tFrame->True, AspectRatio->1,Ticks->None];\
+\>", "Input",
+  AspectRatioFixed->True]
+}, Closed]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Asynchronous", "ExerciseMain"],
+
+Cell[CellGroupData[{
+
+Cell["Definitions", "Subsubsection",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData[{
+  "We will let the resistances and capacitances all be one, and the current \
+input I",
+  StyleBox["i",
+    FontVariations->{"CompatibilityType"->"Subscript"}],
+  " be zero. D",
+  "efine the sigmoid function, ",
+  StyleBox["g[] ",
+    FontWeight->"Bold"],
+  "and its inverse, ",
+  StyleBox["inverseg[]",
+    FontWeight->"Bold"],
+  ":"
+}], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell["\<\
+a1 := (2/Pi); b1 := Pi 1.4 / 2;
+g[x_] := N[a1 ArcTan[b1 x]]; 
+inverseg[x_] := N[(1/b1) Tan[x/a1]];\
+\>", "Input",
+  AspectRatioFixed->False]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Initialization of starting values", "Subsubsection",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell["\<\
+dt = 0.3;
+Tm = {{0,1},{1,0}};
+V = {0.5,-0.2};
+u = inverseg[V];\
+\>", "Input",
+  AspectRatioFixed->False]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Main Program", "Subsubsection",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData[{
+  "The following function computes the output of the ith neuron for the \
+network with a list of neural values ",
+  StyleBox["uu",
+    FontWeight->"Bold"],
+  ", and a weight matrix ",
+  StyleBox["Tm",
+    FontWeight->"Bold"],
+  ". "
+}], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell["\<\
+Hopfield[uu_,i_] := uu[[i]] + dt ((Tm.g[uu])[[i]] - uu[[i]]);\
+\>", "Input",
+  AspectRatioFixed->True],
+
+Cell["\<\
+vlist={};
+For[i=1,i<21,i++;v=u;k=Random[Integer,{1,2}];v[[k]]=Hopfield[u,k];vlist=\
+Append[vlist,v]];\
+\>", "Input",
+  AspectRatioFixed->True],
+
+Cell[BoxData[
+    \(<< Statistics`DescriptiveStatistics`\)], "Input"],
+
+Cell[BoxData[
+    \(\(avgTraj = {{g[u[\([1]\)]], 
+            g[u[\([2]\)]]}, {g[
+              u[\([1]\)] - Mean[u[\([1]\)] - vlist[\([1]\)]]], 
+            g[u[\([2]\)] - Mean[u[\([2]\)] - vlist[\([2]\)]]]}};\)\)], "Input"],
+
+Cell["\<\
+gresults = ListPlot[avgTraj,
+\tPlotJoined->True,AxesOrigin->{0,0},
+\tPlotRange->{{-1,1},{-1,1}},PlotStyle->{RGBColor[1,0,0]},
+\tFrame->True, AspectRatio->1,Ticks->None];\
+\>", "Input",
+  AspectRatioFixed->True]
+}, Closed]]
+}, Closed]],
+
+Cell[BoxData[
+    \(\(Show[gresults, gsyncresults, gcontour];\)\)], "Input"],
+
+Cell["\<\
+The syncronous network seems to be a steeper descent. One should expect that \
+since the asyncronous network can only descend in one direction at a time. \
+The asyncronous network appears to go off at a 45 degree angle from the \
+starting point with respect to the x-y axes. This would make sense since we \
+are averaging a similar,yet random, change to both the x and y coordinates.\
+\>", "Text"]
+}, Closed]]
+},
+FrontEndVersion->"4.0 for X",
+ScreenRectangle->{{0, 1280}, {0, 1024}},
+WindowToolbars->{},
+CellGrouping->Manual,
+WindowSize->{1016, 668},
+WindowMargins->{{112, Automatic}, {Automatic, 103}},
+PrintingCopies->1,
+PrintingPageRange->{1, 9999},
+PrintingOptions->{"PaperSize"->{612, 792},
+"PaperOrientation"->"Portrait",
+"PostScriptOutputFile":>FrontEnd`FileName[{$RootDirectory, "home", "grad03", \
+"martin", "class", "psy5038"}, "hw4rfk.nb.ps", CharacterEncoding -> \
+"ISO8859-1"],
+"Magnification"->1},
+PrivateNotebookOptions->{"ColorPalette"->{RGBColor, 128}},
+ShowCellLabel->True,
+ShowCellTags->False,
+RenderingOptions->{"ObjectDithering"->True,
+"RasterDithering"->False},
+CharacterEncoding->"MacintoshAutomaticEncoding",
+StyleDefinitions -> "Classroom.nb"
+]
+
+
+(***********************************************************************
+Cached data follows.  If you edit this Notebook file directly, not using
+Mathematica, you must remove the line containing CacheID at the top of 
+the file.  The cache data will then be recreated when you save this file 
+from within Mathematica.
+***********************************************************************)
+
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+
+(*NotebookFileOutline
+Notebook[{
+Cell[1717, 49, 141, 8, 141, "Subtitle",
+  Evaluatable->False],
+Cell[1861, 59, 54, 3, 66, "Subtitle"],
+
+Cell[CellGroupData[{
+Cell[1940, 66, 118, 2, 46, "Subsection",
+  Evaluatable->False],
+Cell[2061, 70, 353, 7, 46, "Text",
+  Evaluatable->False],
+Cell[2417, 79, 58, 1, 47, "Input"],
+Cell[2478, 82, 205, 4, 47, "Input"],
+Cell[2686, 88, 105, 3, 28, "Text"],
+Cell[2794, 93, 154, 3, 63, "Input"],
+
+Cell[CellGroupData[{
+Cell[2973, 100, 188, 6, 28, "Text"],
+
+Cell[CellGroupData[{
+Cell[3186, 110, 79, 1, 47, "Input"],
+Cell[3268, 113, 114, 2, 70, "Output"]
+}, Open  ]],
+Cell[3397, 118, 242, 6, 28, "Text",
+  Evaluatable->False]
+}, Closed]],
+Cell[3654, 127, 53, 1, 43, "Input"],
+Cell[3710, 130, 396, 8, 46, "Text"],
+Cell[4109, 140, 260, 11, 167, "Input"]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[4406, 156, 143, 4, 30, "Subsection",
+  Evaluatable->False],
+Cell[4552, 162, 167, 5, 28, "Text",
+  Evaluatable->False],
+
+Cell[CellGroupData[{
+Cell[4744, 171, 312, 7, 62, 189, 3, "GraphicsData", "PICT", "Graphics",
+  Evaluatable->False],
+Cell[5059, 180, 412, 13, 197, "Input"]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[5508, 198, 312, 7, 58, 189, 3, "GraphicsData", "PICT", "Graphics",
+  Evaluatable->False],
+Cell[5823, 207, 412, 13, 197, "Input"]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[6272, 225, 312, 7, 57, 189, 3, "GraphicsData", "PICT", "Graphics",
+  Evaluatable->False],
+Cell[6587, 234, 412, 13, 197, "Input"]
+}, Open  ]],
+Cell[7014, 250, 185, 6, 92, "Input"],
+Cell[7202, 258, 278, 11, 28, "Text"],
+Cell[7483, 271, 148, 3, 47, "Input"],
+Cell[7634, 276, 242, 8, 28, "Text",
+  Evaluatable->False],
+Cell[7879, 286, 209, 3, 79, "Input"]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[8125, 294, 149, 4, 30, "Subsection",
+  Evaluatable->False],
+Cell[8277, 300, 378, 7, 46, "Text",
+  Evaluatable->False],
+Cell[8658, 309, 467, 19, 287, "Input"],
+Cell[9128, 330, 335, 7, 58, "Text",
+  Evaluatable->False],
+Cell[9466, 339, 149, 3, 63, "Input"],
+Cell[9618, 344, 154, 2, 47, "Input"],
+Cell[9775, 348, 3102, 56, 431, "Input"],
+Cell[12880, 406, 46, 0, 46, "Subsection"],
+Cell[12929, 408, 80, 1, 47, "Input"],
+Cell[13012, 411, 61, 1, 47, "Input"],
+Cell[13076, 414, 81, 1, 47, "Input"],
+Cell[13160, 417, 47, 0, 46, "Subsection"],
+Cell[13210, 419, 218, 3, 63, "Output"]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[13465, 427, 111, 2, 30, "Subsection",
+  Evaluatable->False],
+Cell[13579, 431, 431, 10, 118, "Text",
+  Evaluatable->False],
+Cell[14013, 443, 162, 7, 28, "Text",
+  Evaluatable->False],
+
+Cell[CellGroupData[{
+Cell[14200, 454, 26, 0, 38, "Exercise"],
+Cell[14229, 456, 359, 10, 238, "Text"]
+}, Closed]]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[14637, 472, 107, 2, 30, "Subsection",
+  Evaluatable->False],
+
+Cell[CellGroupData[{
+Cell[14769, 478, 144, 4, 46, "Subsection",
+  Evaluatable->False],
+Cell[14916, 484, 220, 5, 28, "Text",
+  Evaluatable->False],
+
+Cell[CellGroupData[{
+Cell[15161, 493, 84, 2, 36, "Subsubsection",
+  Evaluatable->False],
+Cell[15248, 497, 410, 15, 36, "Text",
+  Evaluatable->False],
+Cell[15661, 514, 150, 5, 77, "Input"]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[15848, 524, 106, 2, 28, "Subsubsection",
+  Evaluatable->False],
+Cell[15957, 528, 589, 19, 106, "Text",
+  Evaluatable->False],
+Cell[16549, 549, 127, 7, 107, "Input"]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[16713, 561, 85, 2, 28, "Subsubsection",
+  Evaluatable->False],
+Cell[16801, 565, 308, 11, 28, "Text",
+  Evaluatable->False],
+Cell[17112, 578, 112, 3, 47, "Input"],
+Cell[17227, 583, 219, 5, 28, "Text",
+  Evaluatable->False],
+Cell[17449, 590, 124, 3, 47, "Input"],
+Cell[17576, 595, 256, 7, 107, "Input"]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[17869, 607, 89, 2, 28, "Subsubsection",
+  Evaluatable->False],
+Cell[17961, 611, 111, 2, 28, "Text",
+  Evaluatable->False],
+Cell[18075, 615, 161, 5, 77, "Input"],
+Cell[18239, 622, 205, 5, 77, "Input"],
+Cell[18447, 629, 68, 1, 47, "Input"]
+}, Closed]]
+}, Closed]],
+Cell[18542, 634, 412, 10, 45, "Text",
+  Evaluatable->False]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[18991, 649, 124, 2, 30, "Subsection",
+  Evaluatable->False],
+Cell[19118, 653, 945, 18, 154, "Text",
+  Evaluatable->False],
+
+Cell[CellGroupData[{
+Cell[20088, 675, 37, 0, 55, "ExerciseMain"],
+
+Cell[CellGroupData[{
+Cell[20150, 679, 84, 2, 36, "Subsubsection",
+  Evaluatable->False],
+Cell[20237, 683, 410, 15, 36, "Text",
+  Evaluatable->False],
+Cell[20650, 700, 150, 5, 77, "Input"]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[20837, 710, 106, 2, 28, "Subsubsection",
+  Evaluatable->False],
+Cell[20946, 714, 114, 6, 92, "Input"]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[21097, 725, 85, 2, 28, "Subsubsection",
+  Evaluatable->False],
+Cell[21185, 729, 90, 1, 47, "Input"],
+Cell[21278, 732, 84, 1, 47, "Input"],
+Cell[21365, 735, 231, 6, 92, "Input"]
+}, Closed]]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[21645, 747, 36, 0, 39, "ExerciseMain"],
+
+Cell[CellGroupData[{
+Cell[21706, 751, 84, 2, 36, "Subsubsection",
+  Evaluatable->False],
+Cell[21793, 755, 410, 15, 36, "Text",
+  Evaluatable->False],
+Cell[22206, 772, 150, 5, 77, "Input"]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[22393, 782, 106, 2, 28, "Subsubsection",
+  Evaluatable->False],
+Cell[22502, 786, 114, 6, 92, "Input"]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[22653, 797, 85, 2, 28, "Subsubsection",
+  Evaluatable->False],
+Cell[22741, 801, 308, 11, 28, "Text",
+  Evaluatable->False],
+Cell[23052, 814, 112, 3, 47, "Input"],
+Cell[23167, 819, 152, 5, 62, "Input"],
+Cell[23322, 826, 69, 1, 47, "Input"],
+Cell[23394, 829, 225, 4, 47, "Input"],
+Cell[23622, 835, 220, 6, 92, "Input"]
+}, Closed]]
+}, Closed]],
+Cell[23869, 845, 76, 1, 43, "Input"],
+Cell[23948, 848, 407, 6, 64, "Text"]
+}, Closed]]
+}
+]
+*)
+
+
+
+
+(***********************************************************************
+End of Mathematica Notebook file.
+***********************************************************************)
+
