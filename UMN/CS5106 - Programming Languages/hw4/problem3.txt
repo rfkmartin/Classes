@@ -1,0 +1,77 @@
+PROGRAM AST;
+
+(******************************************************************
+ * AST.pas
+ *
+ * creates abstract syntax tree
+ *
+ * Robert F.K. Martin
+ * ID 1505151
+ * CSci 5106 - Programming Languages
+ * Lab 4
+ * 
+ *****************************************************************)
+
+TYPE
+   prod	   = (add,mul,neg,cnst);
+   exprPtr = ^expr;
+   expr	   = record
+		p	  : prod;
+		case kind : (leaf,unary,binary) of
+		  leaf	 : (i:integer);
+		  unary	 : (c:^expr);
+		  binary : (l,r:^expr);
+		end; { case }
+	
+
+   
+VAR
+   my_e	 : expr;
+   my_ep : exprPtr;
+
+function value (my_ep :exprPtr) : integer;
+begin
+   case my_ep^.p of
+     add : return value(my_ep^.l) + value(my_ep^.r);
+     mul : return value(my_ep^.l) * value(my_ep^.r);
+     neg : return -1 * value(my_ep^.c);
+     cnst : return my_ep^.i;
+   end;	  
+end;
+
+function expr2 : exprPtr;
+var ptr1 : exprPtr;
+var ptr2 : exprPtr;
+var ptr3 : exprPtr;
+begin
+   new(ptr1);
+   new(ptr2);
+   new(ptr3);
+   ptr1^.p := cnst;
+   ptr1^.i := 4;
+   ptr2^.p := cnst;
+   ptr2^.i := 5;
+   ptr3^.p := add;
+   ptr3^.i := 6;
+
+   return ptr3;
+end; { expr2 }
+
+begin
+   my_ep:=expr2;
+   write("the tree value is ",value(my_ep), ".\n");
+end.
+
+###############################
+
+The preceding Pascal code results in a segmentation fault. The tree, 
+expr2, has a root node that has a binary tag, but its variant field is an 
+integer, which should be illegal. When the function value finds a binary 
+tag, it attempts to add the values of the left and right children. Thus, 
+when value attempts to evaluate expr2, it tries to access a variant field 
+which does not exist, resulting in a run-time error.
+
+This problem cannot happen in ML since in contructing a tree, its variant 
+fields are checked for proper type before its evaluation. Thus an ML tree 
+such as val t1=add(cnst 4); would be returned as having invalid type and 
+thus a non-existent field can never be accessed.

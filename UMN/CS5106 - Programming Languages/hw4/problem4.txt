@@ -1,0 +1,17 @@
+1) fn: int -> int
+
+2) fn: int -> int -> int -> int
+
+3) fn: int * int * int -> int
+
+4) fn 'a * int * int -> int
+
+5) int list
+
+6) fn: int list -> int list
+
+7) val a: fn: 'a -> 'b
+
+8) fn : ('a -> 'a) -> 'a -> 'a
+
+9) fn : ('a -> list) -> 'a list -> 'a list
