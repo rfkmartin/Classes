@@ -1,0 +1,1 @@
+gcc -o robot robot.c -I/soft/X11R6.3/include -L/soft/X11R6.3/lib  -R/soft/X11R6.3/lib -lMesaglut -lMesaGLU -lMesaGL -lXext -lXi -lX11 -lsocket -lm
