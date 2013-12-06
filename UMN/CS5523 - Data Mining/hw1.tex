@@ -1,0 +1,134 @@
+% Robert F.K. Martin
+% ID 1505151
+% CSci 5523
+% Homework Set N1
+
+\documentclass[11pt]{article}
+%\RequirePackage{vmargin}
+%\setpapersize{USletter}
+%\setmarginsrb{1in}{1.5in}{1in}{0in}{\headheight}{\headsep}{\footheight}{\footskip}
+\usepackage{setspace}
+\usepackage{homework}
+\usepackage{macros}
+
+% detect interpreter: pdflatex or latex
+\newif\ifpdf
+\ifx\pdfoutput\undefined
+  \pdffalse
+\else
+  \pdfoutput=1
+  \pdftrue
+  \pdfcompresslevel=9
+\fi
+
+% user: add packages you need
+\usepackage{amsmath}
+
+% user: set counter depth for lists
+%\setcounter{page}{1}
+
+% user: set style of equation numbering
+\numberwithin{equation}{section}  % (sec.number)
+\renewcommand{\thetable}{\arabic{table}}
+\renewcommand{\thefigure}{\arabic{figure}}
+
+\singlespacing
+
+\begin{document}
+
+% pick type of your preferred page style. UMN requires page numbers.
+%\pagestyle{headings}
+
+
+\noindent Robert F.K. Martin\\
+ID 1505151\\
+Csci 5523\\
+21 Sep 2011\\
+Homework 1
+\hline
+\vspace*{0.25in}
+\noindent\textbf{Problem 1: Classify the following attributes as binary, discrete, or continuous. Also classify them as
+qualitative (nominal or ordinal) or quantitative (interval or ratio). Some cases may have more than one
+interpretation, so briefly indicate your reasoning if you think there may be more ambiguity.}
+\vspace*{0.25in}
+
+\noindent\textbf{a) House numbers assigned for a given street:} Discrete, ordinal. House numbers are typically integers, so therefore discrete. And ordinal since house numbers really only track relative locations and have no units.
+\vspace*{0.25in}
+
+\noindent\textbf{b) Your calorie intake per day:} Continuous, ratio. Caloric intake, although sometimes rounded to integers, is indeed a real-valued measurement. And it is meaningful to say that 2000 calories is twice as many as 1000 calories.
+\vspace*{0.25in}
+
+\noindent\textbf{c) Shape of a geometric objects commonly found in geometry classes:} Disrete, nominal. Names of shapes are words and words are countably infinite. And since the words are somewhat arbitrary, distinctness is the only property they exhibit. However, if we start talking about vertices of polygons, then we have a ratio attribute.
+\vspace*{0.25in}
+
+\noindent\textbf{d) Routes in rock climbing:} Discrete, ordinal. There are a countable number of route difficulties. And they exhibit only order; it is not meaningful to say that there is a 0.1 difference in difficulty between a 5.4 and a 5.5.
+\vspace*{0.25in}
+
+\noindent\textbf{Problem 2:  Decide which of the similarity measures listed in Chapter 2 would be most appropriate for the
+following situations and why.}
+\vspace*{0.25in}
+
+\noindent\textbf{1. Suppose two of your friends are numismatists (collecting coins from different countries as a hobby).
+You also have coins from various countries. You want to decide which friend has the most similar
+collection to you. Hint: You can represent each collection as a vector of length 196 of the official
+independent countries of the world, where the corresponding entry denotes number of coins collected for
+that country.}
+\vspace*{0.25in}
+
+\noindent The cosine similarity would be appropriate since it often used for document simularity and frequency of words in a document are a good analog of counts of coins from a particular country, The cosine similarity, like the Jaccard, ignores zero entries(which would likely be the case for many of the 196 countries), but also takes into account non-binary vectors. However, the way the question sets up the data does not take into account different coins from the same countries. For example, I may have 5 \$2 coins from Canada but my friend has a \$1 coin, \$2 coin, penny, quarter, and a nickel. We both have 5 coins but one could argue that his is more interesting. A better way to set up the problem would be to have a vector of all possible coins from all possible countries though the cosine similarity would still be the proper measure.
+\vspace*{0.25in}
+
+\noindent\textbf{2. Suppose you measure the precipitation level in Minnesota for each zip code every day. Similarity is to
+be computed between the precipitation levels in Minnesota today and same day of last month.}
+\vspace*{0.25in}
+
+\noindent Since we are dealing with continuous data, Euclidean distance is the most appropriate. Even though the data is most likely sparse since precipitation varies from month to month, a zero measurement of precipitation is still meaningful.
+\vspace*{0.25in}
+
+\noindent\textbf{3. A nutritionist wants to measure the similarity between you and your friend based on following
+attributes: your height (in meters), weight (in pounds), your dietary requirement (in calories), and your
+daily activity level (low, medium, high, extreme). Note that the feature set includes continuous and
+discrete features.}
+\vspace*{0.25in}
+
+
+\vspace*{0.25in}
+
+\noindent\textbf{Problem 3:  Data reduction – sampling, dimensionality reduction, or selecting a subset of features – is
+necessary or useful for a wide variety of reasons, but can be problematic if information necessary to the
+analysis is lost in the process. The following questions explore several issues at a conceptual level}
+
+\vspace*{0.25in}
+
+\noindent\textbf{Problem 4:  In order to compute similarity between two documents:}
+\hspace*{0.25in}
+\noindent\textbf{i) Each document can be represented as a vector of binary features, where each feature is a word of
+interest in the document. In this vector a 1 indicates the presence of the word and a 0 indicates its
+absence.}
+\noindent\textbf{ii) Each document can be represented as a vector of term frequencies, which represent the frequency
+with which each term occurs in the document. (Details of exactly how this is computed are
+unimportant to this problem.)}
+\noindent\textbf{Consider the following example in which there are two documents, D1 and D2, containing four words.
+Using the representation described in (i) the two documents are denoted as follows:}
+
+\textbf{D1 = (1, 0, 0, 1), D2 = (1, 0, 1, 0). The Jaccard similarity in this case is 0.33.}
+\noindent\textbf{Using the representation described in (ii) the two documents are denoted as follows:}
+\textbf{D1 = (0.5, 0, 0, 0.5), D2 = (0.5, 0, 0.5, 0). The cosine similarity in this case is 0.5.}
+
+Provide an example of a pair of documents for which Jaccard similarity will be larger than cosine similarity}
+
+\vspace*{0.25in}
+
+\noindent\textbf{Problem 5:  For the following vectors, x and y, calculate the indicated similarity or distance measures}
+
+\end{document}
+
+
+
+
+
+
+
+
+
+

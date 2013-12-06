@@ -1,0 +1,259 @@
+% Robert F.K. Martin
+% ID 1505151
+% CSci 5031
+% Homework Set N
+
+\documentclass[11pt]{article}
+%\RequirePackage{vmargin}
+%\setpapersize{USletter}
+%\setmarginsrb{1in}{1.5in}{1in}{0in}{\headheight}{\headsep}{\footheight}{\footskip}
+\usepackage{setspace}
+\usepackage{homework}
+\usepackage{macros}
+
+% detect interpreter: pdflatex or latex
+\newif\ifpdf
+\ifx\pdfoutput\undefined
+  \pdffalse
+\else
+  \pdfoutput=1
+  \pdftrue
+  \pdfcompresslevel=9
+\fi
+
+% user: add packages you need
+\usepackage{amsmath}
+
+% user: set counter depth for lists
+%\setcounter{page}{1}
+
+% user: set style of equation numbering
+\numberwithin{equation}{section}  % (sec.number)
+\renewcommand{\thetable}{\arabic{table}}
+\renewcommand{\thefigure}{\arabic{figure}}
+
+\singlespacing
+
+\begin{document}
+
+% pick type of your preferred page style. UMN requires page numbers.
+%\pagestyle{headings}
+
+
+\noindent Robert F.K. Martin\\
+ID 1505151\\
+Csci 5302\\
+02 Nov 2006\\
+Homework 3
+\hline
+\vspace*{0.25in}
+\noindent\textbf{Problem 1a: }
+
+\noindent The max number of rules can be found using the formula $R=3^d-2^{d+1}+1$, where $d=7$, the number of items. R=1932.
+\vspace*{0.25in}
+
+\noindent\textbf{Problem 1b: }
+
+\noindent Since the max size itemset is 4, then the max size frequent itemset is also 4.
+\vspace*{0.25in}
+
+\noindent\textbf{Problem 1c: }
+
+\noindent There are 6 distinct size-3 itemsets and 2 distinct size-4 itemsets. Then, the number of possible size-3 itemsets, ignoring what the attributes are of each itemset, $\binom{4}{3}+\binom{4}{3}+6=14$.
+\vspace*{0.25in}
+
+\noindent\textbf{Problem 1d: }
+
+\noindent Bread and butter appear 5 times together.
+\vspace*{0.25in}
+
+\noindent\textbf{Problem 1e: }
+
+\noindent Confidence is the support of the consequent and antecedent divided by the support of the antecedent. In order for two size-2 rules to have the same confidence, each of the size-1 itemsets must have the same support. So we just need to find two size-1 itemsets with the same support. This can be achieve with either \{bread,butter\} or \{beer,cookies\}.
+\vspace*{0.25in}
+
+\noindent\textbf{Problem 2a: }
+
+\noindent\{a,b,c,d\},\{c,d,e,f\},\\
+\{a,b,c,e\},\\
+\{a,b,c,f\},\\
+\{a,b,d,e\},\\
+\{a,b,d,f\},\\
+\{a,b,e,f\},\\
+\{a,c,d,e\},\\
+\{a,c,d,f\}\\
+\{a,d,e,f\}\\
+\vspace*{0.25in}
+
+\noindent\textbf{Problem 2b: }
+
+\noindent\{a,b,c,d\},\\
+\{a,b,c,e\},\\
+\{a,b,d,e\}
+\vspace*{0.25in}
+
+\noindent\textbf{Problem 2c: }
+
+\noindent $\emptyset$. Each of the above size-4 itemsets are composed of at least one size-3 itemset that is not frequent.
+\vspace*{0.25in}
+
+\noindent\textbf{Problem 2d: }
+
+\noindent There are no size-5 itemsets that will survive pruning since there are no size-4 itemsets that survived pruning.
+\vspace*{0.25in}
+
+\noindent\textbf{Problem 3a: }
+
+\noindent Min: 0, achieved when P(B$|$A)=P(B).\\
+Max: $\infty$, achieved when P(B)=1.
+\vspace*{0.25in}
+
+\noindent\textbf{Problem 3b: }
+
+\noindent It increases.
+\vspace*{0.25in}
+
+\noindent\textbf{Problem 3c: }
+
+\noindent It decreases.
+\vspace*{0.25in}
+
+\noindent\textbf{Problem 3d: }
+
+\noindent It decreases.
+\vspace*{0.25in}
+
+\noindent\textbf{Problem 3e: }
+
+\noindent no.
+\vspace*{0.25in}
+
+\noindent\textbf{Problem 3f: }
+
+\noindent 0
+\vspace*{0.25in}
+
+\noindent\textbf{Problem 3g: }
+
+\noindent no
+\vspace*{0.25in}
+
+\noindent\textbf{Problem 3h: }
+
+\noindent no
+\vspace*{0.25in}
+
+\noindent\textbf{Problem 4a: }
+
+\noindent $\alpha_1=20,\alpha_2=29$
+\vspace*{0.25in}
+
+\noindent\textbf{Problem 4b: }
+
+\noindent $\alpha_1=18,\alpha_2=22$
+\vspace*{0.25in}
+
+\noindent\textbf{Problem 4c: }
+
+\noindent $\alpha_1=5,\alpha_2=7$
+\vspace*{0.25in}
+
+\noindent\textbf{Problem 4d: }
+
+\noindent The three different discretization choices produced three different results with very little overlap between the first two. The point being that the choice of intervals can have significant impact on the final results.
+\vspace*{0.25in}
+
+\noindent\textbf{Problem 5a: }
+
+\noindent We would like symmetry, so that if user 1 is like user 2, we would also like user 2 to be like user 1. Additionally, we would like inversion to hold since if two users are similar in their likes, we would also like them to be similar in their dislikes. But since we have designated 0 to mean dislike, we do not want null addition to hold since we do care about similar dislikes between two users.
+\vspace*{0.25in}
+
+\noindent\textbf{Problem 5b: }
+
+\noindent We should choose correlation because it is symmetric and inversion invarient. Confidence is not symmetric and cosine is not inversion invariant.
+\vspace*{0.25in}
+
+\noindent\textbf{Problem 5c: }
+
+\noindent In this case, we do want null addition to hold but not inverstion. So we should choose the cosine measure since it is still symmetric but is null addition invariant but not invariant to inversion.
+\vspace*{0.25in}
+
+\noindent\textbf{Problem 6a: }
+
+\noindent Set S and T may be equal under the condition that $h_c$ is no more than the minimum confidence of any itemset in S. If $h_c$ is higher, then T is a subset of S.
+\vspace*{0.25in}
+
+\noindent\textbf{Problem 6b: }
+
+\noindent T is a subset of S since S will include all itemsets with support $>=$b plus those that are also $>=$a.
+\vspace*{0.25in}
+
+\noindent\textbf{Problem 6c: }
+
+\noindent S will be a subset of T if S contains any itemset with confidence $>=$ $h_c$. If all the itemsets in S have confidence $<$ $h_c$, then T and S are disjoint.
+\vspace*{0.25in}
+
+\noindent\textbf{Problem 7a: }
+
+\noindent \{a,b,c\},\\
+\{a,c,d\}
+\vspace*{0.25in}
+
+\noindent\textbf{Problem 7b: }
+
+\noindent \{a,b,c\},\\
+\{a,b,d\},\\
+\{a,c,d\},\\
+\{a,c,e\},\\
+\{a,d,e\},\\
+\{b,c,d\},\\
+\{b,c,e\},\\
+\{c,d,e\}
+\vspace*{0.25in}
+
+\noindent\textbf{Problem 7c: }
+
+\noindent True. This is the definition of maximal frequent itemset: an itemset is maximal frequent if NONE of its itemsets are frequent.
+\vspace*{0.25in}
+
+\noindent\textbf{Problem 7d: }
+
+\noindent True. An itemset can be closed and infrequent. An itemset is closed only if all of its supersets have a lower support than itself, which is unrelated to frequency.
+\vspace*{0.25in}
+
+\noindent\textbf{Problem 8a: }
+
+\noindent \textbf{ASSUMPTION FOR ALL ANSWERS: All grayed areas are frequent.} (c) will produce the highest number of frequent itemsets. Since (c) has the longest single frequent itemset, every subset of that largest frequent itemset is also frequent. So it has something like $\binom{600}{1}+\binom{600}{2}+...\binom{600}{600}$ which is an extremely large number.
+\vspace*{0.25in}
+
+\noindent\textbf{Problem 8b: }
+
+\noindent (a) will produce 5 closed frequent itemsets since none of the blocks overlaps with any other block.
+\vspace*{0.25in}
+
+\noindent\textbf{Problem 8c: }
+
+\noindent (c) has the longset size frequent itemset of roughly size-800.
+\vspace*{0.25in}
+
+\noindent\textbf{Problem 8d: }
+
+\noindent (b) will produce a frequent itemset with support of ~8000, which is larger than any other itemset in the choices.
+\vspace*{0.25in}
+
+\noindent\textbf{Problem 8e: }
+
+\noindent (c) will also produce the longest sized closed itemset which is the same as the longest sized frequent itemset.
+\vspace*{0.25in}
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
