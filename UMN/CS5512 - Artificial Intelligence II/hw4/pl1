@@ -1,0 +1,16 @@
+sentence(Number,sentence(X,Y)) --> noun_part(Number,X),verb_part(Number,Y).
+noun_part(Number,noun_part(X,Y)) --> determiner(Number,X),noun(Number,Y).
+verb_part(Number,verb_part(X,Y)) --> verb(Number,X),noun_part(Number,Y).
+
+determiner(_,determiner(the)) --> [the].
+noun(singular,noun(mouse)) --> [mouse].
+noun(singular,noun(cat)) --> [cat].
+noun(plural,noun(mice)) --> [mice].
+noun(plural,noun(cats)) --> [cats].
+verb(singular,verb(hates)) --> [hates].
+verb(plural,verb(hate)) --> [hate].
+
+%Answer the following queries:
+%?- sentence(plural,Parse,[the,mice,hate,the,cat],[]).
+%?- sentence(Number,Parse,[the,mouse,hates,the,cat],[]).
+%?- sentence(Number,Parse,[mice,hate,cats],[]).

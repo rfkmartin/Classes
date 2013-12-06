@@ -1,0 +1,79 @@
+% Computational Intelligence: a logical approach. 
+% Prolog Code.
+% DEFINITION OF DELIVERY ROBOT WORLD IN STRIPS NOTATION 
+% Copyright (c) 1998, Poole, Mackworth, Goebel and Oxford University Press.
+
+% ACTIONS
+% Go(monkey,Pos,Pos_1) is the action of Mag moving from Pos to Pos_1
+preconditions(go(monkey,Pos,Pos_1),
+    [autonomous(monkey), adjacent(Pos,Pos_1), sitting_at(monkey,Pos)]).
+achieves(go(monkey,Pos,Pos_1),sitting_at(monkey,Pos_1)).
+deletes(go(monkey,Pos,Pos_1),sitting_at(monkey,Pos)).
+
+% grasp(monkey,bananas,Pos) is the action of Magent Mag picking up Obj.
+preconditions(grasp(monkey,bananas,Pos),
+    [autonomous(monkey), monkey \= bananas, sitting_at(bananas,Pos), at(monkey,Pos), height(monkey,Hgt), height(bananas,Hgt) ]).
+achieves(grasp(monkey,bananas,Pos), carrying(monkey,bananas)).
+deletes(grasp(monkey,bananas,Pos), sitting_at(bananas,Pos), height(bananas,Hgt)).
+
+% climb(monkey,box)
+preconditions(climb(monkey,box), 
+    [autonomous(monkey),  monkey \= box, at(monkey,Pos), sitting_at(box,Pos), height(monkey,low), height(box,low)]).
+achieves(climb(monkey,box),height(monkey,high)).
+deletes(climb(monkey,box),height(monkey,low)).
+
+% climbdown(monkey,box)
+preconditions(climbdown(monkey,box), 
+    [autonomous(monkey),  monkey \= box, at(monkey,Pos), sitting_at(box,Pos), height(monkey,high), height(box,low)]).
+achieves(climbdown(monkey,box),height(monkey,low)).
+deletes(climbdown(monkey,box),height(monkey,high)).
+
+% push(monkey,box,Pos)
+preconditions(push(monkey,box,Pos),
+    [autonomous(monkey), sitting_at(box,Pos_1), sitting_at(monkey,Pos_1), height(monkey,low), height(box,low),pushable(Obj)]).
+achieves(push(monkey,box,Pos),sitting_at(monkey,Pos),sitting_at(box,Pos)).
+deletes(push(monkey,box,Pos),sitting_at(monkey,Pos_1),sitting_at(box,Pos_1)).
+
+% PRIMITIVE RELATIONS
+primitive(carrying(_,_)).
+primitive(sitting_at(_,_)).
+primitive(height(_,_)).
+primitive(climbable(_)).
+primitive(pushable(_)).
+
+% DERIVED RELATIONS
+
+at(Obj,Pos) <-
+   [sitting_at(Obj,Pos)].
+at(monkey,Pos) <-
+   [autonomous(monkey), monkey \= bananas, carrying(monkey,bananas), at(monkey,Pos)].
+
+adjacent(posA,posB) <- [].
+adjacent(posB,posC) <- [].
+adjacent(posC,posB) <- [].
+adjacent(posB,posA) <- [].
+autonomous(monkey) <- [].
+climbable(box) <- [].
+pushable(box) <- [].
+
+% INITIAL SITUATION
+holds(sitting_at(monkey,posA),init).
+holds(sitting_at(bananas,posB),init).
+holds(sitting_at(box,posC),init).
+holds(height(monkey,low),init).
+holds(height(box,low),init).
+holds(height(bananas,high),init).
+
+achieves(init,X) :-
+   holds(X,init).
+
+% TRY THE FOLLOWING QUERIES with delrob_strips.pl:
+% solve([carrying(rob,k1)],P,3), seq(P,S).
+% solve([sitting_at(k1,lab2)],P,7), seq(P,S).
+% solve([carrying(rob,parcel),sitting_at(rob,lab2)],P,9), seq(P,S).
+% solve([sitting_at(rob,lab2),carrying(rob,parcel)],P,9), seq(P,S).
+
+
+
+
+

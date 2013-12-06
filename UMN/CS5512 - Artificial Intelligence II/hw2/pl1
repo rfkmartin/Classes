@@ -1,0 +1,13 @@
+means(zero,zero).
+means(uno,one).
+means(due,two).
+means(tre,three).
+means(quattro,four).
+means(cinque,five).
+means(sei,six).
+means(sette,seven).
+means(otto,eight).
+means(nove,nine).
+
+translate([X|Tail1],[Y|Tail2]):-means(X,Y),translate(Tail1,Tail2).
+translate([X],[Y]):-means(X,Y).

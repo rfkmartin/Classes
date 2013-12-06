@@ -1,0 +1,4 @@
+mymerge([X|Tail1],[Y|Tail2],Result):-X<Y,!,mymerge(Tail1,[Y|Tail2],Result1),append([X],Result1,Result).
+mymerge([X|Tail1],[Y|Tail2],Result):-X>=Y,!,mymerge([X|Tail1],Tail2,Result1),append([Y],Result1,Result).
+mymerge([],[Y|Tail],Result):-append([],[Y|Tail],Result).
+mymerge([X|Tail],[],Result):-append([],[X|Tail],Result).

@@ -1,0 +1,13 @@
+ Test Point    | Classification Problem
+k  | ( x, y)   |   1b  1c  2a  2b  2c  
+-------------------------------------
+1   | (-1,0 )  |   a   a   a   b   b
+2   | (1 ,-2)  |   X   b   a   b   a
+3   | (-8,-5)  |   X   a   a   a   X
+4   | (-5,1 )  |   a   a   a   a   a
+5   | (6 ,6 )  |   b   b   b   b   b
+6   | (4 ,1 )  |   b   b   b   b   b
+7   | (5 ,-5)  |   b   b   b   a   X
+8   | (7 ,1 )  |   b   b   b   b   b
+9   | (-7,1 )  |   X   a   a   a   X
+10  | (-8,-6)  |   X   a   a   a   X

@@ -1,0 +1,44 @@
+sentence(sentence(X,Y)) --> noun_part(X),verb_part(Y).
+sentence(sentence(W,X,Y,Z)) --> noun_part(W),verb_part(X),conj(Y),sentence(Z).
+
+conj(conj(and)) --> [and].
+
+noun_part(noun_part(X)) --> pronoun(X).
+noun_part(noun_part(X)) --> noun(X).
+noun_part(noun_part(X,Y)) --> article(X),noun(Y).
+
+
+
+%noun_part(noun_part(X,Y)) --> digit(X),digit(Y).
+%noun_part(noun_part(X,Y)) --> noun(X),pp(Y).
+%noun_part(noun_part(X,Y)) --> noun(X),relclause(Y).
+
+verb_part(verb_part(X)) --> verb(X).
+verb_part(verb_part(X,Y)) --> verb(X),noun_part(Y).
+verb_part(verb_part(X,Y)) --> verb(X),adj(Y).
+%verb_part(verb_part(X,Y)) --> verb(X),pp(Y).
+verb_part(verb_part(X,Y)) --> verb(X),adv(Y).
+
+%pp(pp(X,Y)) --> prep(X),noun_part(Y).
+%relclause(relclause(that,X)) --> verb_part(X).
+
+noun(noun(stench)) --> [stench].
+noun(noun(wumpus)) --> [wumpus].
+noun(noun(breeze)) --> [breeze].
+
+verb(verb(is)) --> [is].
+verb(verb(feel)) --> [feel].
+verb(verb(smell)) --> [smell].
+
+adj(adj(dead)) --> [dead].
+
+adv(adv(here)) --> [here].
+
+pronoun(pronoun(i)) --> [i].
+pronoun(pronoun(it)) --> [it].
+
+article(article(the)) --> [the].
+article(article(a)) --> [a].
+article(article(an)) --> [an].
+
+prep(prep(in)) --> [in].

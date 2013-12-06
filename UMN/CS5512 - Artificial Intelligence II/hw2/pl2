@@ -1,0 +1,21 @@
+family(person(tom, doppel, date(7,may,1950), works(bbc,15200)),
+       person(ann, doppel, date(9,may,1951), unemployed),
+       [person(pat, doppel, date(5,may,1973), unemployed),
+       person(jim, doppel, date(5,may,1973), unemployed) ] ).
+family(person(tom, keinkind, date(7,may,1950), works(bbc,15200) ),
+       person(ann, keinkind, date(9,may,1951), unemployed ),
+       [] ).
+family(person(fred, auchdoppel, date(7,may,1930), works(bbc,15200)),
+       person(wilma, auchdoppel, date(9,may,1951), unemployed),
+       [person(pat, auchdoppel, date(5,may,1973), unemployed),
+        person(jim, auchdoppel, date(5,may,1973), works(bbc,15200)) ] ).
+family(person(tom, auchkeinkind, date(7,may,1950), unemployed),
+       person(ann, auchkeinkind, date(9,may,1951), works(bbc,15200)),
+       [] ).
+
+noChildren(X):-family(person(_,X,_,_),_,[]).
+
+employedChildren(X,Y):-family(_,_,[person(X,Y,_,works(_,_)),_]).
+employedChildren(X,Y):-family(_,_,[_,person(X,Y,_,works(_,_))]).
+cuckold(X):-family(person(_,X,_,unemployed),person(_,_,_,works(_,_)),_).
+winterSummer(X,Y,Z):-family(person(_,_,date(_,_,A),_),person(_,_,date(_,_,B),_),[person(X,Z,_,_),person(Y,Z,_,_)]),B-A>=15.

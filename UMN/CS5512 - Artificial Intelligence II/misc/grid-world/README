@@ -1,0 +1,47 @@
+FUNCTION:
+   This program is a simulation of learning the goal of moving to a
+user-defined square of a grid.  It uses Q-learning and was developed by
+Sridhar Mahadevan.
+
+REQUIREMENTS:  This program requires a C compiler and the X11 windowing
+libraries and include files.
+
+INSTALLATION:
+To install:
+
+1. Edit the file Makefile, and change the line that begins:
+	   INCLUDE =
+       to the X11 include file path on your system.
+
+2. Set the loader library path environment variable to the X11 library
+   path on your system:
+	setenv LD_LIBRARY_PATH <X11-lib-path> 
+
+3. Type make.  The executable will be called "grid_world"
+
+4. To run the program with the pre-defined defaults, type "xcar".  
+   To change the defaults, see the next section, INPUT.
+
+
+INPUT:
+
+   A new window with a visual display of the grid will be displayed,
+and in the original window, you are asked to enter a seed value
+for the random number generator.  Then you select a grid cell location to
+be the goal state, by clicking on it with the left mouse button.
+
+   The parameters of the simulation, such as the size of the grid, are
+defined in grid-world.h.  The Q-learning parameters, such as the number of
+trials and iterations, and the learning rate, are defined in qlearner.h.
+If you change these, you must re-compile with the "make" command.
+
+
+OUTPUT:
+
+   The policy (i.e., which direction the agent should move in from each
+square of the grid) is displayed in the grid window, and is also written
+to the file "policy-file". The cumulative rewards for each trial are
+written to cum-reward-x, where x is the trial number.
+
+
+BUGS AND LIMITATIONS:

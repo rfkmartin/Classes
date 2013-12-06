@@ -1,0 +1,137 @@
+Script started on Wed Mar 14 19:24:03 2001
+martin@femto (~/class/cs5512/hw4) % pl
+Welcome to SWI-Prolog (Version 3.2.8)
+Copyright (c) 1993-1998 University of Amsterdam.  All rights reserved.
+
+For help, use ?- help(Topic). or ?- apropos(Word).
+
+1 ?- [pl2].
+pl2 compiled, 0.01 sec, 4,956 bytes.
+
+Yes
+2 ?- trace,sentence(Parse,[it,is,a,wumpus],[]).
+   Call:  (  7) sentence(_G370, [it, is, a, wumpus], []) ? creep
+   Call:  (  8) noun_part(_G497, [it, is, a, wumpus], _L132) ? creep
+   Call:  (  9) pronoun(_G500, [it, is, a, wumpus], _L132) ? creep
+   Exit:  (  9) pronoun(pronoun(it), [it, is, a, wumpus], [is, a, wumpus]) ? creep
+   Exit:  (  8) noun_part(noun_part(pronoun(it)), [it, is, a, wumpus], [is, a, wumpus]) ? creep
+   Call:  (  8) verb_part(_G498, [is, a, wumpus], []) ? creep
+   Call:  (  9) verb(_G504, [is, a, wumpus], []) ? creep
+   Fail:  (  9) verb(_G504, [is, a, wumpus], []) ? creep
+   Redo:  (  8) verb_part(_G498, [is, a, wumpus], []) ? creep
+   Call:  (  9) verb(_G504, [is, a, wumpus], _L160) ? creep
+   Exit:  (  9) verb(verb(is), [is, a, wumpus], [a, wumpus]) ? creep
+   Call:  (  9) noun_part(_G505, [a, wumpus], []) ? creep
+   Call:  ( 10) pronoun(_G509, [a, wumpus], []) ? creep
+   Fail:  ( 10) pronoun(_G509, [a, wumpus], []) ? creep
+   Redo:  (  9) noun_part(_G505, [a, wumpus], []) ? creep
+   Call:  ( 10) noun(_G509, [a, wumpus], []) ? creep
+   Fail:  ( 10) noun(_G509, [a, wumpus], []) ? creep
+   Redo:  (  9) noun_part(_G505, [a, wumpus], []) ? creep
+   Call:  ( 10) article(_G509, [a, wumpus], _L188) ? creep
+   Exit:  ( 10) article(article(a), [a, wumpus], [wumpus]) ? creep
+   Call:  ( 10) noun(_G510, [wumpus], []) ? creep
+   Exit:  ( 10) noun(noun(wumpus), [wumpus], []) ? creep
+   Exit:  (  9) noun_part(noun_part(article(a), noun(wumpus)), [a, wumpus], []) ? creep
+   Exit:  (  8) verb_part(verb_part(verb(is), noun_part(article(a), noun(wumpus))), [is, a, wumpus], []) ? creep
+   Exit:  (  7) sentence(sentence(noun_part(pronoun(it)), verb_part(verb(is), noun_part(article(a), noun(wumpus)))), [it, is, a, wumpus], []) ? creep
+
+Parse = sentence(noun_part(pronoun(it)), verb_part(verb(is), noun_part(article(a), noun(wumpus)))) ;
+   Redo:  ( 10) noun(_G510, [wumpus], []) ? creep
+   Fail:  ( 10) noun(_G510, [wumpus], []) ? creep
+   Redo:  ( 10) article(_G509, [a, wumpus], _L188) ? creep
+   Fail:  ( 10) article(_G509, [a, wumpus], _L188) ? creep
+   Fail:  (  9) noun_part(_G505, [a, wumpus], []) ? creep
+   Redo:  (  9) verb(_G504, [is, a, wumpus], _L160) ? creep
+   Fail:  (  9) verb(_G504, [is, a, wumpus], _L160) ? creep
+   Redo:  (  8) verb_part(_G498, [is, a, wumpus], []) ? creep
+   Call:  (  9) verb(_G504, [is, a, wumpus], _L160) ? creep
+   Exit:  (  9) verb(verb(is), [is, a, wumpus], [a, wumpus]) ? creep
+   Call:  (  9) adj(_G505, [a, wumpus], []) ? creep
+   Fail:  (  9) adj(_G505, [a, wumpus], []) ? creep
+   Redo:  (  9) verb(_G504, [is, a, wumpus], _L160) ? creep
+   Fail:  (  9) verb(_G504, [is, a, wumpus], _L160) ? creep
+   Redo:  (  8) verb_part(_G498, [is, a, wumpus], []) ? creep
+   Call:  (  9) verb(_G504, [is, a, wumpus], _L160) ? creep
+   Exit:  (  9) verb(verb(is), [is, a, wumpus], [a, wumpus]) ? creep
+   Call:  (  9) adv(_G505, [a, wumpus], []) ? creep
+   Fail:  (  9) adv(_G505, [a, wumpus], []) ? creep
+   Redo:  (  9) verb(_G504, [is, a, wumpus], _L160) ? creep
+   Fail:  (  9) verb(_G504, [is, a, wumpus], _L160) ? creep
+   Fail:  (  8) verb_part(_G498, [is, a, wumpus], []) ? creep
+   Redo:  (  8) noun_part(_G497, [it, is, a, wumpus], _L132) ? creep
+   Call:  (  9) noun(_G500, [it, is, a, wumpus], _L132) ? creep
+   Fail:  (  9) noun(_G500, [it, is, a, wumpus], _L132) ? creep
+   Redo:  (  8) noun_part(_G497, [it, is, a, wumpus], _L132) ? creep
+   Call:  (  9) article(_G500, [it, is, a, wumpus], _L147) ? creep
+   Fail:  (  9) article(_G500, [it, is, a, wumpus], _L147) ? creep
+   Fail:  (  8) noun_part(_G497, [it, is, a, wumpus], _L132) ? creep
+   Redo:  (  7) sentence(_G370, [it, is, a, wumpus], []) ? creep
+   Call:  (  8) sentence(_G497, [it, is, a, wumpus], _L133) ? creep
+   Call:  (  9) noun_part(_G501, [it, is, a, wumpus], _L149) ? creep
+   Call:  ( 10) pronoun(_G504, [it, is, a, wumpus], _L149) ? creep
+   Exit:  ( 10) pronoun(pronoun(it), [it, is, a, wumpus], [is, a, wumpus]) ? creep
+   Exit:  (  9) noun_part(noun_part(pronoun(it)), [it, is, a, wumpus], [is, a, wumpus]) ? creep
+   Call:  (  9) verb_part(_G502, [is, a, wumpus], _L133) ? creep
+   Call:  ( 10) verb(_G508, [is, a, wumpus], _L133) ? creep
+   Exit:  ( 10) verb(verb(is), [is, a, wumpus], [a, wumpus]) ? creep
+   Exit:  (  9) verb_part(verb_part(verb(is)), [is, a, wumpus], [a, wumpus]) ? creep
+   Exit:  (  8) sentence(sentence(noun_part(pronoun(it)), verb_part(verb(is))), [it, is, a, wumpus], [a, wumpus]) ? creep
+   Call:  (  8) conj(_G498, [a, wumpus], _L134) ? creep
+   Fail:  (  8) conj(_G498, [a, wumpus], _L134) ? creep
+   Redo:  ( 10) verb(_G508, [is, a, wumpus], _L133) ? creep
+   Fail:  ( 10) verb(_G508, [is, a, wumpus], _L133) ? creep
+   Redo:  (  9) verb_part(_G502, [is, a, wumpus], _L133) ? creep
+   Call:  ( 10) verb(_G508, [is, a, wumpus], _L177) ? creep
+   Exit:  ( 10) verb(verb(is), [is, a, wumpus], [a, wumpus]) ? creep
+   Call:  ( 10) noun_part(_G509, [a, wumpus], _L133) ? creep
+   Call:  ( 11) pronoun(_G513, [a, wumpus], _L133) ? creep
+   Fail:  ( 11) pronoun(_G513, [a, wumpus], _L133) ? creep
+   Redo:  ( 10) noun_part(_G509, [a, wumpus], _L133) ? creep
+   Call:  ( 11) noun(_G513, [a, wumpus], _L133) ? 
+Action (h for help) ? abort
+
+Execution Aborted
+
+3 ?- [oldeo].
+[WARNING: source_sink `oldeo' does not exist]
+[WARNING: Unhandled exception]
+
+Execution Aborted
+
+4 ?- [olde0].
+olde0 compiled, 0.01 sec, 8,504 bytes.
+
+Yes
+5 ?- trace,s([it,is,a,wumpus],[]).
+   Call:  (  8) s([it, is, a, wumpus], []) ? creep
+   Call:  (  9) np([it, is, a, wumpus], _L128) ? creep
+   Call:  ( 10) pronoun([it, is, a, wumpus], _L128) ? creep
+   Exit:  ( 10) pronoun([it, is, a, wumpus], [is, a, wumpus]) ? creep
+   Exit:  (  9) np([it, is, a, wumpus], [is, a, wumpus]) ? creep
+   Call:  (  9) vp([is, a, wumpus], []) ? creep
+   Call:  ( 10) verb([is, a, wumpus], []) ? creep
+   Fail:  ( 10) verb([is, a, wumpus], []) ? creep
+   Redo:  (  9) vp([is, a, wumpus], []) ? creep
+   Call:  ( 10) verb([is, a, wumpus], _L151) ? creep
+   Exit:  ( 10) verb([is, a, wumpus], [a, wumpus]) ? creep
+   Call:  ( 10) np([a, wumpus], []) ? creep
+   Call:  ( 11) pronoun([a, wumpus], []) ? creep
+   Fail:  ( 11) pronoun([a, wumpus], []) ? creep
+   Redo:  ( 10) np([a, wumpus], []) ? creep
+   Call:  ( 11) noun([a, wumpus], []) ? creep
+   Fail:  ( 11) noun([a, wumpus], []) ? creep
+   Redo:  ( 10) np([a, wumpus], []) ? creep
+   Call:  ( 11) article([a, wumpus], _L175) ? creep
+   Exit:  ( 11) article([a, wumpus], [wumpus]) ? creep
+   Call:  ( 11) noun([wumpus], []) ? creep
+   Exit:  ( 11) noun([wumpus], []) ? creep
+   Exit:  ( 10) np([a, wumpus], []) ? creep
+   Exit:  (  9) vp([is, a, wumpus], []) ? creep
+   Exit:  (  8) s([it, is, a, wumpus], []) ? creep
+
+Yes
+[debug] 6 ?- ^C
+Action (h for help) ? exit
+martin@femto (~/class/cs5512/hw4) % 
+script done on Wed Mar 14 19:28:25 2001

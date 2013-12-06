@@ -1,0 +1,2 @@
+member1(X,[X|_]).
+member1(X,[Y|Tail]):-member(X,Tail).

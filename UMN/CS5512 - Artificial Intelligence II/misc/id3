@@ -1,0 +1,218 @@
+/* from Shoham book AI Techniques in Prolog */
+/* MLG: fixed the log part 
+   MLG: added test data.  Look towards the end of the file.
+   MLG: fixed computation of entropy
+   Dan Cosley: removed attributes already considered
+   */
+
+% id3/3 takes as arguments: 
+%   attribute list (+), which is a list of (attribute name, list of
+%      possible values)
+%   input list (+), which is a list of (category, feature vector)
+%   decision tree (-)
+
+id3( _, Data, Tree ) :-
+  all_same_category( Data, Categ ), !,
+  Tree = leaf( Categ).
+
+id3( AttrList, Data, Tree ) :- 
+  select_and_split( AttrList, Data, BestAttr, BestDataPartition ),
+  nl,write('splitting attribute: '), write(BestAttr),nl,
+  % CORRECTION BY DAN COSLEY
+  % removes the attribute used to avoid getting into a loop 
+    delete(AttrList, (BestAttr,_), NewAttrList),
+    write(NewAttrList),nl,
+    generate_children_trees( NewAttrList, BestDataPartition, ChildrenTrees ),
+    generate_children_trees( AttrList, BestDataPartition, ChildrenTrees ),
+  Tree = tree( internal( BestAttr ), ChildrenTrees ).
+
+all_same_category( [ ], _ ). 
+all_same_category( [ (Categ,_) | MoreData ], Categ ) :-
+  all_same_category( MoreData, Categ ). 
+
+select_and_split( AttrList, Data, BestAttr, BestPartition ) :- 
+  findall( ( Attr, Partition, Entropy),
+           ( member( ( Attr, PosAttrValues ), AttrList ), 
+             partition( Data, Attr, PosAttrValues, Partition, Entropy ) ),
+           AllPartitions ), 
+  % write_entropy(AllPartitions),nl,
+  select_minimal_entropy( AllPartitions, BestAttr, BestPartition ).
+
+partition( _, _, [ ] , [ ], 0 ).
+
+partition( Data, Attr, 
+           [ OnePosAttrValue | RestValues ] , Partition, Entropy ) :- 
+  select_by_attr_value( Data, Attr, OnePosAttrValue, SubData ),
+  ( SubData = [ ]
+    -> partition( Data, Attr, RestValues , Partition, Entropy )  
+    ;  
+    compute_set_entropy( SubData, SubEntropy ),
+  % CORRECTION BY MLG 
+  % weigh the subclasses according to the number of elements
+  % when computing entropy
+  % THIS SEEMS TO FIX THE LOOP PROBLEM WITHOUT HAVING TO REMOVE
+  % THE ATTRIBUTES ALREADY USED - MORE TESTING NEEDED
+  length( Data, Dnum ),
+  length( SubData, SubDnum ),
+  Pp is SubDnum / Dnum,
+    partition( Data, Attr, RestValues , RestPartition, RestEntropy ),
+    Partition = [ OnePosAttrValue-SubData | RestPartition ],
+    Entropy is (Pp*SubEntropy) + RestEntropy ).
+
+select_by_attr_value( [ ], _, _, [ ] ).
+select_by_attr_value( [ (V,Datum) | MoreData ], Attr, AttrValue, SubData ) :-
+  member( (Attr,AttrValue), Datum )
+  -> select_by_attr_value( MoreData, Attr, AttrValue, MoreSubData ),
+     SubData = [ (V,Datum) | MoreSubData ]
+  ;  select_by_attr_value( MoreData, Attr, AttrValue, SubData ).
+  
+/* Older implementation of the second clause for 'partition':
+partition( Data, Attr, 
+           [ OnePosAttrValue | RestValues ] , Partition, Entropy ) :- 
+  bagof( (Categ,Datum), 
+         ( member( (Categ,Datum), Data ), 
+           member( (Attr, OnePosAttrValue), Datum ) ),
+         SubData ) 
+  ->
+  compute_set_entropy( SubData, SubEntropy ),
+  partition( Data, Attr, RestValues , RestPartition, RestEntropy ),
+  Partition = [ OnePosAttrValue-SubData | RestPartition ],
+  Entropy is SubEntropy + RestEntropy
+  ;
+  partition( Data, Attr, RestValues , Partition, Entropy ).
+*/
+
+compute_set_entropy( Data, Entropy ) :- 
+  count_positive( Data, Pnum ),
+  length( Data, Dnum ),
+  Pp is Pnum / Dnum,
+  Pn is 1 - Pp,
+  xlogx( Pp, PpLogPp ),
+  xlogx( Pn, PnLogPn ),
+  Entropy is - ( PpLogPp + PnLogPn ).
+
+count_positive( [ ], 0 ).
+count_positive( [ (p,_) | More ], Pnum ) :- !,
+  count_positive( More, Pnum1 ), Pnum is Pnum1 + 1.
+count_positive( [ (n,_) | More ], Pnum ) :- count_positive( More, Pnum ).
+
+xlogx( X, N) :- X is 0.0E+00, !, N = 0.
+xlogx( X, N) :- mylog(X, LogX), N is X * LogX.
+
+
+select_minimal_entropy( 
+    [ (Attr, Partition, Entropy ) | MorePartitions ], 
+    BestAttr, BestPartition ):-
+  select_minimal_entropy_aux( MorePartitions, 
+                              (Attr, Partition, Entropy), 
+                              BestAttr, BestPartition ).
+
+select_minimal_entropy_aux( [ ], (Attr, Partition, _), Attr, Partition ).
+select_minimal_entropy_aux( 
+       [ (Attr1, Partition1, Entropy1) | MorePartitions ],
+       ( _, _, Entropy), BestAttr, BestPartition ) :-
+  Entropy1 < Entropy , !,
+  select_minimal_entropy_aux( 
+      MorePartitions, (Attr1, Partition1, Entropy1), BestAttr, BestPartition ).
+select_minimal_entropy_aux( 
+       [ _ | MorePartitions ],
+       (Attr, Partition, Entropy), BestAttr, BestPartition ) :-
+  select_minimal_entropy_aux( 
+       MorePartitions, (Attr, Partition, Entropy), BestAttr, BestPartition ).
+
+
+generate_children_trees( _, [ ], [ ] ).
+
+generate_children_trees( 
+         AttrList, [ Value-SubData | MoreData ], ChildrenTrees ) :-
+  id3( AttrList, SubData, ChildTree ),
+  generate_children_trees( AttrList, MoreData, MoreTrees ),
+  ChildrenTrees = [ Value-ChildTree | MoreTrees ].
+
+% log is the natural log so we convert it to base 2  
+% log 2 is 0.693147
+mylog(X,N) :- log(X,LogX), N is LogX/0.693147.
+
+% I have no idea why the original program has this table 
+% these are all log10 values 
+% mylog(X,N) :- X is 1.0, !, N is 0.
+% mylog(X,N) :- X is 0.5, !, N is -0.30103.
+% mylog(X,N) :- X is 0.25, !, N is -0.60206.
+% mylog(X,N) :- X is 0.75, !, N is -0.12494.
+% mylog(X,N) :- X is 0.6, !, N is -0.22185.
+% mylog(X,N) :- X is 0.4, !, N is -0.39794.
+% mylog(X,N) :- X is 0.8, !, N is -0.09691.
+% mylog(X,N) :- X is 0.2, !, N is -0.69897.
+% mylog(X,N) :- X is 2/3, !, N is -0.17609.
+% mylog(X,N) :- X is 1-(1/3), !, N is -0.17609.
+% mylog(X,N) :- X is 1- (2/3), !, N is -0.47712.
+% mylog(X,N) :- X is 1/3, !, N is -0.47712.
+% mylog(X,N) :- X is 5/6, !, N is -0.07918.
+% mylog(X,N) :- X is 1-(1/6), !, N is -0.07918.
+% mylog(X,N) :- X is 1-(5/6), !, N is -0.77815.
+% mylog(X,N) :- X is 1/6, !, N is -0.77815.
+% mylog(X,N) :- X is 0.375, !, N is -0.42596873.
+% mylog(X,N) :- X is 0.625, !, N is -0.20412.
+% mylog(X,N) :- X is 0.285714, !, N is -0.54409.
+% mylog(X,N) :- X is 0.714286, !, N is -0.14613.
+
+% mylog(X,LogX) :- 
+%   nl, write('Enter the log of '),write(X), write(' : '),
+%   read(LogX).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Testing
+test1(Tree):- id3([(gpa,[4.0,3.7,3.5]),
+                   (univ,[top10,top20,top30]),
+                   (publ,[yes,no]),
+                   (rec,[good,normal])],
+                 [(p,[(gpa,4.0),(univ,top10),(publ,yes),(rec,good)]),
+                  (p,[(gpa,4.0),(univ,top10),(publ,no),(rec,good)]),
+                  (p,[(gpa,4.0),(univ,top20),(publ,no),(rec,normal)]),
+                  (p,[(gpa,3.7),(univ,top10),(publ,yes),(rec,good)]),
+                  (n,[(gpa,3.7),(univ,top20),(publ,no),(rec,good)]),
+                  (p,[(gpa,3.7),(univ,top30),(publ,yes),(rec,good)]),
+                  (n,[(gpa,3.7),(univ,top30),(publ,no),(rec,good)]),
+                  (n,[(gpa,3.7),(univ,top10),(publ,no),(rec,good)]),
+                  (n,[(gpa,3.5),(univ,top20),(publ,yes),(rec,normal)]),
+                  (n,[(gpa,3.5),(univ,top10),(publ,no),(rec,normal)]),
+                  (n,[(gpa,3.5),(univ,top30),(publ,yes),(rec,normal)]),
+                  (n,[(gpa,3.5),(univ,top30),(publ,no),(rec,good)])
+                 ], 
+                 Tree).
+
+test2(Tree) :- 
+    id3([(outlook,[sunny,overcast,rain]),
+         (temp,[cool,mild,hot]), 
+         (humidity,[normal,high]), 
+         (wind,[strong,weak])],
+        [(n,[(outlook,sunny),   (temp,hot), (humidity,high),  (wind,weak)]),
+         (n,[(outlook,sunny),   (temp,hot), (humidity,high),  (wind,strong)]),
+         (p,[(outlook,overcast),(temp,hot), (humidity,high),  (wind,weak)]),
+         (p,[(outlook,rain),    (temp,mild),(humidity,high),  (wind,weak)]),
+         (p,[(outlook,rain),    (temp,cool),(humidity,normal),(wind,weak)]),
+         (n,[(outlook,rain),    (temp,cool),(humidity,normal),(wind,strong)]),
+         (p,[(outlook,overcast),(temp,cool),(humidity,normal),(wind,strong)]),
+         (n,[(outlook,sunny),   (temp,mild),(humidity,high),  (wind,weak)]),
+         (p,[(outlook,sunny),   (temp,cool),(humidity,normal),(wind,weak)]),
+         (p,[(outlook,rain),    (temp,mild),(humidity,normal),(wind,weak)]),
+         (p,[(outlook,sunny),   (temp,mild),(humidity,normal),(wind,strong)]),
+         (p,[(outlook,overcast),(temp,mild),(humidity,high),  (wind,strong)]),
+         (p,[(outlook,overcast),(temp,hot), (humidity,normal),(wind,weak)]),
+         (p,[(outlook,rain),    (temp,mild),(humidity,high),  (wind,strong)])
+         ],
+         Tree).
+
+testfinal(Tree) :-
+   id3([(size,[small,large]),
+	(nat,[esp,ita,fra]),
+	(status,[single, married])],
+       [(p,[(size,small),(nat,esp),(status,single)]),
+	(n,[(size,small),(nat,ita),(status,single)]),
+	(n,[(size,large),(nat,esp),(status,married)]),
+	(p,[(size,large),(nat,fra),(status,single)]),
+	(n,[(size,large),(nat,ita),(status,single)]),
+	(n,[(size,large),(nat,esp),(status,single)]),
+	(p,[(size,large),(nat,ita),(status,married)])
+	,(n,[(size,small),(nat,esp),(status,married)])
+],Tree).

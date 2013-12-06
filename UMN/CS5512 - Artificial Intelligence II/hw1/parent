@@ -1,0 +1,29 @@
+/* upper case used for variables, lower case for constants.
+   Terminate each clause by a period.  A clause can be written
+   on multiple lines. Do not leave any blank space. */
+
+/* these are rules */
+
+parent(X,Y):-mother(X,Y).
+parent(X,Y):-father(X,Y).
+grandparent(X,Y):-parent(X,Z),parent(Z,Y).
+
+/* and these facts */
+mother(sonja,mary).
+mother(sonja,jane).
+father(john,jim).
+father(john,bob).
+father(bob,bill).
+father(bob,dan).
+
+/* and these are goals 
+
+Find all X that are grandparents of Y.  Type ; after the first answer
+is returned to see more answers. 
+
+grandparent(X,Y).
+
+Find who John is a granparent of
+
+grandparent(john,X).
+*/

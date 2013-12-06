@@ -1,0 +1,16 @@
+thing(bird,'Tweety').
+thing(fish,'Goldie').
+thing(worm,'Squiggly').
+thing(cat,'My cat').
+like(bird,worm).
+like(cat,fish).
+like(cat,bird).
+
+like(cat,X):-thing(fish,X).
+like(cat,X):-thing(bird,X).
+like(bird,X):-thing(worm,X).
+friend(X,Y):-assert(like(X,Y)),assert(like(Y,X)).
+eats(X,Y):-like(X,Y).
+eats(X,Y):-like(Z,Y),thing(Z,X).
+
+friend(me,'My cat').
