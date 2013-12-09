@@ -1,0 +1,42 @@
+%  Robert F.K. Martin<martin@cs.umn.edu>
+%  http://www.cs.umn.edu/~martin/
+
+\def\packagename{homework}
+\def\packagemessage{Someone should make this a nice class just as the
+University of Colorado has it.}
+\def\fileversion{0.01}
+\def\filedate{2003/09/15}
+\def\docdate{2003/09/15}
+
+
+% ---- identification ---------------------------------------------------------
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{homework}[\filedate\space v\fileversion\space \packagename]
+\typeout{Package: `\packagename' v\fileversion\space <\filedate>}
+\typeout{\packagemessage}
+
+
+% ---- package loading --------------------------------------------------------
+
+\RequirePackage{vmargin}
+
+
+% ---- main code --------------------------------------------------------------
+
+\setpapersize{USletter}
+\setmarginsrb{1in}{0.5in}{1in}{1in}{0pt}{0mm}{0pt}{0mm}
+%{\headheight}{\headsep}{\footheight}{\footskip}
+
+
+\newcommand{\hwhead}[5]{ % Name, ID#, Class, Date, Assignment
+\newpage
+\thispagestyle{empty}
+\begin{spacing}{1}
+#1\\
+#2\\
+#3\\
+#4\\
+#5\\
+\end{spacing}
+}

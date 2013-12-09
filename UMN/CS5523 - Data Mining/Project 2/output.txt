@@ -1,0 +1,339 @@
+
+C:\Documents and Settings\Robert Martin\My Documents\Class\CS5523\Project 2>apriori.exe -ts -s.01 T10I4D100K_new.dat problem1a1.txt
+apriori.exe - find frequent item sets with the apriori algorithm
+version 5.61 (2011.09.30)        (c) 1996-2011   Christian Borgelt
+reading T10I4D100K_new.dat ... [870 item(s), 99936 transaction(s)] done [2.75s].
+filtering, sorting and recoding items ... [867 item(s)] done [0.00s].
+sorting and reducing transactions ... [89081/99936 transaction(s)] done [0.06s].
+building transaction tree ... [112305 node(s)] done [0.06s].
+checking subsets of size 1 2 3 4 5 6 7 8 9 10 11 done [4.23s].
+writing problem1a1.txt ... [410920 set(s)] done [0.83s].
+
+C:\Documents and Settings\Robert Martin\My Documents\Class\CS5523\Project 2>perl addemup.pl problem1a1.txt
+867
+110739
+152618
+80612
+39886
+16141
+6219
+2472
+954
+318
+80
+13
+1
+0
+0
+0
+
+C:\Documents and Settings\Robert Martin\My Documents\Class\CS5523\Project 2>apriori.exe -ts -s.02 T10I4D100K_new.dat problem1a2.txt
+apriori.exe - find frequent item sets with the apriori algorithm
+version 5.61 (2011.09.30)        (c) 1996-2011   Christian Borgelt
+reading T10I4D100K_new.dat ... [870 item(s), 99936 transaction(s)] done [0.19s].
+filtering, sorting and recoding items ... [859 item(s)] done [0.00s].
+sorting and reducing transactions ... [89081/99936 transaction(s)] done [0.06s].
+building transaction tree ... [112312 node(s)] done [0.06s].
+checking subsets of size 1 2 3 4 5 6 7 8 9 10 done [2.20s].
+writing problem1a2.txt ... [129781 set(s)] done [0.30s].
+
+C:\Documents and Settings\Robert Martin\My Documents\Class\CS5523\Project 2>perl addemup.pl problem1a2.txt
+859
+58289
+29784
+18028
+11115
+6275
+3263
+1472
+530
+140
+24
+2
+0
+0
+0
+0
+
+C:\Documents and Settings\Robert Martin\My Documents\Class\CS5523\Project 2>apriori.exe -ts -s.03 T10I4D100K_new.dat problem1a3.txt
+apriori.exe - find frequent item sets with the apriori algorithm
+version 5.61 (2011.09.30)        (c) 1996-2011   Christian Borgelt
+reading T10I4D100K_new.dat ... [870 item(s), 99936 transaction(s)] done [0.19s].
+filtering, sorting and recoding items ... [853 item(s)] done [0.02s].
+sorting and reducing transactions ... [89080/99936 transaction(s)] done [0.06s].
+building transaction tree ... [112332 node(s)] done [0.05s].
+checking subsets of size 1 2 3 4 5 6 7 8 9 10 done [1.56s].
+writing problem1a3.txt ... [82108 set(s)] done [0.09s].
+
+C:\Documents and Settings\Robert Martin\My Documents\Class\CS5523\Project 2>perl addemup.pl problem1a3.txt
+853
+36838
+16523
+12606
+8233
+4398
+1889
+615
+135
+17
+1
+0
+0
+0
+0
+0
+
+C:\Documents and Settings\Robert Martin\My Documents\Class\CS5523\Project 2>apriori.exe -ts -s5 -m2 -n15 mushroom_new.dat problem1b1.txt
+apriori.exe - find frequent item sets with the apriori algorithm
+version 5.61 (2011.09.30)        (c) 1996-2011   Christian Borgelt
+reading mushroom_new.dat ... [119 item(s), 8099 transaction(s)] done [0.34s].
+filtering, sorting and recoding items ... [73 item(s)] done [0.00s].
+sorting and reducing transactions ... [7453/8099 transaction(s)] done [0.00s].
+building transaction tree ... [19617 node(s)] done [0.02s].
+checking subsets of size 1 2 3 4 5 6 7 8 9 10 done [1.52s].
+writing problem1b1.txt ... [3750929 set(s)] done [29.91s].
+
+C:\Documents and Settings\Robert Martin\My Documents\Class\CS5523\Project 2>perl addemup.pl problem1b1.txt
+0
+1329
+10617
+48226
+144933
+315872
+527165
+692730
+723730
+600195
+391578
+197889
+75624
+21041
+0
+0
+
+C:\Documents and Settings\Robert Martin\My Documents\Class\CS5523\Project 2>apriori.exe -ts -s10 -m2 -n15 mushroom_new.dat problem1b2.txt
+apriori.exe - find frequent item sets with the apriori algorithm
+version 5.61 (2011.09.30)        (c) 1996-2011   Christian Borgelt
+reading mushroom_new.dat ... [119 item(s), 8099 transaction(s)] done [0.25s].
+filtering, sorting and recoding items ... [56 item(s)] done [0.00s].
+sorting and reducing transactions ... [5598/8099 transaction(s)] done [0.01s].
+building transaction tree ... [18290 node(s)] done [0.00s].
+checking subsets of size 1 2 3 4 5 6 7 8 9 10 done [0.47s].
+writing problem1b2.txt ... [574221 set(s)] done [0.63s].
+
+C:\Documents and Settings\Robert Martin\My Documents\Class\CS5523\Project 2>perl addemup.pl problem1b2.txt
+0
+763
+4595
+16156
+38805
+69829
+98834
+111780
+100659
+71342
+39171
+16292
+4956
+1039
+0
+0
+
+C:\Documents and Settings\Robert Martin\My Documents\Class\CS5523\Project 2>apriori.exe -ts -s20 -m2 -n15 mushroom_new.dat problem1b3.txt
+apriori.exe - find frequent item sets with the apriori algorithm
+version 5.61 (2011.09.30)        (c) 1996-2011   Christian Borgelt
+reading mushroom_new.dat ... [119 item(s), 8099 transaction(s)] done [0.03s].
+filtering, sorting and recoding items ... [43 item(s)] done [0.00s].
+sorting and reducing transactions ... [1944/8099 transaction(s)] done [0.00s].
+building transaction tree ... [5282 node(s)] done [0.01s].
+checking subsets of size 1 2 3 4 5 6 7 8 9 10 done [0.08s].
+writing problem1b3.txt ... [53633 set(s)] done [0.05s].
+
+C:\Documents and Settings\Robert Martin\My Documents\Class\CS5523\Project 2>perl addemup.pl problem1b3.txt
+0
+376
+1473
+3570
+6295
+8834
+10169
+9492
+7010
+4004
+1729
+546
+119
+16
+0
+0
+
+C:\Documents and Settings\Robert Martin\My Documents\Class\CS5523\Project 2>apriori.exe -ts -s5 mushroom_new.dat problem1c1.txt
+apriori.exe - find frequent item sets with the apriori algorithm
+version 5.61 (2011.09.30)        (c) 1996-2011   Christian Borgelt
+reading mushroom_new.dat ... [119 item(s), 8099 transaction(s)] done [0.03s].
+filtering, sorting and recoding items ... [73 item(s)] done [0.00s].
+sorting and reducing transactions ... [7453/8099 transaction(s)] done [0.00s].
+building transaction tree ... [19617 node(s)] done [0.01s].
+checking subsets of size 1 2 3 4 5 6 7 8 9 10 done [1.50s].
+writing problem1c1.txt ... [3755487 set(s)] done [23.22s].
+
+C:\Documents and Settings\Robert Martin\My Documents\Class\CS5523\Project 2>wc -l problem1c1.txt
+3755487 problem1c1.txt
+
+C:\Documents and Settings\Robert Martin\My Documents\Class\CS5523\Project 2>apriori.exe -tc -s5 mushroom_new.dat problem1c2.txt
+apriori.exe - find frequent item sets with the apriori algorithm
+version 5.61 (2011.09.30)        (c) 1996-2011   Christian Borgelt
+reading mushroom_new.dat ... [119 item(s), 8099 transaction(s)] done [0.28s].
+filtering, sorting and recoding items ... [73 item(s)] done [0.00s].
+sorting and reducing transactions ... [7453/8099 transaction(s)] done [0.00s].
+building transaction tree ... [19617 node(s)] done [0.01s].
+checking subsets of size 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 done [90.72s].
+filtering for closed item sets ... done [0.41s].
+writing problem1c2.txt ... [12837 set(s)] done [0.30s].
+
+C:\Documents and Settings\Robert Martin\My Documents\Class\CS5523\Project 2>wc -l problem1c2.txt
+12837 problem1c2.txt
+
+C:\Documents and Settings\Robert Martin\My Documents\Class\CS5523\Project 2>apriori.exe -tm -s5 mushroom_new.dat problem1c3.txt
+apriori.exe - find frequent item sets with the apriori algorithm
+version 5.61 (2011.09.30)        (c) 1996-2011   Christian Borgelt
+reading mushroom_new.dat ... [119 item(s), 8099 transaction(s)] done [0.25s].
+filtering, sorting and recoding items ... [73 item(s)] done [0.00s].
+sorting and reducing transactions ... [7453/8099 transaction(s)] done [0.00s].
+building transaction tree ... [19617 node(s)] done [0.02s].
+checking subsets of size 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 done [89.39s].
+filtering for maximal item sets ... done [0.31s].
+writing problem1c3.txt ... [1453 set(s)] done [0.27s].
+
+C:\Documents and Settings\Robert Martin\My Documents\Class\CS5523\Project 2>wc -l problem1c3.txt
+1453 problem1c3.txt
+
+C:\Documents and Settings\Robert Martin\My Documents\Class\CS5523\Project 2>apriori.exe -ts -s.01 T10I4D100K_new.dat problem1c3.txt
+apriori.exe - find frequent item sets with the apriori algorithm
+version 5.61 (2011.09.30)        (c) 1996-2011   Christian Borgelt
+reading T10I4D100K_new.dat ... [870 item(s), 99936 transaction(s)] done [0.86s].
+filtering, sorting and recoding items ... [867 item(s)] done [0.00s].
+sorting and reducing transactions ... [89081/99936 transaction(s)] done [0.08s].
+building transaction tree ... [112305 node(s)] done [0.05s].
+checking subsets of size 1 2 3 4 5 6 7 8 9 10 11 done [4.09s].
+writing problem1c3.txt ... [410920 set(s)] done [0.38s].
+
+C:\Documents and Settings\Robert Martin\My Documents\Class\CS5523\Project 2>wc -l problem1c3.txt
+410920 problem1c3.txt
+
+C:\Documents and Settings\Robert Martin\My Documents\Class\CS5523\Project 2>apriori.exe -tc -s.01 T10I4D100K_new.dat problem1c4.txt
+apriori.exe - find frequent item sets with the apriori algorithm
+version 5.61 (2011.09.30)        (c) 1996-2011   Christian Borgelt
+reading T10I4D100K_new.dat ... [870 item(s), 99936 transaction(s)] done [0.20s].
+filtering, sorting and recoding items ... [867 item(s)] done [0.01s].
+sorting and reducing transactions ... [89081/99936 transaction(s)] done [0.06s].
+building transaction tree ... [112305 node(s)] done [0.05s].
+checking subsets of size 1 2 3 4 5 6 7 8 9 10 11 12 13 done [4.23s].
+filtering for closed item sets ... done [12.92s].
+writing problem1c4.txt ... [283149 set(s)] done [0.27s].
+
+C:\Documents and Settings\Robert Martin\My Documents\Class\CS5523\Project 2>wc -l problem1c4.txt
+283149 problem1c4.txt
+
+C:\Documents and Settings\Robert Martin\My Documents\Class\CS5523\Project 2>apriori.exe -tm -s.01 T10I4D100K_new.dat problem1c5.txt
+apriori.exe - find frequent item sets with the apriori algorithm
+version 5.61 (2011.09.30)        (c) 1996-2011   Christian Borgelt
+reading T10I4D100K_new.dat ... [870 item(s), 99936 transaction(s)] done [0.19s].
+filtering, sorting and recoding items ... [867 item(s)] done [0.00s].
+sorting and reducing transactions ... [89081/99936 transaction(s)] done [0.06s].
+building transaction tree ... [112305 node(s)] done [0.05s].
+checking subsets of size 1 2 3 4 5 6 7 8 9 10 11 12 13 done [4.20s].
+filtering for maximal item sets ... done [6.31s].
+writing problem1c5.txt ... [127146 set(s)] done [0.17s].
+
+C:\Documents and Settings\Robert Martin\My Documents\Class\CS5523\Project 2>wc -l problem1c5.txt
+127146 problem1c5.txt
+
+C:\Documents and Settings\Robert Martin\My Documents\Class\CS5523\Project 2>apriori.exe -tr -s2 -c5 Teams_new.dat problem2a1.txt problem2a1.out
+apriori.exe - find frequent item sets with the apriori algorithm
+version 5.61 (2011.09.30)        (c) 1996-2011   Christian Borgelt
+reading problem2a1.out ... [1 item(s)] done [0.01s].
+reading Teams_new.dat ... [5 item(s), 210 transaction(s)] done [0.34s].
+filtering, sorting and recoding items ... [5 item(s)] done [0.00s].
+sorting and reducing transactions ... [8/210 transaction(s)] done [0.00s].
+building transaction tree ... [12 node(s)] done [0.00s].
+checking subsets of size 1 2 3 done [0.00s].
+writing problem2a1.txt ... [7 rule(s)] done [0.00s].
+
+C:\Documents and Settings\Robert Martin\My Documents\Class\CS5523\Project 2>cat problem2a1.out
+in
+5 out
+C:\Documents and Settings\Robert Martin\My Documents\Class\CS5523\Project 2>cat problem2a1.txt
+5 <-  (100.0, 42.9)
+5 <- 3 (33.3, 67.1)
+5 <- 1 (47.6, 40.0)
+5 <- 2 (52.4, 45.5)
+5 <- 4 (66.7, 30.7)
+5 <- 3 1 (4.8, 70.0)
+5 <- 3 2 (28.6, 66.7)
+5 <- 1 4 (42.9, 36.7)
+5 <- 2 4 (23.8, 20.0)
+
+C:\Documents and Settings\Robert Martin\My Documents\Class\CS5523\Project 2>apriori.exe -ts -m0 -n1 -s0 la1_new.txt problem3a1.txt
+apriori.exe - find frequent item sets with the apriori algorithm
+version 5.61 (2011.09.30)        (c) 1996-2011   Christian Borgelt
+reading la1_new.txt ... [6 item(s), 3000 transaction(s)] done [0.06s].
+filtering, sorting and recoding items ... [6 item(s)] done [0.00s].
+sorting and reducing transactions ... [11/3000 transaction(s)] done [0.00s].
+building transaction tree ... [17 node(s)] done [0.00s].
+checking subsets of size 1 done [0.00s].
+writing problem3a1.txt ... [6 set(s)] done [0.00s].
+
+C:\Documents and Settings\Robert Martin\My Documents\Class\CS5523\Project 2>cat problem3a1.txt
+ (100.0)
+4 (0.5)
+3 (0.5)
+5 (0.5)
+6 (0.7)
+2 (35.3)
+
+C:\Documents and Settings\Robert Martin\My Documents\Class\CS5523\Project 2>apriori.exe -ts -m2 -s10 la1_new.txt problem3b1.txt
+apriori.exe - find frequent item sets with the apriori algorithm
+version 5.61 (2011.09.30)        (c) 1996-2011   Christian Borgelt
+reading la1_new.txt ... [6 item(s), 3000 transaction(s)] done [0.00s].
+filtering, sorting and recoding items ... [2 item(s)] done [0.00s].
+sorting and reducing transactions ... [2/3000 transaction(s)] done [0.00s].
+building transaction tree ... [2 node(s)] done [0.00s].
+checking subsets of size 1 done [0.00s].
+writing problem3b1.txt ... [1 set(s)] done [0.00s].
+
+C:\Documents and Settings\Robert Martin\My Documents\Class\CS5523\Project 2>cat problem3b1.txt
+2 1 (35.3)
+
+C:\Documents and Settings\Robert Martin\My Documents\Class\CS5523\Project 2>apriori.exe -ts -m2 -s.466 la1_new.txt problem3c1.txt
+apriori.exe - find frequent item sets with the apriori algorithm
+version 5.61 (2011.09.30)        (c) 1996-2011   Christian Borgelt
+reading la1_new.txt ... [6 item(s), 3000 transaction(s)] done [0.00s].
+filtering, sorting and recoding items ... [6 item(s)] done [0.00s].
+sorting and reducing transactions ... [11/3000 transaction(s)] done [0.00s].
+building transaction tree ... [16 node(s)] done [0.00s].
+checking subsets of size 1 2 done [0.00s].
+writing problem3c1.txt ... [7 set(s)] done [0.00s].
+
+C:\Documents and Settings\Robert Martin\My Documents\Class\CS5523\Project 2>cat problem3c1.txt
+4 1 (0.5)
+3 1 (0.5)
+5 1 (0.5)
+5 1 6 (0.5)
+5 6 (0.5)
+6 1 (0.7)
+2 1 (35.3)
+
+C:\Documents and Settings\Robert Martin\My Documents\Class\CS5523\Project 2>hcwin.exe -th -s0 -c30 la1_new.txt la1.out
+hcwin.exe - find hyperclique patterns
+
+reading la1_new.txt ... [6 item(s), 3000 transaction(s)] done [0.05s].
+sorting and recoding items ... [6 item(s)] done [0.00s].
+creating transaction tree ... done [0.00s].
+checking subsets of size 1 2 3 done [0.00s].
+writing la1.out ... [3 hyperclique(s)] done [0.00s].
+
+D:\cygwin\home\rmartin\Class\CS5523\Project 2>cat la1.out
+4 3  (0.4%, 92.9%)
+5 6  (0.5%, 70.0%)
+2 1  (35.3%, 35.3%)
