@@ -1,0 +1,1263 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>About M101J</title>
+
+  <link rel="icon" type="image/x-icon" href="/static/images/favicon.7d83e8e6c089.ico" />
+  <link href='//fonts.googleapis.com/css?family=PT+Sans:400,700,400italic' rel='stylesheet' type='text/css'>
+
+  
+    <link href="/static/css/lms-application.5ca0ecf3d50b.css" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+    <script type="text/javascript" src="/static/js/lms-main_vendor.dc1c3a808f00.js" charset="utf-8"></script>
+
+
+  
+
+  <!--[if lt IE 9]>
+  <script src="/static/js/html5shiv.d5e37d8ee1a4.js"></script>
+  <![endif]-->
+
+  <!--[if lte IE 9]>
+  
+    <link href="/static/css/lms-ie.ede23fb35c36.css" rel="stylesheet" type="text/css" />
+
+
+
+  <![endif]-->
+
+  <meta name="path_prefix" content="">
+  <meta name="description" content="Free Online Classes on MongoDB from MongoDB, Inc."/>
+  <script type="text/javascript">
+
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-7301842-12']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+    
+  </script>
+
+  <!-- Google Tag Manager -->
+  <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5XGNHD" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <script>
+    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-5XGNHD');
+  </script>
+  <!-- End Google Tag Manager -->
+
+  <script type="text/javascript" src="/static/js/sticky_footer.js"></script>
+
+</head>
+
+<body class="">
+
+  
+
+
+
+
+
+
+
+<header class="global" aria-label="Global Navigation">
+  <nav>
+    <h1 class="logo"><a href="/"><img src="/static/images/MongoDB_University_Logo.png" /></a></h1>
+    
+ 
+    <ul class="nav">
+      <li><a href="/courses">Catalog</a></li>
+      <li><a href="/verify_certificate">Verify Certification</a></li>
+      <li><a href="http://ed-blog.mongodb.com/">Blog</a></li>
+
+      <li><a href="/help">Help</a></li>
+ 
+
+          <li><a href="#login-modal" id="login" rel="leanModal">Log In</a></li>
+
+          <li class="user"><a href="#signup-modal" rel="leanModal" id="signup" class="button button-signup">Sign Up</a></li>
+
+
+    <h2><span class="provider">10gen:</span> M101J MongoDB for Java Developers</h2>
+
+
+    </ul>
+  </nav>
+
+
+</header>
+
+
+<div class="ie-banner"><strong>Warning:</strong> Your browser is not fully supported. We strongly recommend using <a href="https://www.google.com/intl/en/chrome/browser/" target="_blank">Chrome</a> or <a href="http://www.mozilla.org/en-US/firefox/new/" target="_blank">Firefox</a>.</div>
+
+
+  
+
+
+
+<section id="login-modal" class="modal login-modal">
+  <div class="inner-wrapper">
+    <header>
+      <h2>Log In</h2>
+    </header>
+
+    <form id="login_form" class="login_form" method="post" data-remote="true" action="/login">
+      <div class="input-wrapper">
+        <label>Email</label>
+        <input name="email" type="email" placeholder="Email">
+      </div>
+      <div class="input-wrapper">
+        <label>Password</label>
+        <input name="password" type="password" placeholder="Password">
+      </div>
+      <label class="remember-me">
+        <input name="remember" type="checkbox" value="true">
+        Remember me
+      </label>
+      <div class="submit">
+        <input name="submit" type="submit" value="Access My Courses" class="button button-wide">
+      </div>
+    </form>
+
+    <section class="login-extra">
+      <p>
+        <em>Not enrolled?</em> <a href="#signup-modal" class="close-login" rel="leanModal">Sign up.</a></span>
+        <a href="#forgot-password-modal" rel="leanModal" class="pwd-reset">Forgot password?</a>
+      </p>
+    </section>
+
+    <div class="close-modal">
+      <div class="inner">
+        <p>&#10005;</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script type="text/javascript">
+(function() {
+   $(document).delegate('#login_form', 'ajax:success', function(data, json, xhr) {
+     if (json.success) {
+        next = getParameterByName('next');
+        if (next) {
+           location.href = next;
+        } else {
+location.reload();
+        }
+     } else {
+       if($('#login_error').length == 0) {
+         $('#login_form').prepend('<div id="login_error" class="modal-form-error"></div>');
+       }
+       $('#login_error').html(json.value).stop().css("display", "block");
+     }
+   });
+})(this)
+</script>
+
+  
+
+
+
+
+
+
+
+<section id="signup-modal" class="modal signup-modal">
+  <div class="inner-wrapper">
+    <div id="register">
+      <header>
+        <h2>Sign Up for MongoDB University</h2>
+      </header>
+
+      <form id="register_form" class="register_form" method="post" data-remote="true" action="/create_account">
+        <div class="notice"></div>
+        <div id="register_error" class="modal-form-error" name="register_error"></div>
+
+        <div class="input-group">
+          <div class="input-wrapper">
+            <label>Username</label>
+            <input id="input-username" name="username" type="text" placeholder="Username (required)"/>
+            <div id="username-error"></div>
+          </div>
+          <div class="input-wrapper">
+            <label>Email</label>
+            <input name="email" type="email" placeholder="Email (required)"/>
+          </div>
+          <div class="input-wrapper">
+            <label>Password</label>
+            <input name="password" type="password" placeholder="Password (required)"/>
+          </div>
+          <div class="input-wrapper">
+            <input name="confirm_password" type="password" placeholder="Confirm Password (required)"/>
+          </div>
+          <div class="input-wrapper">
+            <label>Name</label>
+            <input name="first_name" type="text" placeholder="First Name (required)"/>
+          </div>
+          <div class="input-wrapper">
+            <input name="last_name" type="text" placeholder="Last Name (required)"/>
+          </div>
+          <div class="input-wrapper">
+            <label>Location</label>
+            <select name="country" id="countryselect">
+              <option value="">Country</option>
+              <option value="AF"
+                      >Afghanistan</option>
+              <option value="AX"
+                      >Åland Islands</option>
+              <option value="AL"
+                      >Albania</option>
+              <option value="DZ"
+                      >Algeria</option>
+              <option value="AS"
+                      >American Samoa</option>
+              <option value="AD"
+                      >Andorra</option>
+              <option value="AO"
+                      >Angola</option>
+              <option value="AI"
+                      >Anguilla</option>
+              <option value="AQ"
+                      >Antarctica</option>
+              <option value="AG"
+                      >Antigua and Barbuda</option>
+              <option value="AR"
+                      >Argentina</option>
+              <option value="AM"
+                      >Armenia</option>
+              <option value="AW"
+                      >Aruba</option>
+              <option value="AU"
+                      >Australia</option>
+              <option value="AT"
+                      >Austria</option>
+              <option value="AZ"
+                      >Azerbaijan</option>
+              <option value="BS"
+                      >Bahamas</option>
+              <option value="BH"
+                      >Bahrain</option>
+              <option value="BD"
+                      >Bangladesh</option>
+              <option value="BB"
+                      >Barbados</option>
+              <option value="BY"
+                      >Belarus</option>
+              <option value="BE"
+                      >Belgium</option>
+              <option value="BZ"
+                      >Belize</option>
+              <option value="BJ"
+                      >Benin</option>
+              <option value="BM"
+                      >Bermuda</option>
+              <option value="BT"
+                      >Bhutan</option>
+              <option value="BO"
+                      >Bolivia, Plurinational State of</option>
+              <option value="BA"
+                      >Bosnia and Herzegovina</option>
+              <option value="BW"
+                      >Botswana</option>
+              <option value="BV"
+                      >Bouvet Island</option>
+              <option value="BR"
+                      >Brazil</option>
+              <option value="IO"
+                      >British Indian Ocean Territory</option>
+              <option value="BN"
+                      >Brunei Darussalam</option>
+              <option value="BG"
+                      >Bulgaria</option>
+              <option value="BF"
+                      >Burkina Faso</option>
+              <option value="BI"
+                      >Burundi</option>
+              <option value="KH"
+                      >Cambodia</option>
+              <option value="CM"
+                      >Cameroon</option>
+              <option value="CA"
+                      >Canada</option>
+              <option value="CV"
+                      >Cape Verde</option>
+              <option value="KY"
+                      >Cayman Islands</option>
+              <option value="CF"
+                      >Central African Republic</option>
+              <option value="TD"
+                      >Chad</option>
+              <option value="CL"
+                      >Chile</option>
+              <option value="CN"
+                      >China</option>
+              <option value="CX"
+                      >Christmas Island</option>
+              <option value="CC"
+                      >Cocos (Keeling) Islands</option>
+              <option value="CO"
+                      >Colombia</option>
+              <option value="KM"
+                      >Comoros</option>
+              <option value="CG"
+                      >Congo</option>
+              <option value="CD"
+                      >Congo, The Democratic Republic of the</option>
+              <option value="CK"
+                      >Cook Islands</option>
+              <option value="CR"
+                      >Costa Rica</option>
+              <option value="CI"
+                      >Côte D'ivoire</option>
+              <option value="HR"
+                      >Croatia</option>
+              <option value="CU"
+                      >Cuba</option>
+              <option value="CY"
+                      >Cyprus</option>
+              <option value="CZ"
+                      >Czech Republic</option>
+              <option value="DK"
+                      >Denmark</option>
+              <option value="DJ"
+                      >Djibouti</option>
+              <option value="DM"
+                      >Dominica</option>
+              <option value="DO"
+                      >Dominican Republic</option>
+              <option value="EC"
+                      >Ecuador</option>
+              <option value="EG"
+                      >Egypt</option>
+              <option value="SV"
+                      >El Salvador</option>
+              <option value="GQ"
+                      >Equatorial Guinea</option>
+              <option value="ER"
+                      >Eritrea</option>
+              <option value="EE"
+                      >Estonia</option>
+              <option value="ET"
+                      >Ethiopia</option>
+              <option value="FK"
+                      >Falkland Islands (Malvinas)</option>
+              <option value="FO"
+                      >Faroe Islands</option>
+              <option value="FJ"
+                      >Fiji</option>
+              <option value="FI"
+                      >Finland</option>
+              <option value="FR"
+                      >France</option>
+              <option value="GF"
+                      >French Guiana</option>
+              <option value="PF"
+                      >French Polynesia</option>
+              <option value="TF"
+                      >French Southern Territories</option>
+              <option value="GA"
+                      >Gabon</option>
+              <option value="GM"
+                      >Gambia</option>
+              <option value="GE"
+                      >Georgia</option>
+              <option value="DE"
+                      >Germany</option>
+              <option value="GH"
+                      >Ghana</option>
+              <option value="GI"
+                      >Gibraltar</option>
+              <option value="GR"
+                      >Greece</option>
+              <option value="GL"
+                      >Greenland</option>
+              <option value="GD"
+                      >Grenada</option>
+              <option value="GP"
+                      >Guadeloupe</option>
+              <option value="GU"
+                      >Guam</option>
+              <option value="GT"
+                      >Guatemala</option>
+              <option value="GG"
+                      >Guernsey</option>
+              <option value="GN"
+                      >Guinea</option>
+              <option value="GW"
+                      >Guinea-bissau</option>
+              <option value="GY"
+                      >Guyana</option>
+              <option value="HT"
+                      >Haiti</option>
+              <option value="HM"
+                      >Heard Island and McDonald Islands</option>
+              <option value="VA"
+                      >Holy See (Vatican City State)</option>
+              <option value="HN"
+                      >Honduras</option>
+              <option value="HK"
+                      >Hong Kong</option>
+              <option value="HU"
+                      >Hungary</option>
+              <option value="IS"
+                      >Iceland</option>
+              <option value="IN"
+                      >India</option>
+              <option value="ID"
+                      >Indonesia</option>
+              <option value="IR"
+                      >Iran, Islamic Republic of</option>
+              <option value="IQ"
+                      >Iraq</option>
+              <option value="IE"
+                      >Ireland</option>
+              <option value="IM"
+                      >Isle of Man</option>
+              <option value="IL"
+                      >Israel</option>
+              <option value="IT"
+                      >Italy</option>
+              <option value="JM"
+                      >Jamaica</option>
+              <option value="JP"
+                      >Japan</option>
+              <option value="JE"
+                      >Jersey</option>
+              <option value="JO"
+                      >Jordan</option>
+              <option value="KZ"
+                      >Kazakhstan</option>
+              <option value="KE"
+                      >Kenya</option>
+              <option value="KI"
+                      >Kiribati</option>
+              <option value="KP"
+                      >Korea, Democratic People's Republic of</option>
+              <option value="KR"
+                      >Korea, Republic of</option>
+              <option value="KW"
+                      >Kuwait</option>
+              <option value="KG"
+                      >Kyrgyzstan</option>
+              <option value="LA"
+                      >Lao People's Democratic Republic</option>
+              <option value="LV"
+                      >Latvia</option>
+              <option value="LB"
+                      >Lebanon</option>
+              <option value="LS"
+                      >Lesotho</option>
+              <option value="LR"
+                      >Liberia</option>
+              <option value="LY"
+                      >Libyan Arab Jamahiriya</option>
+              <option value="LI"
+                      >Liechtenstein</option>
+              <option value="LT"
+                      >Lithuania</option>
+              <option value="LU"
+                      >Luxembourg</option>
+              <option value="MO"
+                      >Macao</option>
+              <option value="MK"
+                      >Macedonia, The Former Yugoslav Republic of</option>
+              <option value="MG"
+                      >Madagascar</option>
+              <option value="MW"
+                      >Malawi</option>
+              <option value="MY"
+                      >Malaysia</option>
+              <option value="MV"
+                      >Maldives</option>
+              <option value="ML"
+                      >Mali</option>
+              <option value="MT"
+                      >Malta</option>
+              <option value="MH"
+                      >Marshall Islands</option>
+              <option value="MQ"
+                      >Martinique</option>
+              <option value="MR"
+                      >Mauritania</option>
+              <option value="MU"
+                      >Mauritius</option>
+              <option value="YT"
+                      >Mayotte</option>
+              <option value="MX"
+                      >Mexico</option>
+              <option value="FM"
+                      >Micronesia, Federated States of</option>
+              <option value="MD"
+                      >Moldova, Republic of</option>
+              <option value="MC"
+                      >Monaco</option>
+              <option value="MN"
+                      >Mongolia</option>
+              <option value="ME"
+                      >Montenegro</option>
+              <option value="MS"
+                      >Montserrat</option>
+              <option value="MA"
+                      >Morocco</option>
+              <option value="MZ"
+                      >Mozambique</option>
+              <option value="MM"
+                      >Myanmar</option>
+              <option value="NA"
+                      >Namibia</option>
+              <option value="NR"
+                      >Nauru</option>
+              <option value="NP"
+                      >Nepal</option>
+              <option value="NL"
+                      >Netherlands</option>
+              <option value="AN"
+                      >Netherlands Antilles</option>
+              <option value="NC"
+                      >New Caledonia</option>
+              <option value="NZ"
+                      >New Zealand</option>
+              <option value="NI"
+                      >Nicaragua</option>
+              <option value="NE"
+                      >Niger</option>
+              <option value="NG"
+                      >Nigeria</option>
+              <option value="NU"
+                      >Niue</option>
+              <option value="NF"
+                      >Norfolk Island</option>
+              <option value="MP"
+                      >Northern Mariana Islands</option>
+              <option value="NO"
+                      >Norway</option>
+              <option value="OM"
+                      >Oman</option>
+              <option value="PK"
+                      >Pakistan</option>
+              <option value="PW"
+                      >Palau</option>
+              <option value="PS"
+                      >Palestinian Territory, Occupied</option>
+              <option value="PA"
+                      >Panama</option>
+              <option value="PG"
+                      >Papua New Guinea</option>
+              <option value="PY"
+                      >Paraguay</option>
+              <option value="PE"
+                      >Peru</option>
+              <option value="PH"
+                      >Philippines</option>
+              <option value="PN"
+                      >Pitcairn</option>
+              <option value="PL"
+                      >Poland</option>
+              <option value="PT"
+                      >Portugal</option>
+              <option value="PR"
+                      >Puerto Rico</option>
+              <option value="QA"
+                      >Qatar</option>
+              <option value="RE"
+                      >Réunion</option>
+              <option value="RO"
+                      >Romania</option>
+              <option value="RU"
+                      >Russian Federation</option>
+              <option value="RW"
+                      >Rwanda</option>
+              <option value="BL"
+                      >Saint Barthélemy</option>
+              <option value="SH"
+                      >Saint Helena, Ascension and Tristan Da Cunha</option>
+              <option value="KN"
+                      >Saint Kitts and Nevis</option>
+              <option value="LC"
+                      >Saint Lucia</option>
+              <option value="MF"
+                      >Saint Martin</option>
+              <option value="PM"
+                      >Saint Pierre and Miquelon</option>
+              <option value="VC"
+                      >Saint Vincent and the Grenadines</option>
+              <option value="WS"
+                      >Samoa</option>
+              <option value="SM"
+                      >San Marino</option>
+              <option value="ST"
+                      >Sao Tome and Principe</option>
+              <option value="SA"
+                      >Saudi Arabia</option>
+              <option value="SN"
+                      >Senegal</option>
+              <option value="RS"
+                      >Serbia</option>
+              <option value="SC"
+                      >Seychelles</option>
+              <option value="SL"
+                      >Sierra Leone</option>
+              <option value="SG"
+                      >Singapore</option>
+              <option value="SK"
+                      >Slovakia</option>
+              <option value="SI"
+                      >Slovenia</option>
+              <option value="SB"
+                      >Solomon Islands</option>
+              <option value="SO"
+                      >Somalia</option>
+              <option value="ZA"
+                      >South Africa</option>
+              <option value="GS"
+                      >South Georgia and the South Sandwich Islands</option>
+              <option value="ES"
+                      >Spain</option>
+              <option value="LK"
+                      >Sri Lanka</option>
+              <option value="SD"
+                      >Sudan</option>
+              <option value="SR"
+                      >Suriname</option>
+              <option value="SJ"
+                      >Svalbard and Jan Mayen</option>
+              <option value="SZ"
+                      >Swaziland</option>
+              <option value="SE"
+                      >Sweden</option>
+              <option value="CH"
+                      >Switzerland</option>
+              <option value="SY"
+                      >Syrian Arab Republic</option>
+              <option value="TW"
+                      >Taiwan, Province of China</option>
+              <option value="TJ"
+                      >Tajikistan</option>
+              <option value="TZ"
+                      >Tanzania, United Republic of</option>
+              <option value="TH"
+                      >Thailand</option>
+              <option value="TL"
+                      >Timor-leste</option>
+              <option value="TG"
+                      >Togo</option>
+              <option value="TK"
+                      >Tokelau</option>
+              <option value="TO"
+                      >Tonga</option>
+              <option value="TT"
+                      >Trinidad and Tobago</option>
+              <option value="TN"
+                      >Tunisia</option>
+              <option value="TR"
+                      >Turkey</option>
+              <option value="TM"
+                      >Turkmenistan</option>
+              <option value="TC"
+                      >Turks and Caicos Islands</option>
+              <option value="TV"
+                      >Tuvalu</option>
+              <option value="UG"
+                      >Uganda</option>
+              <option value="UA"
+                      >Ukraine</option>
+              <option value="AE"
+                      >United Arab Emirates</option>
+              <option value="GB"
+                      >United Kingdom</option>
+              <option value="US"
+                      >United States</option>
+              <option value="UM"
+                      >United States Minor Outlying Islands</option>
+              <option value="UY"
+                      >Uruguay</option>
+              <option value="UZ"
+                      >Uzbekistan</option>
+              <option value="VU"
+                      >Vanuatu</option>
+              <option value="VE"
+                      >Venezuela, Bolivarian Republic of</option>
+              <option value="VN"
+                      >Viet Nam</option>
+              <option value="VG"
+                      >Virgin Islands, British</option>
+              <option value="VI"
+                      >Virgin Islands, U.S.</option>
+              <option value="WF"
+                      >Wallis and Futuna</option>
+              <option value="EH"
+                      >Western Sahara</option>
+              <option value="YE"
+                      >Yemen</option>
+              <option value="ZM"
+                      >Zambia</option>
+              <option value="ZW"
+                      >Zimbabwe</option>
+            </select>
+            <select name="state" id= "stateselect" disabled="disabled">
+              <option value="">State</option>
+              <option value="AL"
+                      >Alabama</option>
+              <option value="AK"
+                      >Alaska</option>
+              <option value="AZ"
+                      >Arizona</option>
+              <option value="AR"
+                      >Arkansas</option>
+              <option value="CA"
+                      >California</option>
+              <option value="CO"
+                      >Colorado</option>
+              <option value="CT"
+                      >Connecticut</option>
+              <option value="DE"
+                      >Delaware</option>
+              <option value="DC"
+                      >District of Columbia</option>
+              <option value="FL"
+                      >Florida</option>
+              <option value="GA"
+                      >Georgia</option>
+              <option value="HI"
+                      >Hawaii</option>
+              <option value="ID"
+                      >Idaho</option>
+              <option value="IL"
+                      >Illinois</option>
+              <option value="IN"
+                      >Indiana</option>
+              <option value="IA"
+                      >Iowa</option>
+              <option value="KS"
+                      >Kansas</option>
+              <option value="KY"
+                      >Kentucky</option>
+              <option value="LA"
+                      >Louisiana</option>
+              <option value="ME"
+                      >Maine</option>
+              <option value="MD"
+                      >Maryland</option>
+              <option value="MA"
+                      >Massachusetts</option>
+              <option value="MI"
+                      >Michigan</option>
+              <option value="MN"
+                      >Minnesota</option>
+              <option value="MS"
+                      >Mississippi</option>
+              <option value="MO"
+                      >Missouri</option>
+              <option value="MT"
+                      >Montana</option>
+              <option value="NE"
+                      >Nebraska</option>
+              <option value="NV"
+                      >Nevada</option>
+              <option value="NH"
+                      >New Hampshire</option>
+              <option value="NJ"
+                      >New Jersey</option>
+              <option value="NM"
+                      >New Mexico</option>
+              <option value="NY"
+                      >New York</option>
+              <option value="NC"
+                      >North Carolina</option>
+              <option value="ND"
+                      >North Dakota</option>
+              <option value="OH"
+                      >Ohio</option>
+              <option value="OK"
+                      >Oklahoma</option>
+              <option value="OR"
+                      >Oregon</option>
+              <option value="PA"
+                      >Pennsylvania</option>
+              <option value="RI"
+                      >Rhode Island</option>
+              <option value="SC"
+                      >South Carolina</option>
+              <option value="SD"
+                      >South Dakota</option>
+              <option value="TN"
+                      >Tennessee</option>
+              <option value="TX"
+                      >Texas</option>
+              <option value="UT"
+                      >Utah</option>
+              <option value="VT"
+                      >Vermont</option>
+              <option value="VA"
+                      >Virginia</option>
+              <option value="WA"
+                      >Washington</option>
+              <option value="WV"
+                      >West Virginia</option>
+              <option value="WI"
+                      >Wisconsin</option>
+              <option value="WY"
+                      >Wyoming</option>
+            </select>
+            <select name="province" id= "provinceselect" disabled="disabled">
+              <option value="">Province</option>
+              <option value="AB"
+                      >Alberta</option>
+              <option value="BC"
+                      >British Columbia</option>
+              <option value="MB"
+                      >Manitoba</option>
+              <option value="NB"
+                      >New Brunswick</option>
+              <option value="NF"
+                      >Newfoundland</option>
+              <option value="NT"
+                      >Northwest Territories</option>
+              <option value="NS"
+                      >Nova Scotia</option>
+              <option value="ON"
+                      >Ontario</option>
+              <option value="PE"
+                      >Prince Edward Island</option>
+              <option value="QC"
+                      >Quebec</option>
+              <option value="SK"
+                      >Saskatchewan</option>
+              <option value="YT"
+                      >Yukon</option>
+            </select>
+          </div>
+          <div class="input-wrapper">
+            <label>Postal Code</label>
+            <input name="postal_code" type="text"/>
+          </div>
+          <div class="input-wrapper">
+            <label>Company</label>
+            <input name="company" type="text" placeholder="Company (required)">
+          </div>
+          <div class="input-wrapper">
+            <label for="jobfunction">Job Function</label>
+            <select name="jobfunction" id="jobfunction">
+              <option value="dev">Software Developer/Engineer</option>
+              <option value="itexec">IT Executive (CIO, CTO, VP Engineering, etc.)</option>
+              <option value="dir">Director/Development Manager</option>
+              <option value="arch">Architect</option>
+              <option value="dba">Database Administrator (DBA)</option>
+              <option value="techops">Technical Operations</option>
+              <option value="pm">Product/Project Management</option>
+              <option value="student">Student</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="input-wrapper">
+            <label for="devlang">What is your primary development language/platform?</label>
+            <select name="devlang" id="devlang">
+              <option value="ccpp">C/C++</option>
+              <option value="csharp">C#</option>
+              <option value="java">Java</option>
+              <option value="nodejs">Node.js</option>
+              <option value="php">PHP</option>
+              <option value="python">Python</option>
+              <option value="ruby">Ruby</option>
+              <option value="scala">Scala</option>
+              <option value="perl">Perl</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="input-wrapper">
+            <label for="explevel">What is your experience level with MongoDB?</label>
+            <select name="explevel" id="explevel">
+              <option value="eval">Evaluation</option>
+              <option value="dev">Development</option>
+              <option value="prod">Production</option>
+              <option value="notyet">Just Playing Around!</option>
+            </select>
+          </div>
+
+          <label data-field="newsletter"  class="newsletter" class="newsletter">
+            <input type="checkbox" name="newsletter" value="true" checked/>
+            Keep me up to date on MongoDB news
+          </label>
+          <label data-field="terms_of_service" class="terms-of-service" class="terms_of_service" class="terms-of-service">
+            <input name="terms_of_service" type="checkbox" value="true">
+            I agree to the
+            <a href="http://www.mongodb.com/legal-notices" target="_blank">Terms of Service</a>
+          </label>
+          <div class="submit" style="text-align:center">
+            <button name="submit" type="submit" value="Create My Account" class="button button-wide">Create My Account</button>
+          </div>
+        </div>
+      </form>
+
+      <section class="login-extra">
+        <p>
+          <em>Already have an account?</em> <a href="#login-modal" class="close-signup" rel="leanModal">Login.</a>
+        </p>
+      </section>
+
+    </div>
+
+    <div class="close-modal">
+      <div class="inner">
+        <p>&#10005;</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script type="text/javascript">
+(function() {
+   $(document).delegate('#register_form', 'ajax:success', function(data, json, xhr) {
+     if(json.success) {
+       var next = getParameterByName('next');
+       if (next) {
+         location.href = next;
+       } else {
+         location.reload();
+       } 
+     } else {
+       $(".field-error").removeClass('field-error');
+       $('.' + json.field).addClass('field-error')
+       $('#register_error').html(json.error).stop().css("display", "block");
+     }
+    });
+  })(this)
+</script>
+<script type="text/javascript">
+function validate_username(msg) {
+      data = {"username":$("#input-username").val()};
+
+      // only make ajax call if username is not empty
+      if (data.username.length > 0) {
+          $.get("validate_username", data)
+          .done(function(data) {
+           if (data.success) {
+             // clear our error message
+             $("#username-error").html("");
+           } else {
+             // show error message
+             $("#username-error").html(msg + " Try").css("color", "red");
+
+             // make username suggestions
+             $.each(data.error, function(index, sugg_username) {
+                var sugg_link = $("<a href='' class='sugg_username'></a>");
+               $("#username-error").append(sugg_link.html(sugg_username).css("margin-left","10px"));
+             });
+
+             // autofill generated username in input field
+             $(".sugg_username").click(function(event) {
+               $("#input-username").val($(this).text()).focus();
+               $("#username-error").html("");
+               event.preventDefault();
+             });
+           }
+          })
+          .fail(function (jqXHR, textStatus, errorThrown) {
+            console.log(errorThrown, ": ", jqXHR.responseText);
+          })
+      }
+    }
+
+  // username validation
+  $(document).ready(function() {
+    $("#input-username").blur(function() {
+        validate_username("Username already taken.")
+    });
+  });
+
+</script>
+<script type="text/javascript">
+$(document).ready(function() {
+    function setupSelect(country, selector) {
+	var selectedCountry = $('#countryselect option:selected').val(),
+	    select = $(selector);
+        if (selectedCountry == country) {
+            select.removeAttr('disabled');
+            select.show();
+        } else {
+            select.attr('disabled', 'disabled');
+            select.hide();
+        }
+    }
+    function resetStateSelector() {
+	setupSelect('US', '#stateselect');
+	setupSelect('CA', '#provinceselect');       
+    }
+    $('#countryselect').change(resetStateSelector);
+    resetStateSelector();
+});
+</script>
+
+
+  
+<section id="forgot-password-modal" class="modal forgot-password-modal">
+  <div class="inner-wrapper">
+    <div id="password-reset">
+      <header>
+        <h2>Password reset</h2>
+        <hr>
+      </header>
+
+      <div class="message">
+        <p>Enter your e-mail address below, and we will e-mail instructions for setting a new password.</p>
+      </div>
+
+      <form id="pwd_reset_form" action="/password_reset/" method="post" data-remote="true">
+        <div class="input-wrapper">
+          <label>Email</label>
+          <input id="id_email" type="email" name="email" maxlength="75" placeholder="Your E-mail"/>
+        </div>
+        <div class="submit">
+          <input type="submit" id="pwd_reset_button" class="button button-wide" value="Reset my password" />
+        </div>
+      </form>
+    </div>
+
+    <div class="close-modal">
+      <div class="inner">
+        <p>&#10005;</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script type="text/javascript">
+  (function() {
+   $(document).delegate('#pwd_reset_form', 'ajax:success', function(data, json, xhr) {
+     if(json.success) {
+       $("#password-reset").html(json.value);
+     } else {
+       if($('#pwd_error').length == 0) {
+         $('#pwd_reset_form').prepend('<div id="pwd_error" class="modal-form-error">Email is incorrect.</div>');
+       }
+       $('#pwd_error').stop().css("display", "block");
+     }
+   });
+  })(this)
+</script>
+
+
+  <section class="content-wrapper">
+    
+
+
+
+
+
+
+
+
+
+
+<section class="course-info">
+  <header class="course-profile">
+    <div class="intro-inner-wrapper">
+      <div class="table">
+      <section class="intro">
+        <hgroup>
+          <h1>M101J: MongoDB for Java Developers</h1>
+        </hgroup>
+
+        <div class="main-cta">
+            <a href="#signup-modal" class="register button" rel="leanModal" data-notice='You must Sign Up
+		     or <a href="#login-modal" rel="leanModal">Log In</a>
+		     to enroll.'>Register for M101J</a>
+        </div>
+
+      </section>
+      <a href="#video-modal" class="media" rel="leanModal">
+        <div class="hero">
+          <img src="https://img.youtube.com/vi/a-aMJ4vG-vU/maxresdefault.jpg" width=300px" />
+
+          <div class="play-intro"></div>
+        </div>
+      </a>
+    </div>
+      </div>
+  </header>
+
+  <section class="container">
+    <section class="course-sidebar">
+      <section class="course-summary">
+
+        <ol class="important-dates">
+            <li><p>Starts</p><p><span class="start-date">
+Aug 05, 2014 05:00 PM UTC
+</span></p></li>
+
+            <li><p>Ends</p><span class="final-date">
+Sep 23, 2014 05:00 PM UTC
+</span></li>
+
+            <li><p>Estimated Effort</p><span class="start-date">5 hours/week
+</span></li>
+
+            <li style="border-bottom:none"><p>Prerequisites</p><span class="start-date">Knowledge of Java
+</span></li>
+        </ol>
+      </section>
+
+    </section>
+
+    <section class="details">
+        <br/>
+
+      <div class="inner-wrapper">
+        <section class="about">
+    <h2>About this course</h2>
+    <p>Learn everything you need to know to get started building a MongoDB-based app.</p>
+
+    <p>This course will go over basic installation, JSON, schema design, querying, insertion of data, indexing and working with language drivers. In the course, you will build a blogging platform, backed by MongoDB. Our code examples will be in Java. </p>
+</section>
+
+<section class="Prerequisites">
+  <h2>Prerequisites</h2>
+  <p>To take this course you should be familiar with Java. Knowledge of relational databases is not required.</p>
+</section>
+
+<section class="course-staff">
+    <h2>Course staff</h3>
+
+    <article class="teacher">
+    <div class="teacher-image"><img width="140px" src="/static/images/andrew.png"/></div>
+        <h3>Andrew Erlichson</h3> 
+        <p>Andrew designs and implements the worldwide education efforts around MongoDB. Prior to MongoDB, Inc., Andrew was CEO and founder of Phanfare, an online photo hosting company, now part of Carbonite. Prior to Carbonite, he was founder and CEO of Flashbase, a web service that offered self-service online database forms and analysis tools. Flashbase was acquired by DoubleClick. At DoubleClick, Andrew was Vice President of Technology for the Research and Development group. He has worked at Mips Computer Systems, Silicon Graphics and BlackRock. Andrew received his A.B. from Dartmouth College and his M.S. and Ph.D. in Electrical Engineering from Stanford University.</p>
+    </article>
+
+    <article class="teacher">
+    <div class="teacher-image"><img width="140px" src="/static/10gen_2014_M101J_August/images/yemin_ed_site.74235d99d22d.jpg"/></div>
+        <h3>Jeff Yemin</h3> 
+        <p>Jeff Yemin has been programming with Java for over 15 years, since landing a job at Sun Microsystems as a Java consultant and educator. His first experience with MongoDB came while at MTV Networks, where he led a project to create a unified Java-based content management system (CMS) with MongoDB as the underlying data repository. Jeff is now an engineering manager at MongoDB, Inc. and the lead maintainer of the MongoDB Java driver.</p>
+    </article>
+
+</section>
+
+<section class="faq">
+    <h2>FAQ</h2>
+    <article class="questions">
+      <ul>
+          <li>What is the cost of the class?
+            <p>This class is free.</p>
+          </li>
+          <li>What do I need to take this class?
+            <p>You will need access to a computer and YouTube. A recent Windows, Mac OS or Linux based machine will work fine. </p>
+          </li>
+          <li>What do I receive for taking this course?
+            <p>You will get a statement of accomplishment from MongoDB, Inc.</p>
+          </li>
+          <li>Do I need to be available during a certain hour of the day to watch the course?
+          <p> The course is self-paced with weekly deadlines. The course will be broken down into short video segments with periodic assessments to check on your progress, weekly assignments and a final exam.</p></li>
+          <li>How does the grading work?
+          <p>You will receive a final grade but the grade won't be on your statement of accomplishment. To receive a certificate of completion, you will need to achieve 65% on graded material. There are three different types of assessments within the course: quizzes, weekly assignments and a final exam/project. Quizzes don't count toward your grade. Quizzes are intended to help you check your own understanding. The weekly assignments will comprise one half of your grade and the final exam/project one half of your grade. Most assignments will be due on Tuesdays. Each week we will release new video lectures and a new assignments. Unfortunately, due to the large number of students and in the interest of fairness, late assignments cannot be accepted.</p>
+          <li> Will I be able to get help?
+          <p> We will be providing online forums where students can help each other. In addition, the instructor(s), teaching assistants and other MongoDB employees will monitor the forums and try to help. Often the fastest answer comes from another student.</p>
+          </li>
+      </ul>
+    </article>
+
+</section>
+
+      </div>
+    </section>
+  </section>
+</section>
+
+  <div style="display: none;">
+    <form id="class_enroll_form" method="post" data-remote="true" action="/change_enrollment">
+      <fieldset class="enroll_fieldset">
+        <input name="course_id" type="hidden" value="10gen/M101J/2014_August">
+        <input name="enrollment_action" type="hidden" value="enroll">
+      </fieldset>
+      <div class="submit">
+        <input name="submit" type="submit" value="enroll">
+      </div>
+    </form>
+  </div>
+
+
+
+
+<section id="video-modal" class="modal video-modal">
+  <div class="inner-wrapper">
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/a-aMJ4vG-vU?showinfo=0" frameborder="0" allowfullscreen></iframe>
+
+  </div>
+</section>
+
+
+    
+  </section>
+
+  
+
+
+<footer class="fixed-bottom">
+  <nav>
+    <section class="top">
+      <section class="primary">
+        <a href="http://www.mongodb.com/products/mongodb">Products &amp; Services</a>
+        <a href="http://www.mongodb.com/events">Events</a>
+        <a href="http://www.mongodb.com/partners">Partners</a>
+        <a href="http://www.mongodb.com/customers">Customers</a>
+        <a href="http://www.mongodb.com/about">About MongoDB</a>
+        <a href="/contact">Contact Us</a>
+        <a href="http://www.mongodb.com/careers">Careers</a>
+      </section>
+
+      <section class="social">
+        <a href="https://twitter.com/mongodbinc"><img src="/static/images/social/Twitter_Green.d8e7872efca3.png" /></a>
+        <a href="http://www.facebook.com/mongodb"><img src="/static/images/social/Facebook_Green.cbef2a5f8ae7.png" /></a>
+        <a href="http://www.linkedin.com/company/783611"><img src="/static/images/social/LinkedIn_Green.c94be7a74679.png" /></a>
+        <a href="https://plus.google.com/101024085748034940765/posts"><img src="/static/images/social/Google_Plus_Green.3db5a5583e75.png" /></a>
+      </section>
+    </section>
+
+    <section class="bottom">
+      <section class="copyright">
+          <a class="footerlogo10gen" href="http://www.mongodb.com">&nbsp;</a>
+          <div class="copyright-text">&copy; 2014 MongoDB, Inc. MongoDB&reg;, Mongo&reg;, and the leaf logo are registered trademarks of MongoDB Inc.</div>
+          <a class="footerlogoedx" href="http://edx.org">&nbsp;</a>
+      </section>
+    </section>
+
+  </nav>
+</footer>
+
+
+  
+    <script type="text/javascript" src="/static/js/lms-application.02f0ca828125.js" charset="utf-8"></script>
+
+
+  
+    <script type="text/javascript" src="/static/js/lms-modules.aa105d81e594.js" charset="utf-8"></script>
+
+
+
+  
+
+      <script type="text/javascript">
+      (function() {
+        $(".register").click(function() {
+          if ($(".login_form .enroll_fieldset").length === 0) {
+            $(".login_form").append( $(".enroll_fieldset").first().clone() );
+          }
+          if ($(".register_form .enroll_fieldset").length === 0) {
+            $(".register_form").append( $(".enroll_fieldset").first().clone() );
+          }
+        });
+      })(this)
+      </script>
+
+  <script src="/static/js/course_info.40bc0fcfaae1.js"></script>
+
+
+</body>
+</html>

@@ -1,0 +1,12 @@
+{"sku":1,"price":1,"description":"a","category":"aa","brand":"aaa","reviews":{"author":"aaaa"}}
+{"sku":2,"price":10,"description":"b","category":"bb","brand":"bbb","reviews":{"author":"bbbb"}}
+{"sku":3,"price":100,"description":"c","category":"cc","brand":"ccc","reviews":{"author":"cccc"}}
+{"sku":4,"price":1000,"description":"d","category":"dd","brand":"ddd","reviews":{"author":"dddd"}}
+{"sku":5,"price":10000,"description":"e","category":"ee","brand":"eee","reviews":{"author":"eeee"}}
+{"sku":6,"price":100000,"description":"f","category":"ff","brand":"fff","reviews":{"author":"ffff"}}
+{"sku":7,"price":1000000,"description":"g","category":"gg","brand":"ggg","reviews":{"author":"gggg"}}
+{"sku":8,"price":10000000,"description":"h","category":"hh","brand":"hhh","reviews":{"author":"hhhh"}}
+{"sku":9,"price":100000000,"description":"i","category":"ii","brand":"iii","reviews":{"author":"iiii"}}
+{"sku":10,"price":100000000,"description":"j","category":"jj","brand":"jjj","reviews":{"author":"jjjj"}}
+{"sku":11,"price":1000000000,"description":"k","category":"kk","brand":"kkk","reviews":{"author":"kkkk"}}
+{"sku":12,"price":10000000000,"description":"l","category":"ll","brand":"lll","reviews":{"author":"llll"}}
