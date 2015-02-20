@@ -1,0 +1,6 @@
+test.subject =read.csv("../test/subject_test.txt")
+test.X       =read.csv("../test/X_test.txt")
+test.y       =read.csv("../test/y_test.txt")
+train.subject=read.csv("../train/subject_train.txt")
+train.X      =read.csv("../train/X_train.txt")
+train.y      =read.csv("../train/y_train.txt")
