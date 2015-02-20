@@ -1,8 +1,11 @@
+library("dplyr")
 ## read in features
 feats<-read.table("../features.txt")
-## select features with mean()
-idx<-grep("mean\\(\\)",feats$V2)
-
+## select features with mean() and std()
+idx.mean<-grep("mean\\(\\)",feats$V2)
+idx.std<-grep("std\\(\\)",feats$V2)
+idx<-union(idx.mean,idx.std)
+idx<-idx[order(idx)]
 
 ## read in test data
 test.subject =read.table("../test/subject_test.txt")
@@ -34,11 +37,22 @@ remove(test)
 
 ## pare down subject with mean() features
 names(data)<-c("Subject.ID","Activity.ID",as.character(feats$V2))
-mean.idx=c(1,2,idx+2)
-mean.data<-data[mean.idx]
+idx=c(1,2,idx+2)
+data<-data[idx]
+## clean up variable names
+old.names=names(data)
+data.names<-gsub("-mean\\(\\)",".mean",old.names)
+data.names<-gsub("-std\\(\\)",".std",data.names)
+data.names<-gsub("-X",".X",data.names)
+data.names<-gsub("-Y",".Y",data.names)
+data.names<-gsub("-Z",".Z",data.names)
+names(data)<-data.names
 
 ## read activity
 acts<-read.table("../activity_labels.txt")
 names(acts)<-c("Activity.ID","Activity")
 ## label activities with text labels
-mean.data<-merge(acts,mean.data)
+data<-merge(acts,data)
+
+final<-data %>% group_by(Activity,Subject.ID) %>% summarise_each(funs(mean))
+write.table(final,file="final.txt",row.name=FALSE)
