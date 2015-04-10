@@ -1,0 +1,11 @@
+use m101
+db.products.createIndex({"price":-1})
+db.products.createIndex({"sku":1})
+db.products.createIndex({"description":1})
+db.products.createIndex({"category":1,"brand":1})
+db.products.createIndex({"reviews.author":1})
+db.products.getIndexes()
+db.products.find({brand:'GE'}).sort({category:1, brand:-1}).explain()
+db.products.find({'brand':"GE"}).sort({price:1}).explain()
+db.products.find({$and:[{price:{$gt:30}},{price:{$lt:50}}]}).sort({brand:1}).explain()
+db.products.find({'brand':"GE"}).explain()

@@ -21,7 +21,7 @@ __author__ = 'aje'
 import sys
 import re
 import datetime
-
+import pymongo
 
 
 # The Blog Post Data Access Object handles interactions with the Posts collection
@@ -31,9 +31,9 @@ class BlogPostDAO:
     def __init__(self, database):
         self.db = database
         self.posts = database.posts
-        self.posts.ensure_index('tags',1)
-        self.posts.ensure_index('date',-1)
-        self.posts.ensure_index('permalink',1)
+        self.posts.create_index([("tags", pymongo.ASCENDING),("date",pymongo.DESCENDING)])
+        self.posts.create_index([("date",pymongo.DESCENDING)])
+        self.posts.create_index([("permalink",pymongo.ASCENDING)])
 
     # inserts the blog entry and returns a permalink for the entry
     def insert_entry(self, title, post, tags_array, author):
