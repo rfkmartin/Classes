@@ -110,7 +110,7 @@ class BlogPostDAO:
         post = self.posts.find_one({'permalink': permalink})
 
         # XXX Final exam Question 4
-        # 
+        #
         # if you store the likes value in the way the template expects
         # and how is implied by by the fixup code below, you don't need to make a change here
 
@@ -150,10 +150,21 @@ class BlogPostDAO:
     def increment_likes(self, permalink, comment_ordinal):
 
         #
-        # XXX Final exam 
+        # XXX Final exam
         # Work here. You need to update the num_likes value in the comment being liked
-        # 
-        
+        #
+        print "adding to comment ",str(comment_ordinal)
+        commentordinal = "comments."+str(comment_ordinal)+".num_likes"
+
+        self.posts.update({'permalink': permalink},{"$inc": {commentordinal:1}})
+        #WriteResult result = postsCollection.update(new BasicDBObject("permalink", permalink),
+        #        new BasicDBObject("$inc",new BasicDBObject("comments."+ordinal+".num_likes",1)),false, false);
+        #db.posts.update(
+        #        { permalink: permalink },
+        #{
+        #    $inc: { comments.ordinal.num_likes: 1 }
+        #}
+        #)
 
         return 0
 

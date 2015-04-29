@@ -1,4 +1,7 @@
-cursor = db.images.find()
+use testm101p
+db.albums.createIndex({"images":1});
+db.images.createIndex({"_id":1});
+cursor = db.images.find();
 while ( cursor.count() ){
    var img = cursor.next();
    cursor2 = db.albums.find({"images":img._id});
@@ -11,4 +14,5 @@ while ( cursor.count() ){
       db.images.remove({"_id":img._id});
    }
 }
-db.images.find({"tags":"sunrises"}).count();
+db.images.count();
+db.images.find({"tags":"kittens"}).count();
